@@ -1,12 +1,13 @@
-FROM python=3.8.6
-WORKDIR /app
-COPY Pipfile Pipfile.lock ./
+FROM python:3
 
-RUN pip install requirements.txt
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /code
+
+RUN pip install pipenv
+
+COPY Pipfile Pipfile.lock ./
 RUN pipenv install --system
 
-COPY . .
-
-EXPOSE 8000
-
-CMD = ['python', 'manage.py', 'runserver', "0.0.0.0:8000"]
+COPY . /code/
