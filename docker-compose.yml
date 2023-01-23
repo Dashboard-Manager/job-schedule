@@ -5,9 +5,11 @@ services:
     container_name: local_postgres
     image: postgres
     environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PORT =${POSTGRES_PORT}
   web:
     container_name: local_django
     build: 
