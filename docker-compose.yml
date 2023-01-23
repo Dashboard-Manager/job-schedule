@@ -13,7 +13,7 @@ services:
     container_name: local_django
     build: 
       context: ./backend
-      dockerfile: .docker/Dockerfile
+      dockerfile: docker/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/src:z
