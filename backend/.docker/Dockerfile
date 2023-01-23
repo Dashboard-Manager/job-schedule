@@ -1,13 +1,16 @@
-FROM python:3
+FROM python:3.9
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+
 WORKDIR /src
 
-RUN pip install pipenv
+COPY Pipfile Pipfile.lock /src/
+RUN pip install pipenv && pipenv install --system
 
-COPY Pipfile Pipfile.lock ./
-RUN pipenv install --system
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    # psycopg2 dependencies
+    libpq-dev 
 
 COPY . /src/
