@@ -2,20 +2,22 @@ version: '3.9'
 
 services:
   db:
-    container_name: postgres
+    container_name: local_postgres
     image: postgres
     environment:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
   web:
-    container_name: django
+    container_name: local_django
     build: 
-      context: .
+      context: ./backend
       dockerfile: .docker/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code/
+      - ./backend:/src:z
+    env_file:
+      - ./backend/.env
     ports:
       - "8000:8000"
     depends_on:
