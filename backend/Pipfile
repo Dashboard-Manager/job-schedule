@@ -7,11 +7,14 @@ name = "pypi"
 django = "*"
 python-dotenv = "*"
 psycopg2-binary = "2.8.6"
+black = "*"
 
 [dev-packages]
 django = "*"
 python-dotenv = "*"
 psycopg2-binary = "2.8.6"
+pylint = "*"
+black = "*"
 
 [requires]
 python_version = "3.9"
