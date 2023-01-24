@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:11
     container_name: local_postgres
     env_file:
       - ./.envs/postgres.env
@@ -11,6 +11,7 @@ services:
 
   web:
     container_name: local_django
+    restart: always
     build:
       context: ./backend
       dockerfile: docker/Dockerfile
