@@ -1,4 +1,4 @@
-name: CHECKS
+name: python-actions
 
 on:
   pull_request:
