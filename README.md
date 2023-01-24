@@ -1,1 +1,1 @@
-# template django base project
+# JOB SCHEDULE
