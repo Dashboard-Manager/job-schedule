@@ -1,3 +1,1 @@
-# job-schedule
-testgit
-e
+# template django base project
