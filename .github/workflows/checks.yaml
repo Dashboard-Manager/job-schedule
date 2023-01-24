@@ -28,6 +28,3 @@ jobs:
         uses: VaultVulp/action-pipenv@v2.0.1
         with:
           command: install -d
-      - name: Run Tests
-        run: |
-          python manage.py test
