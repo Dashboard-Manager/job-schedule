@@ -6,9 +6,15 @@ name = "pypi"
 [packages]
 django = "*"
 python-dotenv = "*"
-psycopg2-binary = "==2.8.6"
+psycopg2-binary = "*"
+black = "*"
 
 [dev-packages]
+django = "*"
+python-dotenv = "*"
+psycopg2-binary = "*"
+pylint = "*"
+black = "*"
 
 [requires]
 python_version = "3.9"

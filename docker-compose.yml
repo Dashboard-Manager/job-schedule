@@ -2,23 +2,22 @@ version: '3.9'
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:11
     container_name: local_postgres
     env_file:
       - ./.envs/postgres.env
     ports:
     - "5432:5432"
-    
+
   web:
     container_name: local_django
-    build: 
+    restart: always
+    build:
       context: ./backend
-      dockerfile: .docker/Dockerfile
+      dockerfile: docker/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend:/src:z
-    env_file:
-      - ./backend/.env
     ports:
       - "8000:8000"
     depends_on:
