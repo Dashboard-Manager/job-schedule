@@ -8,7 +8,6 @@ services:
   web:
     container_name: local_django
     platform: linux/amd64
-    # restart: always
     build:
       context: ./backend
       dockerfile: ./docker/Dockerfile
@@ -19,10 +18,6 @@ services:
     env_file:
       - ./.envs/docker.env
       - ./.envs/postgres.env
-    # environment:
-    # - SECRET_KEY=${SECRET_KEY}
-    # - DEBUG=${DEBUG}
-    # - ALLOWED_HOSTS=${ALLOWED_HOSTS}
     depends_on:
       - db
     command: /django.sh
@@ -31,12 +26,7 @@ services:
     container_name: local_postgres
     env_file:
       - ./.envs/postgres.env
-    # environment:
-    #   - POSTGRES_HOST=${POSTGRES_HOST}
-    #   - POSTGRES_PORT=${POSTGRES_PORT}
-    #   - POSTGRES_DB=${POSTGRES_DB}
-    #   - POSTGRES_USER=${POSTGRES_USER}
-    #   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
