@@ -1,20 +1,30 @@
 [[source]]
+name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-name = "pypi"
 
 [packages]
 django = "*"
-python-dotenv = "*"
+django-environ = "*"
+django-extensions = "*"
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
+drf-spectacular = "*"
 psycopg2-binary = "*"
-black = "*"
+werkzeug = "*"
 
 [dev-packages]
-django = "*"
-python-dotenv = "*"
-psycopg2-binary = "*"
-pylint = "*"
 black = "*"
+coverage = "*"
+factory-boy = "*"
+faker = "*"
+flake8 = "*"
+isort = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-django = "*"
+pytest-mock = "*"
+django-debug-toolbar = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
