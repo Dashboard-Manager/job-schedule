@@ -1,23 +1,38 @@
-FROM python:3.9
+ARG PYTHON_VERSION=3.11-slim-bullseye
+
+FROM python:${PYTHON_VERSION}
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+ARG APP_HOME=/src
+WORKDIR ${APP_HOME}
 
-WORKDIR /src
+COPY Pipfile Pipfile.lock ${APP_HOME}/
 
-COPY Pipfile Pipfile.lock /src/
-RUN pip install pipenv && pipenv install --dev --system
+# RUN pip install pipenv && pipenv install --dev
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     # psycopg2 dependencies
     libpq-dev \
+    && pip3 install pipenv \
+    && pipenv requirements > requirements.txt \
+    && pipenv requirements --dev > dev-requirements.txt \
+    && pip3 install -r requirements.txt \
+    && pip3 install -r dev-requirements.txt \
     # cleaning up unused files
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
 
-COPY . /src/
-ADD ./docker/docker-entrypoint.sh /docker-entrypoint.sh
-RUN chmod a+x /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ADD ./docker/entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r//' /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
+
+ADD ./docker/django.sh /django.sh
+RUN sed -i 's/\r//' /django.sh
+RUN chmod a+x /django.sh
+
+COPY . ${APP_HOME}
+
+ENTRYPOINT ["/entrypoint.sh"]
