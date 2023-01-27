@@ -1,5 +1,12 @@
-exclude: "^docs/|/migrations/,^.envs/,^.coveragerc,^backend/docker/"
 default_stages: [commit, merge-commit, push]
+exclude: |
+    (?x)(
+        ^docs/|
+        /migrations/|
+        ^.envs/|
+        ^.coveragerc|
+        ^backend/docker/
+    )
 
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
