@@ -9,13 +9,14 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-import os
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 from pathlib import Path
+from typing import List
 import environ
 
 env = environ.Env()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BACKEND_DIR = Path(__file__).resolve(strict=True).parent.parent
 APPS_DIR = BACKEND_DIR / "apps"
 
@@ -29,7 +30,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", False)
 
-if DEBUG == True:
+if DEBUG is True:
     ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 else:
     ALLOWED_HOSTS = [env("ALLOWED_HOSTS")]
@@ -52,7 +53,7 @@ LOCAL_APPS = [
     "debug_toolbar",
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS: List[str] = []
 
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS

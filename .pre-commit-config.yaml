@@ -1,26 +1,57 @@
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-added-large-files
+exclude: "^docs/|/migrations/"
+default_stages: [commit, merge-commit, push]
 
-  - repo: https://github.com/psf/black
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: debug-statements
+    -   id: double-quote-string-fixer
+    -   id: name-tests-test
+    -   id: requirements-txt-fixer
+
+-   repo: https://github.com/asottile/pyupgrade
+    rev: v3.3.1
+    hooks:
+    -   id: pyupgrade
+        args: [--py310-plus]
+
+-   repo: https://github.com/psf/black
     rev: 22.10.0
     hooks:
-      - id: black
+    -   id: black
         files: ^backend/
 
-  - repo: https://github.com/pycqa/isort/
+-   repo: https://github.com/pycqa/isort/
     rev: 5.11.4
     hooks:
-      - id: isort
+    -   id: isort
         files: ^backend/
 
-  - repo: https://github.com/PyCQA/flake8
+-   repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
-      - id: flake8
+    -   id: flake8
         files: ^backend/
+        additional_dependencies:
+            - flake8-bugbear
+            - flake8-comprehensions
+            - flake8-simplify
+
+-   repo: https://pypi.org/project/mypy
+    rev: v0.991
+    hooks:
+    -   id: mypy
+        files: ^backend/
+        additional_dependencies:
+            - types-dataclasses >= 0.1.3
+            - types-PyYAML
+            - tomli >= 0.2.6, < 2.0.0
+            - types-typed-ast >= 1.4.1
+            - click >= 8.1.0
+            - platformdirs >= 2.1.0
+            - pytest
+            - hypothesis

@@ -15,11 +15,11 @@ COPY Pipfile Pipfile.lock ${APP_HOME}/
 RUN apt-get update && apt-get install --no-install-recommends -y \
     # psycopg2 dependencies
     libpq-dev \
-    && pip3 install pipenv \
+    && pip install pipenv \
     && pipenv requirements > requirements.txt \
     && pipenv requirements --dev > dev-requirements.txt \
-    && pip3 install -r requirements.txt \
-    && pip3 install -r dev-requirements.txt \
+    && pip install -r requirements.txt \
+    && pip install -r dev-requirements.txt \
     # cleaning up unused files
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*

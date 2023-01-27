@@ -1,6 +1,7 @@
 # Job-schedule
 
 ## To run local and deploy needed
+
 [Python](https://www.python.org/downloads/)\
 [Docker](https://docs.docker.com/compose/install/)
 
@@ -49,11 +50,13 @@ To deploy this project run
 ```bash
   git clone https://github.com/kwiats/job-schedule job-schedule
 ```
+
 Go to the project directory
 
 ```bash
   cd job-schedule
 ```
+
 Run docker
 
 ```bash
@@ -67,11 +70,14 @@ Go to site:
 ```
 
 ## Install packages
+
 ```bash
 cd backend
 pipenv install [package]
 ```
+
 or for dev
+
 ```bash
 pipenv install [package] --dev
 ```
