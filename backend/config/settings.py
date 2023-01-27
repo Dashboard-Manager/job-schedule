@@ -40,15 +40,14 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-LOCAL_APPS = [
+LOCAL_APPS: List[str] = []  # noqa
+
+THIRD_PARTY_APPS = [
     "rest_framework",
     "django_extensions",
     "drf_spectacular",
     "debug_toolbar",
 ]
-
-THIRD_PARTY_APPS: List[str] = []  # noqa
-
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
