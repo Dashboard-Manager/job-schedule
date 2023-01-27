@@ -1,4 +1,5 @@
 from config.settings import *  # noqa
+from config.env import env
 
 # GENERAL
 # ------------------------------------------------------------------------------

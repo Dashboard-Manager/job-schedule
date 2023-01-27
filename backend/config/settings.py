@@ -11,14 +11,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from pathlib import Path
 from typing import List
-import environ
-
-env = environ.Env()
-
-BACKEND_DIR = Path(__file__).resolve(strict=True).parent.parent
-APPS_DIR = BACKEND_DIR / "apps"
+from config.env import env, BACKEND_DIR
 
 
 # Quick-start development settings - unsuitable for production
