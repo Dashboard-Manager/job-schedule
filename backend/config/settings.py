@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from typing import List
+from typing import List  # flake8: noqa
 
 from config.env import BACKEND_DIR, env
 
@@ -47,7 +47,7 @@ LOCAL_APPS = [
     "debug_toolbar",
 ]
 
-THIRD_PARTY_APPS: List[str] = []
+THIRD_PARTY_APPS: List[str] = []  # noqa
 
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
