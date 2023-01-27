@@ -1,4 +1,4 @@
-exclude: "^docs/|/migrations/"
+exclude: "^docs/|/migrations/,^.envs/,^.coveragerc,^backend/docker/"
 default_stages: [commit, merge-commit, push]
 
 repos:
