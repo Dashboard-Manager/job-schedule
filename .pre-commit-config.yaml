@@ -26,8 +26,22 @@ repos:
     rev: 6.0.0
     hooks:
     -   id: flake8
-        args: ["--config_root=.flake8"]
+        args: ['--config=setup.cfg', '--ignore=E129,E2']
         files: ^backend/
+        additional_dependencies:
+        - flake8-absolute-import
+        - flake8-bugbear
+        - flake8-class-attributes-order
+        - flake8-comprehensions
+        - flake8-debugger
+        - flake8-django
+        - flake8-newspaper-style
+        - flake8-no-implicit-concat
+        - flake8-no-pep420
+        - flake8-print
+        - flake8-pytest-style
+        - flake8-simplify
+        - flake8-warnings
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.991
