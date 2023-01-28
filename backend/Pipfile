@@ -41,6 +41,7 @@ pytest-cov = "*"
 pytest-django = "*"
 pytest-mock = "*"
 tox = "*"
+django-stubs = "*"
 
 [requires]
 python_version = "3.11"

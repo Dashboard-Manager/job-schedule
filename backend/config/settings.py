@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 from typing import List  # flake8: noqa
 
-from config.env import BACKEND_DIR, env
+from config.env import BACKEND_DIR, env  # type: ignore
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
