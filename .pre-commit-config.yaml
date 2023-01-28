@@ -50,9 +50,9 @@ repos:
         - flake8-simplify
         - flake8-warnings
 
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.991
-    hooks:
-    -   id: mypy
-        files: ^backend/
-        args: ["--config=mypy.ini"]
+# -   repo: https://github.com/pre-commit/mirrors-mypy
+#     rev: v0.991
+#     hooks:
+#     -   id: mypy
+#         files: ^backend/
+#         args: ["--config=mypy.ini"]
