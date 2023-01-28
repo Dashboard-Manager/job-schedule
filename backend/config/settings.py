@@ -11,9 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-from typing import List  # flake8: noqa
-
-from config.env import BACKEND_DIR, env  # type: ignore
+from config.env import BACKEND_DIR, env
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -40,7 +38,13 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-LOCAL_APPS: List[str] = []  # noqa
+LOCAL_APPS = [
+    "apps.earnings",
+    "apps.filesaver",
+    "apps.schedules",
+    "apps.users",
+    "apps.workstations",
+]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
