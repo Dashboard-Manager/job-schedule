@@ -1,3 +1,4 @@
+from apps.earnings.services import constants
 from apps.earnings.services.calculations import (
     calc_disability_contr,
     calc_health_care_contr,
@@ -20,7 +21,36 @@ class BaseModel(models.Model):  # type: ignore
 
 
 class Earnings(BaseModel):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    constant_pension_contribution = models.FloatField(
+        verbose_name="Pension Contribution",
+        default=constants.PENSION,
+    )
+
+    constant_disability_contribution = models.FloatField(
+        verbose_name="Disability Contribution",
+        default=constants.DISABILITY,
+    )
+
+    constant_sickness_contribution = models.FloatField(
+        verbose_name="Sickness Contribution",
+        default=constants.SICKNESS,
+    )
+
+    constant_health_care_contribution = models.FloatField(
+        verbose_name="Health Care Contribution",
+        default=constants.HEALTH_CARE,
+    )
+
+    constant_PIT = models.FloatField(
+        verbose_name="PIT tax",
+        default=constants.PIT,
+    )
+
+    user = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
 
     @property
     def age(self) -> int:
@@ -32,15 +62,30 @@ class Earnings(BaseModel):
 
     @property
     def pension_contribution(self) -> float:
-        return float(calc_pension_contr(self.brutto_salary))
+        return float(
+            calc_pension_contr(
+                self.brutto_salary,
+                self.constant_pension_contribution,
+            )
+        )
 
     @property
     def disability_contribution(self) -> float:
-        return float(calc_disability_contr(self.brutto_salary))
+        return float(
+            calc_disability_contr(
+                self.brutto_salary,
+                self.constant_disability_contribution,
+            )
+        )
 
     @property
     def sickness_contribution(self) -> float:
-        return float(calc_sickness_contr(self.brutto_salary))
+        return float(
+            calc_sickness_contr(
+                self.brutto_salary,
+                self.constant_sickness_contribution,
+            )
+        )
 
     @property
     def ZUS_contributions(self) -> float:
@@ -55,16 +100,32 @@ class Earnings(BaseModel):
 
     @property
     def health_care_contribution(self) -> float:
-        return float(calc_health_care_contr(self.brutto_salary, self.ZUS_contributions))
+        return float(
+            calc_health_care_contr(
+                self.brutto_salary,
+                self.ZUS_contributions,
+                self.constant_health_care_contribution,
+            )
+        )
 
     @property
     def income(self) -> float:
-        return float(calc_income(self.brutto_salary, self.ZUS_contributions))
+        return float(
+            calc_income(
+                self.brutto_salary,
+                self.ZUS_contributions,
+            )
+        )
 
     @property
     def income_tax(self) -> int:
         if self.user.age > 26:
-            return int(calc_income_tax(self.income))
+            return int(
+                calc_income_tax(
+                    self.income,
+                    self.constant_PIT,
+                )
+            )
         return 0
 
     @property
