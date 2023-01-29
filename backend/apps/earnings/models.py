@@ -44,12 +44,13 @@ class Earnings(BaseModel):
 
     @property
     def ZUS_contributions(self) -> float:
-        return float(
+        return round(
             (
                 self.pension_contribution
                 + self.disability_contribution
                 + self.sickness_contribution
-            )
+            ),
+            2,
         )
 
     @property
@@ -68,11 +69,12 @@ class Earnings(BaseModel):
 
     @property
     def netto_salary(self) -> float:
-        return float(
+        return round(
             (
                 self.brutto_salary
                 - self.ZUS_contributions
                 - self.health_care_contribution
                 - self.income_tax
-            )
+            ),
+            2,
         )
