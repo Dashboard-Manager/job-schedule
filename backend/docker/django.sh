@@ -4,8 +4,13 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-python manage.py makemigrations
+echo "Making migrations for apps [users, earnings, ..]"
+python manage.py makemigrations users earnings
+
+echo "Apply database migrations"
 python manage.py migrate
+
+echo "Running server on 0.0.0.0:8000"
 python manage.py runserver_plus 0.0.0.0:8000
 
 exec "$@"
