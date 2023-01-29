@@ -40,10 +40,10 @@ DJANGO_APPS = [
 
 LOCAL_APPS = [
     "apps.earnings",
-    "apps.filesaver",
-    "apps.schedules",
     "apps.users",
     "apps.workstations",
+    "apps.schedules",
+    "apps.filesaver",
 ]
 
 THIRD_PARTY_APPS = [
@@ -54,6 +54,8 @@ THIRD_PARTY_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
+
+AUTH_USER_MODEL = "users.Profile"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
