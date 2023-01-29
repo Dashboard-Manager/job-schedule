@@ -28,6 +28,7 @@ class EarningsAdmin(admin.ModelAdmin):  # type: ignore
         "income",
         "income_tax",
     ]
+
     fieldsets = (
         (
             "Profile informations",
@@ -54,6 +55,19 @@ class EarningsAdmin(admin.ModelAdmin):  # type: ignore
             },
         ),
         (
+            "Constants for calculations",
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "constant_pension_contribution",
+                    "constant_disability_contribution",
+                    "constant_sickness_contribution",
+                    "constant_health_care_contribution",
+                    "constant_PIT",
+                ),
+            },
+        ),
+        (
             "Earnings informations",
             {
                 "classes": (
@@ -76,12 +90,4 @@ class EarningsAdmin(admin.ModelAdmin):  # type: ignore
             },
         ),
     )
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": ("user"),
-            },
-        ),
-    )
+    add_fieldsets = ()
