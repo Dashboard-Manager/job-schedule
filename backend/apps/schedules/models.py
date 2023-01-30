@@ -1,7 +1,6 @@
 from apps.users.models import Profile
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 
 class BaseModel(models.Model):  # type: ignore
@@ -13,12 +12,6 @@ class BaseModel(models.Model):  # type: ignore
 
 
 class Event(BaseModel):
-    # choices
-    class TypeOfEvent(models.TextChoices):  # type: ignore
-        TASK = "TASK", _("Task")
-        JOB = "JOB", _("Job hours")
-        EVENT = "EVENT", _("Job event")
-
     title = models.TextField(
         verbose_name="Title of event",
         default="title",
@@ -26,11 +19,6 @@ class Event(BaseModel):
     description = models.TextField(
         verbose_name="Description of event",
         default="...",
-    )
-    type = models.CharField(
-        max_lentgh=5,
-        choices=TypeOfEvent.choices,
-        default=TypeOfEvent.JOB,
     )
 
     start_time = models.DateTimeField()
@@ -51,7 +39,19 @@ class Event(BaseModel):
         related_name="performer",
     )
 
-    # slug = models.SlugField(max_length=50, )
+    def __str__(self) -> str:
+        return f"{self.title}"
 
-    # TODO: create validators
-    # TODO: slug filed?
+
+class Job(BaseModel):
+    start_job = models.DateTimeField(db_index=True, default=timezone.now)
+    end_job = models.DateTimeField()
+
+    user = models.ForeignKey(Profile, related_name="employer")
+
+    def __str__(self) -> str:
+        return f"{self.user} worked by {self.job_hours} hours"
+
+    @property
+    def job_hours(self) -> int:
+        return int(divmod((self.start_job - self.end_job).total_seconds(), 3600)[0])
