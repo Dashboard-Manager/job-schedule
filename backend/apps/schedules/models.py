@@ -30,6 +30,7 @@ class Event(BaseModel):
         blank=True,
         null=True,
         related_name="author",
+        on_delete=models.SET_NULL,
     )
     to_user = models.ForeignKey(
         Profile,
@@ -37,6 +38,7 @@ class Event(BaseModel):
         blank=True,
         null=True,
         related_name="performer",
+        on_delete=models.SET_NULL,
     )
 
     def __str__(self) -> str:
@@ -44,10 +46,12 @@ class Event(BaseModel):
 
 
 class Job(BaseModel):
-    start_job = models.DateTimeField(db_index=True, default=timezone.now)
-    end_job = models.DateTimeField()
+    start_job = models.DateTimeField(
+        verbose_name="Start working", db_index=True, default=timezone.now
+    )
+    end_job = models.DateTimeField(verbose_name="Stop working")
 
-    user = models.ForeignKey(Profile, related_name="employer")
+    user = models.ForeignKey(Profile, related_name="employer", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.user} worked by {self.job_hours} hours"
@@ -55,3 +59,6 @@ class Job(BaseModel):
     @property
     def job_hours(self) -> int:
         return int(divmod((self.start_job - self.end_job).total_seconds(), 3600)[0])
+
+
+# TODO: class Task(BaseModel)...
