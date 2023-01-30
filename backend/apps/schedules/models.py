@@ -49,7 +49,7 @@ class Job(BaseModel):
     start_job = models.DateTimeField(
         verbose_name="Start working", db_index=True, default=timezone.now
     )
-    end_job = models.DateTimeField(verbose_name="Stop working")
+    end_job = models.DateTimeField(verbose_name="Stop working", blank=True, null=True)
 
     user = models.ForeignKey(Profile, related_name="employer", on_delete=models.CASCADE)
 
@@ -58,7 +58,9 @@ class Job(BaseModel):
 
     @property
     def job_hours(self) -> int:
-        return int(divmod((self.start_job - self.end_job).total_seconds(), 3600)[0])
+        if self.end_job:
+            return int(divmod((self.end_job - self.start_job).total_seconds(), 3600)[0])
+        return 0
 
 
 # TODO: class Task(BaseModel)...
