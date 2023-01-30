@@ -46,6 +46,8 @@ class Event(BaseModel):
 
 
 class Job(BaseModel):
+    date = models.DateField(default=timezone.now)
+
     start_job = models.DateTimeField(
         verbose_name="Start working", db_index=True, default=timezone.now
     )
@@ -63,4 +65,4 @@ class Job(BaseModel):
         return 0
 
 
-# TODO: class Task(BaseModel)...
+# TODO: class Task(BaseModel)... #noqa #type: ignore
