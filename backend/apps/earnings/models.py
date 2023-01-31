@@ -10,6 +10,7 @@ from apps.earnings.services.calculations import (
 from apps.users.models import Profile
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 
 class BaseModel(models.Model):  # type: ignore
@@ -139,3 +140,35 @@ class Earnings(BaseModel):
             ),
             2,
         )
+
+
+class JobHours(BaseModel):
+    MONTH = "MONTHLY"
+    WEEK = "WEEKLY"
+    YEAR = "YEARLY"
+    TIMEPERIOD = [
+        (MONTH, _("Working hours from last month")),
+        (WEEK, _("Working hours from last week")),
+        (YEAR, _("Working hours from last week")),
+    ]
+
+    _job_hours = models.IntegerField(db_column="job_hours")
+    date = models.DateField(default=timezone.now())
+
+    period = models.CharField(choices=TIMEPERIOD, default=MONTH)
+
+    def __str__(self) -> str:
+        return f"{self.period} - {self.date}"
+
+    @property
+    def job_hours(self) -> int:
+        return self._job_hours  # type: ignore
+
+    @job_hours.setter
+    def job_hours(self) -> None:
+        if self.period == self.MONTHLY:
+            self._job_hours = 1  # TODO: func to take hours from current month
+        if self.period == self.WEEKLY:
+            self._job_hours = 2  # TODO: func to take hours from current week
+        if self.period == self.YEARLY:
+            self._job_hours = 3  # TODO: func to take hours from current year
