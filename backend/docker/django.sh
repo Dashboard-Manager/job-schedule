@@ -4,8 +4,8 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-echo "Making migrations for apps [users, earnings, ..]"
-python manage.py makemigrations users earnings
+echo "Making migrations for apps [users, earnings, schedules...]"
+python manage.py makemigrations users earnings schedules
 
 echo "Apply database migrations"
 python manage.py migrate
