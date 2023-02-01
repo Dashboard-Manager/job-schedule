@@ -7,10 +7,10 @@ from apps.earnings.services.calculations import (
     calc_pension_contr,
     calc_sickness_contr,
 )
+from apps.earnings.services.working_hours import get_working_hours
 from apps.users.models import Profile
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 
 
 class BaseModel(models.Model):  # type: ignore
@@ -143,22 +143,14 @@ class Earnings(BaseModel):
 
 
 class JobHours(BaseModel):
-    MONTH = "MONTHLY"
-    WEEK = "WEEKLY"
-    YEAR = "YEARLY"
-    TIMEPERIOD = [
-        (MONTH, _("Working hours from last month")),
-        (WEEK, _("Working hours from last week")),
-        (YEAR, _("Working hours from last week")),
-    ]
 
-    _job_hours = models.IntegerField(db_column="job_hours")
+    _job_hours = models.IntegerField(db_column="job_hours", default=0)
+
     date = models.DateField(default=timezone.now())
+    start_date = models.DateField(default=(timezone.now() - timezone.timedelta(days=1)))
+    end_date = models.DateField(default=timezone.now())
 
-    period = models.CharField(choices=TIMEPERIOD, default=MONTH)
-
-    def __str__(self) -> str:
-        return f"{self.period} - {self.date}"
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="employer")
 
     @property
     def job_hours(self) -> int:
@@ -166,9 +158,6 @@ class JobHours(BaseModel):
 
     @job_hours.setter
     def job_hours(self) -> None:
-        if self.period == self.MONTHLY:
-            self._job_hours = 1  # TODO: func to take hours from current month
-        if self.period == self.WEEKLY:
-            self._job_hours = 2  # TODO: func to take hours from current week
-        if self.period == self.YEARLY:
-            self._job_hours = 3  # TODO: func to take hours from current year
+        self._job_hours = get_working_hours(self.user, self.start_date, self.end_date)
+
+    # clean
