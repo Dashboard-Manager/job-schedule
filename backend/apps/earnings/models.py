@@ -143,21 +143,23 @@ class Earnings(BaseModel):
 
 
 class JobHours(BaseModel):
+    date = models.DateField(default=timezone.now)
+    start_date = models.DateField(default=timezone.now)
+    end_date = models.DateField(default=timezone.now)
 
-    _job_hours = models.IntegerField(db_column="job_hours", default=0)
+    user = models.ForeignKey(
+        Profile,
+        on_delete=models.CASCADE,
+    )
 
-    date = models.DateField(default=timezone.now())
-    start_date = models.DateField(default=(timezone.now() - timezone.timedelta(days=1)))
-    end_date = models.DateField(default=timezone.now())
-
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="employer")
+    def __str__(self) -> str:
+        return f"{self.user} has {self.hours} hours in job"
 
     @property
-    def job_hours(self) -> int:
-        return self._job_hours  # type: ignore
+    def hours(self) -> int:
+        if self.user:
+            return int(get_working_hours(self.user, self.start_date, self.end_date))
+        return 0
 
-    @job_hours.setter
-    def job_hours(self) -> None:
-        self._job_hours = get_working_hours(self.user, self.start_date, self.end_date)
 
-    # clean
+# clean
