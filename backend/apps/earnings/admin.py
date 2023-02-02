@@ -1,4 +1,4 @@
-from apps.earnings.models import Earnings
+from apps.earnings.models import Earnings, JobHours
 from apps.users.models import Profile
 from django.contrib import admin
 
@@ -91,3 +91,46 @@ class EarningsAdmin(admin.ModelAdmin):  # type: ignore
         ),
     )
     add_fieldsets = ()
+
+
+@admin.register(JobHours)
+class JobAdmin(admin.ModelAdmin):  # type: ignore
+    list_display = [
+        "user",
+        "start_date",
+        "end_date",
+        "hours",
+        "extra_hours",
+    ]
+
+    readonly_fields = [
+        "hours",
+        "extra_hours",
+    ]
+    fieldsets = (
+        (
+            "Profile informations",
+            {
+                "fields": (
+                    "user",
+                    "hours",
+                    "extra_hours",
+                )
+            },
+        ),
+        (
+            "Find hours between dates..",
+            {
+                "classes": (
+                    "wide",
+                    "extrapretty",
+                ),
+                "fields": (
+                    (
+                        "start_date",
+                        "end_date",
+                    ),
+                ),
+            },
+        ),
+    )

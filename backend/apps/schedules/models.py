@@ -1,3 +1,4 @@
+from apps.schedules.services import get_hours
 from apps.users.models import Profile
 from django.db import models
 from django.utils import timezone
@@ -59,9 +60,17 @@ class Job(BaseModel):
         return f"{self.user} worked by {self.job_hours} hours"
 
     @property
-    def job_hours(self) -> int:
+    def job_hours(self):
         if self.end_job:
-            return int(divmod((self.end_job - self.start_job).total_seconds(), 3600)[0])
+            hours = get_hours(self.end_job, self.start_job)
+            return min(hours, 8.0)
+        return 0
+
+    @property
+    def extra_job_hours(self):
+        if self.job_hours == 8:
+            hours = get_hours(self.end_job, self.start_job) - 8
+            return max(0, hours)
         return 0
 
 
