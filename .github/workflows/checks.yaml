@@ -72,4 +72,5 @@ jobs:
       - name: Checkout mypy
         uses: jpetrucciani/mypy-check@master
         with:
-          path: "./backend"
+          path: "."
+          mypy_flags: '--config-file mypy.ini'
