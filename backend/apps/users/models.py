@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class Profile(AbstractUser):  # type: ignore
+class Profile(AbstractUser):
     salary = models.FloatField(verbose_name="brutto salary", default=0.0)
     birth_date = models.DateField(verbose_name="date of birth", blank=True, null=True)
 

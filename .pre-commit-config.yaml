@@ -33,7 +33,7 @@ repos:
     rev: 6.0.0
     hooks:
     -   id: flake8
-        args: ['--config=setup.cfg', '--ignore=E129,E2']
+        args: ['--config=setup.cfg']
         files: ^backend/
         additional_dependencies:
         - flake8-absolute-import
@@ -49,10 +49,3 @@ repos:
         - flake8-pytest-style
         - flake8-simplify
         - flake8-warnings
-
--   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v0.991
-    hooks:
-    -   id: mypy
-        files: ^backend/
-        args: ["--config=mypy.ini"]

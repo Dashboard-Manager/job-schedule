@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class EarningsConfig(AppConfig):  # type: ignore
+class EarningsConfig(AppConfig):
     name = "apps.earnings"
     verbose_name = "Earnings"
