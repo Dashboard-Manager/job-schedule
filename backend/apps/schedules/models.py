@@ -61,17 +61,15 @@ class Job(BaseModel):
 
     @property
     def job_hours(self):
-        if self.end_job:
-            hours = get_hours(self.end_job, self.start_job)
-            return min(hours, 8.0)
-        return 0
+        if not self.end_job:
+            return 0
+        hours = get_hours(self.end_job, self.start_job)
+        return min(hours, 8.0)
 
     @property
     def extra_job_hours(self):
-        if self.job_hours == 8:
-            hours = get_hours(self.end_job, self.start_job) - 8
-            return max(0, hours)
-        return 0
+        hours = get_hours(self.end_job, self.start_job)
+        return max(0, hours - 8)
 
 
 # TODO: class Task(BaseModel)... #noqa #type: ignore
