@@ -23,6 +23,7 @@ jobs:
       - name: Setup pipenv
         shell: bash
         run: |
+            cd backend
             pip install pipenv
             pipenv install --system
             pipenv install --dev
