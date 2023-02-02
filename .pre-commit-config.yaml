@@ -56,3 +56,5 @@ repos:
     -   id: mypy
         files: ^backend/
         args: ["--config=./backend/mypy.ini"]
+        additional_dependencies:
+        - django-stubs
