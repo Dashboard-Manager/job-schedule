@@ -48,6 +48,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: django
     steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
       - name: Run Django Tests
         run:  docker-compose run web coverage run -m pytest
       - name: Generate coverage.lcov
