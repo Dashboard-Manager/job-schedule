@@ -7,10 +7,10 @@ env:
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", 'develop' ]
 
   push:
-    branches: [ "main" ]
+    branches: [ "main", 'develop' ]
 
 jobs:
   django:
@@ -28,12 +28,14 @@ jobs:
         run: |
             cd backend
             pip install pipenv
-            pipenv install --system
-            pipenv install --dev
+            pipenv requirements > requirements.txt
+            pipenv requirements --dev > dev-requirements.txt
+            pip install -r requirements.txt
+            pip install -r dev-requirements.txt
 
-  # With no caching at all the entire ci process takes 4m 30s to complete!
   pytest:
     runs-on: ubuntu-latest
+    needs: django
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v3
@@ -56,6 +58,7 @@ jobs:
 
   mypy:
     runs-on: ubuntu-latest
+    needs: django
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v3
