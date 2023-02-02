@@ -161,5 +161,15 @@ class JobHours(BaseModel):
             return int(get_working_hours(self.user, self.start_date, self.end_date))
         return 0
 
+    @property
+    def extra_hours(self) -> int:
+        if self.user:
+            return int(
+                get_working_hours(
+                    self.user, self.start_date, self.end_date, extra_hours=True
+                )
+            )
+        return 0
+
 
 # clean
