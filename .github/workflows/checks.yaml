@@ -15,6 +15,23 @@ on:
     paths-ignore: [ "migrations/**" ]
 
 jobs:
+  django:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
+      - name: Setup pipenv
+        shell: bash
+        run: |
+            pip install pipenv
+            pipenv install --system
+            pipenv install --dev
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11.0"
+          architecture: x64
+
   # With no caching at all the entire ci process takes 4m 30s to complete!
   pytest:
     runs-on: ubuntu-latest
@@ -41,12 +58,9 @@ jobs:
   mypy:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11.0
-          architecture: x64
-      - name: Checkout
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
+      - name: Checkout mypy
         uses: jpetrucciani/mypy-check@master
         with:
-          mypy_flags: '--config-file ./backend/mypy.ini'
+          path: "./backend"
