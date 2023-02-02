@@ -10,9 +10,11 @@ class JobAdmin(admin.ModelAdmin):  # type: ignore
         "user",
         "date",
         "job_hours",
+        "extra_job_hours",
     ]
     readonly_fields = [
         "job_hours",
+        "extra_job_hours",
     ]
 
     fieldsets = (
@@ -22,6 +24,7 @@ class JobAdmin(admin.ModelAdmin):  # type: ignore
                 "fields": (
                     "user",
                     "job_hours",
+                    "extra_job_hours",
                     "date",
                 )
             },
