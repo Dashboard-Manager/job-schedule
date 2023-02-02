@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11.0"
+          architecture: x64
       - name: Setup pipenv
         shell: bash
         run: |
@@ -27,11 +32,6 @@ jobs:
             pip install pipenv
             pipenv install --system
             pipenv install --dev
-      - name: Setup Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.11.0"
-          architecture: x64
 
   # With no caching at all the entire ci process takes 4m 30s to complete!
   pytest:
