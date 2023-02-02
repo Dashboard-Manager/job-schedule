@@ -33,7 +33,7 @@ repos:
     rev: 6.0.0
     hooks:
     -   id: flake8
-        args: ['--config=setup.cfg', '--ignore=E129,E2']
+        args: ['--config=setup.cfg']
         files: ^backend/
         additional_dependencies:
         - flake8-absolute-import
