@@ -1,3 +1,15 @@
-*.md
+#Ignore the logs directory
+logs/
+
+#Ignoring the password file
+.envs/*
+
+#Ignoring git and cache folders
 .git
-.gitignore
+.cache
+.venv
+.env
+.pytest_cache
+.mypy_cache
+#Ignoring all the markdown and class files
+*.md
