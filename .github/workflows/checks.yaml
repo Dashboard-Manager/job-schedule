@@ -70,7 +70,4 @@ jobs:
       - name: Checkout Code Repository
         uses: actions/checkout@v3
       - name: Checkout mypy
-        uses: jpetrucciani/mypy-check@master
-        with:
-          path: "./backend"
-          mypy_flags: '--config-file mypy.ini'
+        uses: docker-compose run web mypy . --config-file mypy.ini
