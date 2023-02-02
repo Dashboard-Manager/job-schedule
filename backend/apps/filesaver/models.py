@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class BaseModel(models.Model):  # type: ignore
+class BaseModel(models.Model):
     class Meta:
         abstract = True
 

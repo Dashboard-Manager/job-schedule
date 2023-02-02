@@ -17,15 +17,15 @@ from config.env import BACKEND_DIR, env
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default="aaaa")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", False)
+DEBUG = env.bool("DEBUG", True)
 
-if DEBUG is True:
-    ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
-else:
+if DEBUG is False:
     ALLOWED_HOSTS = [env("ALLOWED_HOSTS")]
+else:
+    ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
@@ -91,15 +91,14 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-# DATABASES = {"default": config("DATABASE_URL")}
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": env("POSTGRES_PORT"),
+        "NAME": env("POSTGRES_DB", default="postgres_db"),
+        "USER": env("POSTGRES_USER", default="postgres_user"),
+        "PASSWORD": env("POSTGRES_PASSWORD", default="postgres_pass"),
+        "HOST": env("POSTGRES_HOST", default="postgres"),
+        "PORT": env("POSTGRES_PORT", default="5432"),
     }
 }
 # Password validation

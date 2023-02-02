@@ -55,4 +55,4 @@ repos:
     hooks:
     -   id: mypy
         files: ^backend/
-        args: ["--config=mypy.ini"]
+        args: ["--config=./backend/mypy.ini"]

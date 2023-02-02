@@ -1,30 +1,52 @@
-name: python-actions
+name: CI
+
+# Enable Buildkit and let compose use it to speed up image building
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
 
 on:
   pull_request:
-    branches: ["main"]
+    branches: [ "main" ]
+    paths-ignore: [ "migrations/**" ]
 
   push:
-    branches: ["main"]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      # You can use PyPy versions in python-version.
-      # For example, pypy-2.7 and pypy-3.8
-      matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11"]
+    branches: [ "main" ]
+    paths-ignore: [ "migrations/**" ]
 
+jobs:
+  # With no caching at all the entire ci process takes 4m 30s to complete!
+  pytest:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Checkout Code Repository
+        uses: actions/checkout@v3
+      - name: Build the Stack
+        run:  docker-compose build
+      - name: Run DB Migrations
+        run:  docker-compose run --rm django python manage.py migrate
+      - name: Run Django Tests
+        run:  docker-compose run django coverage run -m pytest
+      - name: Generate coverage.lcov
+        run: docker-compose run django coverage lcov
+      - name: Tear down the Stack
+        run:  docker-compose down
+      - name: Coveralls GitHub Action
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: "./backend/coverage.lcov"
+          base-path: "./backend"
+        uses: coverallsapp/github-action@1.1.3
+
+  mypy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      # You can test your matrix by printing the current Python version
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-      - name: Install dependecies
-        uses: VaultVulp/action-pipenv@v2.0.1
+          python-version: 3.11.0
+          architecture: x64
+      - name: Checkout
+        uses: jpetrucciani/mypy-check@master
         with:
-          command: install -d
+          mypy_flags: '--config-file ./backend/mypy.ini'

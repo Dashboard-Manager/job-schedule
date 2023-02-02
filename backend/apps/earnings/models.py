@@ -12,7 +12,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class BaseModel(models.Model):  # type: ignore
+class BaseModel(models.Model):
     class Meta:
         abstract = True
 
@@ -123,7 +123,7 @@ class Earnings(BaseModel):
             return int(
                 calc_income_tax(
                     self.income,
-                    self.constant_PIT,
+                    int(self.constant_PIT),
                 )
             )
         return 0
