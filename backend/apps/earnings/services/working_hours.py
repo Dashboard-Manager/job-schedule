@@ -1,12 +1,13 @@
+from datetime import date
+
 from apps.schedules.models import Job
 from apps.users.models import Profile
-from django.db import models
 
 
 def get_working_hours(
     user: Profile,
-    start_date: models.DateField,
-    end_date: models.DateField,
+    start_date: date,
+    end_date: date,
     extra_hours: bool = False,
 ) -> int:
 
