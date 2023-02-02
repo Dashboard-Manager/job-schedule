@@ -68,6 +68,8 @@ class Job(BaseModel):
 
     @property
     def extra_job_hours(self):
+        if not self.end_job:
+            return 0
         hours = get_hours(self.end_job, self.start_job)
         return max(0, hours - 8)
 
