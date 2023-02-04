@@ -1,4 +1,3 @@
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 from config.env import BACKEND_DIR, env
 
 # Quick-start development settings - unsuitable for production
@@ -7,15 +6,49 @@ from config.env import BACKEND_DIR, env
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", True)
+DEBUG = env.bool("DJANGO_DEBUG", True)
 
 if DEBUG is False:
     ALLOWED_HOSTS = [env("ALLOWED_HOSTS")]
 else:
     ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+# Internationalization
+
+LANGUAGE_CODE = "en-us"
+
+TIME_ZONE = "UTC"
+
+USE_I18N = True
+
+USE_TZ = True
+
+SITE_ID = 1
+
+LOCALE_PATHS = [str(BACKEND_DIR / "locale")]
+
+# Databases
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env("POSTGRES_DB", default="postgres_db"),
+        "USER": env("POSTGRES_USER", default="postgres_user"),
+        "PASSWORD": env("POSTGRES_PASSWORD", default="postgres_pass"),
+        "HOST": env("POSTGRES_HOST", default="postgres"),
+        "PORT": env("POSTGRES_PORT", default="5432"),
+    }
+}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Urls
+
+ROOT_URLCONF = "config.urls"
+WSGI_APPLICATION = "config.wsgi.application"
 
 
-# Application definition
+# Applications
 DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -41,7 +74,44 @@ THIRD_PARTY_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
+# Migrations
+
+MIGRATION_MODULES = {
+    "earnings": "apps.earnings.migrations",
+    "filesaver": "apps.filesaver.migrations",
+    "schedules": "apps.schedules.migrations",
+    "users": "apps.users.migrations",
+    "workstations": "apps.workstations.migrations",
+}
+
+# Authentication
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+]
+
 AUTH_USER_MODEL = "users.Profile"
+
+# Passwords
+
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",  # noqa
+        "OPTION": {
+            "MIN_LENGTH": 5,
+        },
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",  # noqa
+    },
+    {
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",  # noqa
+    },
+]
+
+# Middleware
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -53,7 +123,20 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "config.urls"
+# Statics and media
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(BACKEND_DIR / "staticfiles")
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = "/static/"
+# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = [str(BACKEND_DIR / "static")]
+# https://docs.djangoproject.com/en/dev/ref/settings/#media-root
+MEDIA_ROOT = str(BACKEND_DIR / "media")
+# https://docs.djangoproject.com/en/dev/ref/settings/#media-url
+MEDIA_URL = "/media/"
+
+# Templates
 
 TEMPLATES = [
     {
@@ -71,91 +154,35 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "config.wsgi.application"
-
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BACKEND_DIR / "db_local.sqlite3",
-    }
-}
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",  # noqa
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",  # noqa
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",  # noqa
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",  # noqa
-    },
-]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
-
-LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
-
-USE_I18N = True
-
-USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(BACKEND_DIR / "staticfiles")
-# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = "/static/"
-# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [str(BACKEND_DIR / "static")]
-# https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(BACKEND_DIR / "media")
-# https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = "/media/"
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-SHELL_PLUS = "ipython"
-
-SHELL_PLUS_PRINT_SQL = True
-
-NOTEBOOK_ARGUMENTS = [
-    "--ip",
-    "0.0.0.0",
-    "--port",
-    "8000",
-    "--allow-root",
-    "--no-browser",
-]
-
-IPYTHON_ARGUMENTS = [
-    "--ext",
-    "django_extensions.management.notebook_extension",
-    "--debug",
-]
-
-IPYTHON_KERNEL_DISPLAY_NAME = "Django Shell-Plus"
-
-RUNSERVERPLUS_SERVER_ADDRESS_PORT = "0.0.0.0:8000"
+# Admins
 
 ADMIN_URL = "admin/"
+
+ADMINS = [("kwiatuh", "kwiatuh@example.com"), ("x", "y")]  # twoje miejsce
+
+MANAGERS = ADMINS
+
+# Email
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+EMAIL_BACKEND = env(
+    "DJANGO_EMAIL_BACKEND",
+    default="django.core.mail.backends.smtp.EmailBackend",
+)
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
+EMAIL_TIMEOUT = 5
+
+# Security
+
+SESSION_COOKIE_HTTPONLY = True
+
+CSRF_COOKIE_HTTPONLY = True
+
+SECURE_BROWSER_XSS_FILTER = True
+
+X_FRAME_OPTIONS = "DENY"
+
+# Logging
 
 LOGGING = {
     "version": 1,
@@ -175,3 +202,25 @@ LOGGING = {
     },
     "root": {"level": "INFO", "handlers": ["console"]},
 }
+
+
+# DRF
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# Spectacular - api docs
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Dashboard Manager - API",
+    "DESCRIPTION": "Documentation of API",
+    "VERSION": "1.0.0",
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+}
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
