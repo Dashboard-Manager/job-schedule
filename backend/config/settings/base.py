@@ -7,12 +7,12 @@ from config.env import BACKEND_DIR, env
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", True)
+DEBUG = env.bool("DEBUG", False)
 
-if DEBUG is False:
-    ALLOWED_HOSTS = [env("ALLOWED_HOSTS")]
-else:
-    ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+# if DEBUG is False:
+#     ALLOWED_HOSTS = [env("ALLOWED_HOSTS")]
+# else:
+#     ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 
 # Application definition
@@ -73,15 +73,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BACKEND_DIR / "db_local.sqlite3",
-    }
-}
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -131,29 +122,6 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-SHELL_PLUS = "ipython"
-
-SHELL_PLUS_PRINT_SQL = True
-
-NOTEBOOK_ARGUMENTS = [
-    "--ip",
-    "0.0.0.0",
-    "--port",
-    "8000",
-    "--allow-root",
-    "--no-browser",
-]
-
-IPYTHON_ARGUMENTS = [
-    "--ext",
-    "django_extensions.management.notebook_extension",
-    "--debug",
-]
-
-IPYTHON_KERNEL_DISPLAY_NAME = "Django Shell-Plus"
-
-RUNSERVERPLUS_SERVER_ADDRESS_PORT = "0.0.0.0:8000"
 
 ADMIN_URL = "admin/"
 

@@ -12,6 +12,7 @@ djangorestframework-simplejwt = "*"
 drf-spectacular = "*"
 psycopg2-binary = "*"
 werkzeug = "*"
+django-configurations = {extras = ["database"], version = "*"}
 
 [dev-packages]
 black = "*"
