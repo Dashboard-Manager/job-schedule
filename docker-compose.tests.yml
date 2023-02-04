@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+
+  tests:
+    container_name: tests_django
+    platform: linux/amd64
+    build:
+      context: ./backend
+      dockerfile: ./docker/Dockerfile
+    command: /dev_valid.sh

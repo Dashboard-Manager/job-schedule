@@ -10,7 +10,13 @@ def user_data():
     }
 
 
-def test_user_data(user_data):
+def test_user_data_username(user_data):
     User = get_user_model()
     user = User(**user_data)
     assert user.username == "Robert"
+
+
+def test_user_data_password(user_data):
+    User = get_user_model()
+    user = User(**user_data)
+    assert user.password == "robert123"

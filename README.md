@@ -2,7 +2,7 @@
 
 ## To run local and deploy needed
 
-[Python](https://www.python.org/downloads/)\
+[Python](https://www.python.org/downloads/)
 [Docker](https://docs.docker.com/compose/install/)
 
 ## Run Locally
@@ -21,9 +21,7 @@ Go to the project directory
 
 Install pipenv
 
-```bash
-  pip install pipenv
-```
+Use one for this commands [pipenv](https://pypi.org/project/pipenv/#installation)
 
 Install dependencies
 
@@ -40,7 +38,7 @@ Go to the shell
 Start the server
 
 ```bash
-  python3 manage.py runserver_plus
+  pipenv run python manage.py runserver_plus
 ```
 
 ## Deployment
@@ -80,4 +78,38 @@ or for dev
 
 ```bash
 pipenv install [package] --dev
+```
+
+## Develop mode
+
+install develop packages
+
+```bash
+  cd backend
+  pipenv install --dev
+```
+
+run local develop script
+
+```bash
+  cd backend
+  ./dev_valid.sh
+```
+
+run local develop script in docker container if change build directory
+
+```bash
+  docker-compose -f docker-compose.tests.yml up --build
+```
+
+or use only docker-compose up
+
+```bash
+  docker-compose -f docker-compose.tests.yml up
+```
+
+coverage html
+
+```bash
+  start ./htmlcov/index.html
 ```
