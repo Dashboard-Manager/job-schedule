@@ -1,0 +1,7 @@
+[run]
+omit = */migrations/*
+
+[paths]
+source =
+    apps/
+    config/
