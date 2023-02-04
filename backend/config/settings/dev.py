@@ -7,23 +7,35 @@ try:  # noqa
 except ImportError:
     pass
 
-# Generals
-SECRET_KEY = env("SECRET_KEY", default="random_few_signs")
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS", default=["localhost", "0.0.0.0", "127.0.0.1"])
+DEBUG = env.bool("DEBUG")
+# Generals
+SECRET_KEY = env("SECRET_KEY")
+
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 # Databases
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("POSTGRES_DB", default="postgres_db"),
-        "USER": env("POSTGRES_USER", default="postgres_user"),
-        "PASSWORD": env("POSTGRES_PASSWORD", default="postgres_pass"),
-        "HOST": env("POSTGRES_HOST", default="postgres"),
-        "PORT": env("POSTGRES_PORT", default="5432"),
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
     }
 }
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]  # noqa
+
+# Email
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
+# EMAIL_BACKEND = env(
+#     "DJANGO_EMAIL_BACKEND",
+#     default="django.core.mail.backends.smtp.EmailBackend",
+# )
+# # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
+# EMAIL_TIMEOUT = 5

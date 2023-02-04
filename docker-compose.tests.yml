@@ -9,3 +9,11 @@ services:
       context: ./backend
       dockerfile: ./docker/Dockerfile
     command: /dev_valid.sh
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: local_postgres
+    env_file:
+      - ./.envs/postgres.env
