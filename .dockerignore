@@ -16,3 +16,6 @@ __pycache__
 *.pyc
 #Ignoring all the markdown and class files
 *.md
+
+#Ignoring database
+.sqlite3
