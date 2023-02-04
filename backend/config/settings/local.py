@@ -1,40 +1,46 @@
 from config.env import env
 from config.settings.base import *  # noqa
 
+# General
 DEBUG = True
 
-SECRET_KEY = "some_local_key"
+SECRET_KEY = env(
+    "SECRET_KEY",
+    default="FRONTENDOWIEC-ZAPRASZAMY",
+)
 
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+# Databases
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db_local.sqlite3",
+    }
+}
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "",
+    }
+}
 
+# Django-debug-toolbar
 
 INSTALLED_APPS += [  # noqa
     "debug_toolbar",
 ]
+
 MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa
 
 DEBUG_TOOLBAR_CONFIG = {
     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
-}
-
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "job_database",
-    }
+    "SHOW_TEMPLATE_CONTEXT": True,
 }
 
 
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-    }
-}
-
+# Runserver-plus conf
+RUNSERVERPLUS_SERVER_ADDRESS_PORT = "0.0.0.0:8000"
 
 SHELL_PLUS = "ipython"
 
@@ -57,4 +63,6 @@ IPYTHON_ARGUMENTS = [
 
 IPYTHON_KERNEL_DISPLAY_NAME = "Django Shell-Plus"
 
-RUNSERVERPLUS_SERVER_ADDRESS_PORT = "0.0.0.0:8000"
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
+
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
