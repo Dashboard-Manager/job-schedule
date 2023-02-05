@@ -1,5 +1,6 @@
-from config.settings.base import *  # noqa
 import os
+
+from config.settings.base import *  # noqa
 
 # General
 DEBUG = True
