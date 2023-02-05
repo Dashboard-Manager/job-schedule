@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 class TestProfileModel:
     @pytest.fixture
     def profile(self):
-        return ProfileFactory()
+        return ProfileFactory.create()
 
     def custom_profile(self, *args, **kwargs):
         return ProfileFactory.build(*args, **kwargs)
