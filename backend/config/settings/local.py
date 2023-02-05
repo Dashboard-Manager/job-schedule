@@ -1,19 +1,17 @@
-from config.env import env
 from config.settings.base import *  # noqa
+import os
 
 # General
 DEBUG = True
 
-SECRET_KEY = env(
-    "SECRET_KEY",
-    default="FRONTENDOWIEC-ZAPRASZAMY",
-)
+SECRET_KEY = "SECRET_KEY"
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
 # Databases
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db_local.sqlite3",
+        "NAME": os.path.join(BACKEND_DIR, "db.sqlite3"),
     }
 }
 

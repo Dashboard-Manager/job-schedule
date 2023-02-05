@@ -1,13 +1,6 @@
-from config.env import BACKEND_DIR, env
+from config.env import BACKEND_DIR
 
 # Generals
-
-DEBUG = env.bool("DJANGO_DEBUG", True)
-
-if DEBUG is False:
-    ALLOWED_HOSTS = [env("ALLOWED_HOSTS")]
-else:
-    ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 # Internationalization
 
@@ -22,20 +15,6 @@ USE_TZ = True
 SITE_ID = 1
 
 LOCALE_PATHS = [str(BACKEND_DIR / "locale")]
-
-# Databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("POSTGRES_DB", default="postgres_db"),
-        "USER": env("POSTGRES_USER", default="postgres_user"),
-        "PASSWORD": env("POSTGRES_PASSWORD", default="postgres_pass"),
-        "HOST": env("POSTGRES_HOST", default="postgres"),
-        "PORT": env("POSTGRES_PORT", default="5432"),
-    }
-}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -154,20 +133,6 @@ TEMPLATES = [
 # Admins
 
 ADMIN_URL = "admin/"
-
-ADMINS = [("kwiatuh", "kwiatuh@example.com"), ("x", "y")]  # twoje miejsce
-
-MANAGERS = ADMINS
-
-# Email
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
-)
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
-EMAIL_TIMEOUT = 5
 
 # Security
 
