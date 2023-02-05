@@ -1,5 +1,6 @@
 import os
 
+from config.env import BACKEND_DIR
 from config.settings.base import *  # noqa
 
 # General
