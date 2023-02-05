@@ -5,6 +5,8 @@ services:
   tests:
     container_name: tests_django
     platform: linux/amd64
+    env_file:
+      - ./.envs/postgres.env
     build:
       context: ./backend
       dockerfile: ./docker/Dockerfile
