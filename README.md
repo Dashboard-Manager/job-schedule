@@ -1,44 +1,8 @@
  <!-- markdownlint-disable MD033 MD022 MD001 MD041 -->
-<head>
-<style>
-    table {
-        border-collapse: collapse;
-        width: 100%;
-    }
-    div {
-        background-color: #1F1F1F;
-    }
-    tr, th {
-        border: 3px solid #ffffff;
-        padding: 15px;
-    }
-    .table-title {
-        text-align: center;
-        color:#ffffff;
-        margin: 15px;
-        padding: 15px;
-        background-color:#54A56F;
-    }
-    h2 {
-        background-color:#54A56F;
-        text-align: center;
-    }
-</style>
-</head>
-<table>
-    <tr>
-        <th class="table-title">Apps</th>
-        <th class="table-title">Results</th>
-    </tr>
-    <tr>
-        <td>pre-commit</td>
-        <td><a href="https://results.pre-commit.ci/latest/github/wspolny-projekt/job-schedule/main"><img src="https://results.pre-commit.ci/badge/github/wspolny-projekt/job-schedule/main.svg"></a></td>
-    </tr>
-    <tr>
-        <td>coverage</td>
-        <td><a href="https://coveralls.io/github/Dashboard-Manager/job-schedule?branch=main"><img src="https://coveralls.io/repos/github/Dashboard-Manager/job-schedule/badge.svg?branch=main"></a></td>
-    </tr>
-</table>
+| Apps | Results |
+| ----------- | ----------- |
+| pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/wspolny-projekt/job-schedule/main.svg)](https://results.pre-commit.ci/latest/github/wspolny-projekt/job-schedule/main) |
+| coverage | [![Coverage Status](https://coveralls.io/repos/github/Dashboard-Manager/job-schedule/badge.svg?branch=main)](https://coveralls.io/github/Dashboard-Manager/job-schedule?branch=main) |
 
 # Job-schedule
 The project presents interactiv dashboard for managing the enterprise, employees, budget and statistics.
