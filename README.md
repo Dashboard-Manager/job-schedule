@@ -1,7 +1,7 @@
  <!-- markdownlint-disable MD033 MD022 MD001 MD041 -->
 | Apps | Results |
 | ----------- | ----------- |
-| pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/latest/github/Dashboard-Manager/job-schedule/main) |
+| pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Dashboard-Manager/job-schedule/main.svg)](https://results.pre-commit.ci/latest/github/Dashboard-Manager/job-schedule/main) |
 | coverage | [![Coverage Status](https://coveralls.io/repos/github/Dashboard-Manager/job-schedule/badge.svg?branch=main)](https://coveralls.io/github/Dashboard-Manager/job-schedule?branch=main) |
 
 # Job-schedule
