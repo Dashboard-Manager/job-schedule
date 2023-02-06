@@ -24,29 +24,47 @@ class BaseModel(models.Model):
 class Earnings(BaseModel):
 
     constant_pension_contribution = models.FloatField(
-        verbose_name="Pension Contribution",
+        verbose_name="Constant Pension Contribution",
         default=constants.PENSION,
     )
 
     constant_disability_contribution = models.FloatField(
-        verbose_name="Disability Contribution",
+        verbose_name="Constant  Disability Contribution",
         default=constants.DISABILITY,
     )
 
     constant_sickness_contribution = models.FloatField(
-        verbose_name="Sickness Contribution",
+        verbose_name="Constant Sickness Contribution",
         default=constants.SICKNESS,
     )
 
     constant_health_care_contribution = models.FloatField(
-        verbose_name="Health Care Contribution",
+        verbose_name="Constant Health Care Contribution",
         default=constants.HEALTH_CARE,
     )
 
     constant_PIT = models.FloatField(
-        verbose_name="PIT tax",
+        verbose_name="Constant PIT tax",
         default=constants.PIT,
     )
+
+    calculated_pension_contribution = models.FloatField(
+        verbose_name="Calculated Pension Contribution", default=0
+    )
+
+    calculated_disability_contribution = models.FloatField(
+        verbose_name="Calculated  Disability Contribution", default=0
+    )
+
+    calculated_sickness_contribution = models.FloatField(
+        verbose_name="Calculated Sickness Contribution", default=0
+    )
+
+    calculated_health_care_contribution = models.FloatField(
+        verbose_name="Calculated Health Care Contribution", default=0
+    )
+
+    calculated_PIT_tax = models.FloatField(verbose_name="Calculated PIT tax", default=0)
 
     user = models.ForeignKey(
         Profile,
@@ -163,19 +181,6 @@ class JobHours(BaseModel):
                     self.user,
                     self.start_date,
                     self.end_date,
-                )
-            )
-        return 0
-
-    @property
-    def extra_hours(self) -> int:
-        if self.user:
-            return int(
-                get_working_hours(
-                    self.user,
-                    self.start_date,
-                    self.end_date,
-                    extra_hours=True,
                 )
             )
         return 0
