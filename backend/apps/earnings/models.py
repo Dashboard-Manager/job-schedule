@@ -48,23 +48,25 @@ class Earnings(BaseModel):
         default=constants.PIT,
     )
 
-    calculated_pension_contribution = models.FloatField(
+    pension_contribution = models.FloatField(
         verbose_name="Calculated Pension Contribution", default=0
     )
 
-    calculated_disability_contribution = models.FloatField(
+    disability_contribution = models.FloatField(
         verbose_name="Calculated  Disability Contribution", default=0
     )
 
-    calculated_sickness_contribution = models.FloatField(
+    sickness_contribution = models.FloatField(
         verbose_name="Calculated Sickness Contribution", default=0
     )
 
-    calculated_health_care_contribution = models.FloatField(
+    health_care_contribution = models.FloatField(
         verbose_name="Calculated Health Care Contribution", default=0
     )
 
-    calculated_PIT_tax = models.FloatField(verbose_name="Calculated PIT tax", default=0)
+    income = models.FloatField(verbose_name="Calculated income", default=0)
+
+    income_tax = models.FloatField(verbose_name="Calculated income tax", default=0)
 
     user = models.ForeignKey(
         Profile,
@@ -72,37 +74,7 @@ class Earnings(BaseModel):
     )
 
     @property
-    def age(self) -> int:
-        return self.user.age
-
-    @property
-    def brutto_salary(self) -> float:
-        return self.user.salary
-
-    def set_pension_contribution(self):
-        self.calculated_pension_contribution = calc_pension_contr(
-            self.brutto_salary,
-            self.constant_pension_contribution,
-        )
-        self.save()
-
-    def set_disability_contribution(self) -> float:
-        return float(
-            calc_disability_contr(
-                self.brutto_salary,
-                self.constant_disability_contribution,
-            )
-        )
-
-    def set_sickness_contribution(self) -> float:
-        return float(
-            calc_sickness_contr(
-                self.brutto_salary,
-                self.constant_sickness_contribution,
-            )
-        )
-
-    def set_ZUS_contributions(self) -> float:
+    def ZUS_contributions(self) -> float:
         return round(
             (
                 self.pension_contribution
@@ -112,35 +84,59 @@ class Earnings(BaseModel):
             2,
         )
 
-    def set_health_care_contribution(self) -> float:
-        return float(
-            calc_health_care_contr(
-                self.brutto_salary,
-                self.ZUS_contributions,
-                self.constant_health_care_contribution,
-            )
+    @property
+    def brutto_salary(self) -> float:
+        return self.user.salary
+
+    @property
+    def income(self) -> float:
+        return calc_income(
+            self.brutto_salary,
+            self.ZUS_contributions,
         )
 
-    def set_income(self) -> float:
-        return float(
-            calc_income(
-                self.brutto_salary,
-                self.ZUS_contributions,
-            )
+    def set_pension_contribution(self):
+        self.pension_contribution = calc_pension_contr(
+            self.brutto_salary,
+            self.constant_pension_contribution,
         )
+        self.save()
+
+    def set_disability_contribution(self) -> float:
+        self.disability_contribution = calc_disability_contr(
+            self.brutto_salary,
+            self.constant_disability_contribution,
+        )
+        self.save()
+
+    def set_sickness_contribution(self) -> float:
+        self.sickness_contribution = calc_sickness_contr(
+            self.brutto_salary,
+            self.constant_sickness_contribution,
+        )
+        self.save()
+
+    def set_health_care_contribution(self) -> float:
+        self.health_care_contribution = calc_health_care_contr(
+            self.brutto_salary,
+            self.ZUS_contributions,
+            self.constant_health_care_contribution,
+        )
+        self.save()
 
     def set_income_tax(self) -> int:
         if self.user.age > 26:
-            return int(
-                calc_income_tax(
-                    self.income,
-                    int(self.constant_PIT),
-                )
+            self.income_tax = calc_income_tax(
+                self.income,
+                self.constant_PIT,
             )
-        return 0
+            self.save()
+            return
+        self.income_tax = 0
+        self.save()
 
     def set_netto_salary(self) -> float:
-        return round(
+        self.netto_salary = round(
             (
                 self.brutto_salary
                 - self.ZUS_contributions
@@ -149,6 +145,7 @@ class Earnings(BaseModel):
             ),
             2,
         )
+        self.save()
 
 
 class JobHours(BaseModel):
