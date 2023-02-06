@@ -1,21 +1,29 @@
 import os
 
-from config.env import BACKEND_DIR
+import environ
+from config.env import ENV_DIR, env
 from config.settings.base import *  # noqa
 
-# General
-DEBUG = True
+environ.Env.read_env(os.path.join(ENV_DIR, "postgres.env"))
+environ.Env.read_env(os.path.join(ENV_DIR, "local.env"))
 
-SECRET_KEY = "SECRET_KEY"
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+DEBUG = env.bool("DEBUG")
+# Generals
+SECRET_KEY = env("SECRET_KEY")
 
-# Databases
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BACKEND_DIR, "db.sqlite3"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": "",
+        "PORT": 5433,
     }
 }
+
 
 # Cache
 CACHES = {

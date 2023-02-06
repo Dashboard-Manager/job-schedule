@@ -4,11 +4,16 @@ set -o errexit
 set -o pipefail
 set -o nounset
 
-if [ -z "${POSTGRES_USER}" ]; then
-    base_postgres_image_default_user='postgres_user'
-    export POSTGRES_USER="${base_postgres_image_default_user}"
-fi
-export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+export POSTGRES_DB="${POSTGRES_DB}"
+export POSTGRES_USER="${POSTGRES_USER}"
+export POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
+export POSTGRES_HOST="${POSTGRES_HOST}"
+export POSTGRES_PORT="${POSTGRES_PORT}"
+
+# export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+
+# echo start connect to PostgreSQL
+export DATABASE_URL="postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:$POSTGRES_PORT/$POSTGRES_DB"
 
 python <<END
 import sys
@@ -19,11 +24,11 @@ start = time.time()
 while True:
     try:
         psycopg2.connect(
-            dbname="${POSTGRES_DB}",
-            user="${POSTGRES_USER}",
-            password="${POSTGRES_PASSWORD}",
-            host="${POSTGRES_HOST}",
-            port="${POSTGRES_PORT}",
+            dbname="$POSTGRES_DB",
+            user="$POSTGRES_USER",
+            password="$POSTGRES_PASSWORD",
+            host="$POSTGRES_HOST",
+            port=$POSTGRES_PORT,
         )
         break
     except psycopg2.OperationalError as error:
