@@ -73,23 +73,20 @@ class Earnings(BaseModel):
 
     @property
     def age(self) -> int:
-        return int(self.user.age)
+        return self.user.age
 
     @property
     def brutto_salary(self) -> float:
-        return float(self.user.salary)
+        return self.user.salary
 
-    @property
-    def pension_contribution(self) -> float:
-        return float(
-            calc_pension_contr(
-                self.brutto_salary,
-                self.constant_pension_contribution,
-            )
+    def set_pension_contribution(self):
+        self.calculated_pension_contribution = calc_pension_contr(
+            self.brutto_salary,
+            self.constant_pension_contribution,
         )
+        self.save()
 
-    @property
-    def disability_contribution(self) -> float:
+    def set_disability_contribution(self) -> float:
         return float(
             calc_disability_contr(
                 self.brutto_salary,
@@ -97,8 +94,7 @@ class Earnings(BaseModel):
             )
         )
 
-    @property
-    def sickness_contribution(self) -> float:
+    def set_sickness_contribution(self) -> float:
         return float(
             calc_sickness_contr(
                 self.brutto_salary,
@@ -106,8 +102,7 @@ class Earnings(BaseModel):
             )
         )
 
-    @property
-    def ZUS_contributions(self) -> float:
+    def set_ZUS_contributions(self) -> float:
         return round(
             (
                 self.pension_contribution
@@ -117,8 +112,7 @@ class Earnings(BaseModel):
             2,
         )
 
-    @property
-    def health_care_contribution(self) -> float:
+    def set_health_care_contribution(self) -> float:
         return float(
             calc_health_care_contr(
                 self.brutto_salary,
@@ -127,8 +121,7 @@ class Earnings(BaseModel):
             )
         )
 
-    @property
-    def income(self) -> float:
+    def set_income(self) -> float:
         return float(
             calc_income(
                 self.brutto_salary,
@@ -136,8 +129,7 @@ class Earnings(BaseModel):
             )
         )
 
-    @property
-    def income_tax(self) -> int:
+    def set_income_tax(self) -> int:
         if self.user.age > 26:
             return int(
                 calc_income_tax(
@@ -147,8 +139,7 @@ class Earnings(BaseModel):
             )
         return 0
 
-    @property
-    def netto_salary(self) -> float:
+    def set_netto_salary(self) -> float:
         return round(
             (
                 self.brutto_salary
