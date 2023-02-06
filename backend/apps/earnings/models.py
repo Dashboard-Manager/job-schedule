@@ -21,8 +21,7 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Earnings(BaseModel):
-
+class Constants(BaseModel):
     constant_pension_contribution = models.FloatField(
         verbose_name="Constant Pension Contribution",
         default=constants.PENSION,
@@ -48,6 +47,19 @@ class Earnings(BaseModel):
         default=constants.PIT,
     )
 
+    @property
+    def ZUS_contributions(self) -> float:
+        return round(
+            (
+                self.pension_contribution
+                + self.disability_contribution
+                + self.sickness_contribution
+            ),
+            2,
+        )
+
+
+class Calculations(BaseModel):
     pension_contribution = models.FloatField(
         verbose_name="Calculated Pension Contribution", default=0
     )
@@ -68,21 +80,8 @@ class Earnings(BaseModel):
 
     income_tax = models.FloatField(verbose_name="Calculated income tax", default=0)
 
-    user = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
-    )
-
-    @property
-    def ZUS_contributions(self) -> float:
-        return round(
-            (
-                self.pension_contribution
-                + self.disability_contribution
-                + self.sickness_contribution
-            ),
-            2,
-        )
+    user = models.ForeignKey("Settlements", on_delete=models.CASCADE)
+    constants = models.ForeignKey(Constants, on_delete=models.CASCADE)
 
     @property
     def brutto_salary(self) -> float:
@@ -98,29 +97,29 @@ class Earnings(BaseModel):
     def set_pension_contribution(self):
         self.pension_contribution = calc_pension_contr(
             self.brutto_salary,
-            self.constant_pension_contribution,
+            self.constants.constant_pension_contribution,
         )
         self.save()
 
     def set_disability_contribution(self) -> float:
         self.disability_contribution = calc_disability_contr(
             self.brutto_salary,
-            self.constant_disability_contribution,
+            self.constants.constant_disability_contribution,
         )
         self.save()
 
     def set_sickness_contribution(self) -> float:
         self.sickness_contribution = calc_sickness_contr(
             self.brutto_salary,
-            self.constant_sickness_contribution,
+            self.constants.constant_sickness_contribution,
         )
         self.save()
 
     def set_health_care_contribution(self) -> float:
         self.health_care_contribution = calc_health_care_contr(
             self.brutto_salary,
-            self.ZUS_contributions,
-            self.constant_health_care_contribution,
+            self.constants.ZUS_contributions,
+            self.constants.constant_health_care_contribution,
         )
         self.save()
 
@@ -128,7 +127,7 @@ class Earnings(BaseModel):
         if self.user.age > 26:
             self.income_tax = calc_income_tax(
                 self.income,
-                self.constant_PIT,
+                self.constants.constant_PIT,
             )
             self.save()
             return
@@ -139,13 +138,35 @@ class Earnings(BaseModel):
         self.netto_salary = round(
             (
                 self.brutto_salary
-                - self.ZUS_contributions
+                - self.constants.ZUS_contributions
                 - self.health_care_contribution
                 - self.income_tax
             ),
             2,
         )
         self.save()
+
+
+class Salaries(BaseModel):
+    brutto_salary = models.FloatField()
+    netto_salary = models.FloatField()
+
+    calculations = models.ForeignKey(Calculations, on_delete=models.CASCADE)
+
+    def set_netto_salary(self):
+        self.netto_salary = self.calculations.netto_salary
+        self.save()
+
+    def set_brutto_salary(self):
+        self.brutto_salary = self.calculations.user.salary
+        self.save()
+
+
+class Settlements(BaseModel):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    constants = models.ForeignKey(Constants, on_delete=models.CASCADE)
+    calculations = models.OneToOneField(Calculations, on_delete=models.CASCADE)
+    salary = models.ForeignKey(Salaries, on_delete=models.CASCADE)
 
 
 class JobHours(BaseModel):
