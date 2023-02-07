@@ -61,24 +61,19 @@ class Constants(BaseModel):
 
 class Calculations(BaseModel):
     pension_contribution = models.FloatField(
-        verbose_name="Calculated Pension Contribution", default=0
+        verbose_name="Pension Contribution", default=0
     )
-
     disability_contribution = models.FloatField(
-        verbose_name="Calculated  Disability Contribution", default=0
+        verbose_name=" Disability Contribution", default=0
     )
-
     sickness_contribution = models.FloatField(
-        verbose_name="Calculated Sickness Contribution", default=0
+        verbose_name="Sickness Contribution", default=0
     )
-
     health_care_contribution = models.FloatField(
-        verbose_name="Calculated Health Care Contribution", default=0
+        verbose_name="Health Care Contribution", default=0
     )
-
-    income = models.FloatField(verbose_name="Calculated income", default=0)
-
-    income_tax = models.FloatField(verbose_name="Calculated income tax", default=0)
+    income = models.FloatField(verbose_name="Income", default=0)
+    income_tax = models.FloatField(verbose_name="Income tax", default=0)
 
     settlement = models.ForeignKey(
         "Settlements", on_delete=models.CASCADE, related_name="employer"
@@ -123,9 +118,6 @@ class Calculations(BaseModel):
                 self.constants.PIT,
             )
             self.save()
-            return
-        self.income_tax = 0
-        self.save()
 
     def set_netto_salary(self) -> float:
         self.netto_salary = round(
@@ -172,6 +164,7 @@ class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
     start_date = models.DateField(default=timezone.now)
     end_date = models.DateField(default=timezone.now)
+    hours = models.PositiveIntegerField(default=0)
 
     user = models.ForeignKey(
         Profile,
@@ -181,17 +174,15 @@ class JobHours(BaseModel):
     def __str__(self) -> str:
         return f"{self.user} has {self.hours} hours in job"
 
-    @property
-    def hours(self) -> int:
-        if self.user:
-            return int(
-                get_working_hours(
-                    self.user,
-                    self.start_date,
-                    self.end_date,
-                )
-            )
-        return 0
+    def set_hours(self):
+        if self.start_date > self.end_date:
+            raise ValueError("End date must be after start date")
+        self.hours = get_working_hours(
+            self.user,
+            self.start_date,
+            self.end_date,
+        )
+        self.save()
 
 
 # clean
