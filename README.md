@@ -22,41 +22,15 @@ The project presents interactiv dashboard for managing the enterprise, employees
 
 ## Local
 
-### Setup local PostgreSQL database
+To your connection in Dbeaver or other you use:
 
-<ol>
-  <li>Before you start build server you need check some steps and maybe change it:</li>
-  <p>find your pg_hba.conf file in your system and change this too look similar this</p>
-  <code>local   all             postgres                                peer</code><br>
-  <code>host    all       all             0.0.0.0/0             md5</code><br>
-  <code>local   all       all                                   md5</code><br>
-  <code>sudo -i -u postgres</code><br>
-  <code>[postgres@server ~$] psql</code><br>
-  <code>postgres=# ALTER USER postgres PASSWORD 'postgres';</code><br>
-  <code>ALTER ROLE</code><br>
-  <code>postgres=# /q</code><br>
-  <code>exit</code><br>
-  <li>In file pg_indent.conf set your system username with command whoami in terminal and change "default-user"</li>
-  <code># MAPNAME       SYSTEM-USERNAME         PG-USERNAME</code><br>
-  <code>user1             default-user               postgres</code><br>
-  <li>Now you can use passwords added by docker</li>
-  <li style="color:red;">Remamber after all reset your postgres</li>
-  <code>sudo systemctl restart postgresql-15</code><br>
-  <li>Run your database local</li>
-  <code>docker-compose up db --build</code>
-  <li>To navigate your server local you can use this commands</li>
-  <code>docker-compose start db #run database</code><br>
-  <code>docker-compose stop db #stop database</code>
-  <li>Now you can connect your database</li>
-  <li>Run SQL Shell (installed with PostgreSQL) or installed pgAdmin (can install with PostgreSQL) or preferred DBeaver</li>
-  <li>To your connection in Dbeaver or other you use:</li>
-  <code>Host: localhost</code><br>
-  <code>Port: 5433</code><br>
-  <code>Database: job-schedule</code><br>
-  <code>Username: job-schedule</code><br>
-  <code>Password: django-app</code><br>
-  <li>all configs you can add and change in file ./envs/postgres.env, but remember to again --build app</li>
-</ol>
+```yaml
+Host: localhost
+Port: 5433
+Database: job-schedule
+Username: job-schedule
+Password: django-app
+```
 
 ### Now run your django application locally when database is started
 
@@ -105,7 +79,6 @@ Go to site:
 ```bash
   http://127.0.0.1:8000
 ```
-
 
 ## for Develop
 ### Install packages
