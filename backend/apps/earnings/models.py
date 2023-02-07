@@ -93,31 +93,22 @@ class Calculations(BaseModel):
     def income(self) -> float:
         return calc_income(
             self.brutto_salary,
-            self.ZUS_contributions,
+            self.constants.ZUS_contributions,
         )
 
-    def set_pension_contribution(self):
+    def set_contributions(self):
         self.pension_contribution = calc_pension_contr(
             self.brutto_salary,
             self.constants.pension_contribution,
         )
-        self.save()
-
-    def set_disability_contribution(self) -> float:
         self.disability_contribution = calc_disability_contr(
             self.brutto_salary,
             self.constants.disability_contribution,
         )
-        self.save()
-
-    def set_sickness_contribution(self) -> float:
         self.sickness_contribution = calc_sickness_contr(
             self.brutto_salary,
             self.constants.sickness_contribution,
         )
-        self.save()
-
-    def set_health_care_contribution(self) -> float:
         self.health_care_contribution = calc_health_care_contr(
             self.brutto_salary,
             self.constants.ZUS_contributions,
