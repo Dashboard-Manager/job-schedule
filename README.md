@@ -25,11 +25,26 @@ The project presents interactiv dashboard for managing the enterprise, employees
 To your connection in Dbeaver or other you use:
 
 ```yaml
-Host: localhost
-Port: 5433
-Database: job-schedule
-Username: job-schedule
-Password: django-app
+  Host: localhost
+  Port: 5433
+  Database: job-schedule
+  Username: job-schedule
+  Password: django-app
+```
+
+Build database and run connections
+
+```bash
+  docker-compose up db --build
+```
+
+To navigate if database is builded
+
+```bash
+  #to start
+  docker-compose start db
+  #to stop
+  docker-compose stop db
 ```
 
 ### Now run your django application locally when database is started
@@ -84,44 +99,27 @@ Go to site:
 ### Install packages
 
 ```bash
-cd backend
-pipenv install [package]
-```
-
-or for dev
-
-```bash
-pipenv install [package] --dev
-```
-
-### install develop packages
-
-```bash
   cd backend
-  pipenv install --dev
+  pipenv install [package]
+  #or for dev
+  pipenv install [package] --dev
 ```
 
-run local develop script
+### run local develop script
 
 ```bash
   cd backend
   ./dev_valid.sh
 ```
 
-run local develop script in docker container if change build directory
+### run test docker script
 
 ```bash
+  #build test script
   docker-compose -f docker-compose.tests.yml up --build
-```
-
-or use only docker-compose up
-
-```bash
+  #or use only docker-compose up
   docker-compose -f docker-compose.tests.yml up
-```
-
-coverage html
-
-```bash
+  #run coverage html result
   start ./htmlcov/index.html
+
 ```
