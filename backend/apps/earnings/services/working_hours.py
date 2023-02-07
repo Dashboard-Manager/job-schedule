@@ -10,7 +10,6 @@ def get_working_hours(
     end_date: date,
     extra_hours: bool = False,
 ) -> int:
-
     working_days = Job.objects.filter(
         date__range=(start_date, end_date),
         user=user,
