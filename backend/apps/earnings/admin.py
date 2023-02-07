@@ -1,10 +1,9 @@
-# from apps.earnings.models import (
-#     Calculations,
-#     Constants,
-#     JobHours,
-#     Salaries,
-#     Settlements,
-# )
+from apps.earnings.models import (  # JobHours,
+    Calculations,
+    Constants,
+    Salaries,
+    Settlements,
+)
 from apps.users.models import Profile
 from django.contrib import admin
 
@@ -13,16 +12,16 @@ class ProfileInLine(admin.TabularInline):  # type: ignore
     model = Profile
 
 
+admin.site.register([Constants, Calculations, Salaries, Settlements])
+
 # @admin.register(Constants, Calculations, Salaries, Settlements)
 # class EarningsAdmin(admin.ModelAdmin):  # type: ignore
 #     list_display = [
-#         "user",
-#         "age",
-#         "brutto_salary",
-#         "netto_salary",
+#         "Settlements.user",
+#         "Salaries.brutto_salary",
+#         "Salaries.netto_salary",
 #     ]
 #     readonly_fields = [
-#         "age",
 #         "brutto_salary",
 #         "netto_salary",
 #         "pension_contribution",
