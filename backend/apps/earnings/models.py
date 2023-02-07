@@ -162,8 +162,8 @@ class Settlements(BaseModel):
 
 class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
-    start_date = models.DateField(default=timezone.now)
-    end_date = models.DateField(default=timezone.now)
+    start_job = models.TimeField(auto_now_add=True, default=timezone.now())
+    end_job = models.TimeField(default=timezone.now)
     hours = models.PositiveIntegerField(default=0)
 
     user = models.ForeignKey(
@@ -175,14 +175,17 @@ class JobHours(BaseModel):
         return f"{self.user} has {self.hours} hours in job"
 
     def set_hours(self):
-        if self.start_date > self.end_date:
-            raise ValueError("End date must be after start date")
         self.hours = get_working_hours(
             self.user,
-            self.start_date,
-            self.end_date,
+            self.start_job,
+            self.end_job,
         )
         self.save()
+
+    def clean(self):
+        super().clean()
+        if self.start_job > self.end_job:
+            raise ValueError("End date must be after start date")
 
 
 # clean
