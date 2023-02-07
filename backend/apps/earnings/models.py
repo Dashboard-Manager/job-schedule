@@ -22,29 +22,29 @@ class BaseModel(models.Model):
 
 
 class Constants(BaseModel):
-    constant_pension_contribution = models.FloatField(
+    PIT = models.FloatField(
+        verbose_name="Constant PIT tax",
+        default=constants.PIT,
+    )
+
+    pension_contribution = models.FloatField(
         verbose_name="Constant Pension Contribution",
         default=constants.PENSION,
     )
 
-    constant_disability_contribution = models.FloatField(
+    disability_contribution = models.FloatField(
         verbose_name="Constant  Disability Contribution",
         default=constants.DISABILITY,
     )
 
-    constant_sickness_contribution = models.FloatField(
+    sickness_contribution = models.FloatField(
         verbose_name="Constant Sickness Contribution",
         default=constants.SICKNESS,
     )
 
-    constant_health_care_contribution = models.FloatField(
+    health_care_contribution = models.FloatField(
         verbose_name="Constant Health Care Contribution",
         default=constants.HEALTH_CARE,
-    )
-
-    constant_PIT = models.FloatField(
-        verbose_name="Constant PIT tax",
-        default=constants.PIT,
     )
 
     @property
@@ -80,7 +80,9 @@ class Calculations(BaseModel):
 
     income_tax = models.FloatField(verbose_name="Calculated income tax", default=0)
 
-    user = models.ForeignKey("Settlements", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        "Settlements", on_delete=models.CASCADE, related_name="employer"
+    )
     constants = models.ForeignKey(Constants, on_delete=models.CASCADE)
 
     @property
@@ -97,21 +99,21 @@ class Calculations(BaseModel):
     def set_pension_contribution(self):
         self.pension_contribution = calc_pension_contr(
             self.brutto_salary,
-            self.constants.constant_pension_contribution,
+            self.constants.pension_contribution,
         )
         self.save()
 
     def set_disability_contribution(self) -> float:
         self.disability_contribution = calc_disability_contr(
             self.brutto_salary,
-            self.constants.constant_disability_contribution,
+            self.constants.disability_contribution,
         )
         self.save()
 
     def set_sickness_contribution(self) -> float:
         self.sickness_contribution = calc_sickness_contr(
             self.brutto_salary,
-            self.constants.constant_sickness_contribution,
+            self.constants.sickness_contribution,
         )
         self.save()
 
@@ -119,7 +121,7 @@ class Calculations(BaseModel):
         self.health_care_contribution = calc_health_care_contr(
             self.brutto_salary,
             self.constants.ZUS_contributions,
-            self.constants.constant_health_care_contribution,
+            self.constants.health_care_contribution,
         )
         self.save()
 
@@ -127,7 +129,7 @@ class Calculations(BaseModel):
         if self.user.age > 26:
             self.income_tax = calc_income_tax(
                 self.income,
-                self.constants.constant_PIT,
+                self.constants.PIT,
             )
             self.save()
             return
@@ -164,9 +166,15 @@ class Salaries(BaseModel):
 
 class Settlements(BaseModel):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    constants = models.ForeignKey(Constants, on_delete=models.CASCADE)
-    calculations = models.OneToOneField(Calculations, on_delete=models.CASCADE)
-    salary = models.ForeignKey(Salaries, on_delete=models.CASCADE)
+    constants = models.ForeignKey(
+        Constants, on_delete=models.CASCADE, related_name="contributions"
+    )
+    calculations = models.OneToOneField(
+        Calculations, on_delete=models.CASCADE, related_name="calculationed"
+    )
+    salary = models.ForeignKey(
+        Salaries, on_delete=models.CASCADE, related_name="converted"
+    )
 
 
 class JobHours(BaseModel):
