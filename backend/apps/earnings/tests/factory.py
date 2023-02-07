@@ -1,11 +1,13 @@
 from apps.users.tests.factories import ProfileFactory
+from django.utils import timezone
 from factory import LazyFunction, SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
-from faker.providers import internet
+from faker.providers import date_time, internet
 
 faker = Faker()
 faker.add_providers(internet)
+faker.add_providers(date_time)
 
 
 class ConstantsFactory(DjangoModelFactory):
@@ -41,3 +43,11 @@ class SettlementsFactory(DjangoModelFactory):
     constants = LazyFunction(lambda: SubFactory(ConstantsFactory))
     calculations = LazyFunction(lambda: SubFactory(CalculationsFactory))
     salary = LazyFunction(lambda: SubFactory(SalariesFactory))
+
+
+class JobHoursFactory(DjangoModelFactory):
+    date = LazyFunction(lambda: timezone.now())
+    user = LazyFunction(lambda: SubFactory(ProfileFactory))
+    start_job = LazyFunction(lambda: faker.time(pattern="%H:%M:%S"))
+    end_job = LazyFunction(lambda: faker.time(pattern="%H:%M:%S"))
+    hours = LazyFunction(lambda: faker.random_int(min=0, max=24))
