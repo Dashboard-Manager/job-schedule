@@ -22,7 +22,6 @@ class BaseModel(models.Model):
 
 
 class Earnings(BaseModel):
-
     constant_pension_contribution = models.FloatField(
         verbose_name="Pension Contribution",
         default=constants.PENSION,
