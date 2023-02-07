@@ -9,6 +9,8 @@ from apps.earnings.services.calculations import (
 )
 from apps.earnings.services.working_hours import get_working_hours
 from apps.users.models import Profile
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -164,7 +166,19 @@ class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
     start_job = models.TimeField(auto_now_add=True, default=timezone.now())
     end_job = models.TimeField(default=timezone.now)
-    hours = models.PositiveIntegerField(default=0)
+    hours = models.PositiveSmallIntegerField(
+        default=0,
+        validators=[
+            MinValueValidator(
+                limit_value=0,
+                message="Working hours cannot be less than 0",
+            ),
+            MaxValueValidator(
+                limit_value=24,
+                message="Working hours cannot be more than 24h. Day has 24h.",
+            ),
+        ],
+    )
 
     user = models.ForeignKey(
         Profile,
@@ -185,7 +199,7 @@ class JobHours(BaseModel):
     def clean(self):
         super().clean()
         if self.start_job > self.end_job:
-            raise ValueError("End date must be after start date")
+            raise ValidationError("End date must be after start date")
 
 
 # clean
