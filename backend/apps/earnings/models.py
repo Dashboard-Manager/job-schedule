@@ -164,7 +164,7 @@ class Settlements(BaseModel):
 
 class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
-    start_job = models.TimeField(auto_now_add=True, default=timezone.now())
+    start_job = models.TimeField(auto_now_add=True, default=timezone.now)
     end_job = models.TimeField(default=timezone.now)
     hours = models.PositiveSmallIntegerField(
         default=0,
