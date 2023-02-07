@@ -9,7 +9,6 @@ class ProfileInLine(admin.TabularInline):  # type: ignore
 
 @admin.register(Earnings)
 class EarningsAdmin(admin.ModelAdmin):  # type: ignore
-
     list_display = [
         "user",
         "age",
