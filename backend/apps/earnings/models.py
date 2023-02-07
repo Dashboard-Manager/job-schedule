@@ -80,14 +80,14 @@ class Calculations(BaseModel):
 
     income_tax = models.FloatField(verbose_name="Calculated income tax", default=0)
 
-    user = models.ForeignKey(
+    settlement = models.ForeignKey(
         "Settlements", on_delete=models.CASCADE, related_name="employer"
     )
     constants = models.ForeignKey(Constants, on_delete=models.CASCADE)
 
     @property
     def brutto_salary(self) -> float:
-        return self.user.salary
+        return self.settlement.user.salary
 
     @property
     def income(self) -> float:
@@ -160,7 +160,7 @@ class Salaries(BaseModel):
         self.save()
 
     def set_brutto_salary(self):
-        self.brutto_salary = self.calculations.user.salary
+        self.brutto_salary = self.calculations.brutto_salary
         self.save()
 
 
