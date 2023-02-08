@@ -1,18 +1,8 @@
-from apps.earnings.models import (  # JobHours,
-    Calculations,
-    Constants,
-    Salaries,
-    Settlements,
-)
-from apps.users.models import Profile
+from apps.earnings.models import Calculations, Constants, JobHours, Settlements
 from django.contrib import admin
 
+admin.site.register([Settlements, Calculations, Constants])
 
-class ProfileInLine(admin.TabularInline):  # type: ignore
-    model = Profile
-
-
-admin.site.register([Constants, Calculations, Salaries, Settlements])
 
 # @admin.register(Constants, Calculations, Salaries, Settlements)
 # class EarningsAdmin(admin.ModelAdmin):  # type: ignore
@@ -97,44 +87,44 @@ admin.site.register([Constants, Calculations, Salaries, Settlements])
 #     add_fieldsets = ()
 
 
-# @admin.register(JobHours)
-# class JobAdmin(admin.ModelAdmin):  # type: ignore
-#     list_display = [
-#         "user",
-#         "start_date",
-#         "end_date",
-#         "hours",
-#         "extra_hours",
-#     ]
+@admin.register(JobHours)
+class JobAdmin(admin.ModelAdmin):  # type: ignore
+    list_display = [
+        "user",
+        "start_date",
+        "end_date",
+        "hours",
+        "extra_hours",
+    ]
 
-#     readonly_fields = [
-#         "hours",
-#         "extra_hours",
-#     ]
-#     fieldsets = (
-#         (
-#             "Profile informations",
-#             {
-#                 "fields": (
-#                     "user",
-#                     "hours",
-#                     "extra_hours",
-#                 )
-#             },
-#         ),
-#         (
-#             "Find hours between dates..",
-#             {
-#                 "classes": (
-#                     "wide",
-#                     "extrapretty",
-#                 ),
-#                 "fields": (
-#                     (
-#                         "start_date",
-#                         "end_date",
-#                     ),
-#                 ),
-#             },
-#         ),
-#     )
+    readonly_fields = [
+        "hours",
+        "extra_hours",
+    ]
+    fieldsets = (
+        (
+            "Profile informations",
+            {
+                "fields": (
+                    "user",
+                    "hours",
+                    "extra_hours",
+                )
+            },
+        ),
+        (
+            "Find hours between dates..",
+            {
+                "classes": (
+                    "wide",
+                    "extrapretty",
+                ),
+                "fields": (
+                    (
+                        "start_date",
+                        "end_date",
+                    ),
+                ),
+            },
+        ),
+    )
