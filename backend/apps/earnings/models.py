@@ -1,16 +1,14 @@
+import logging
+
 from apps.earnings.services import constants
-from apps.earnings.services.calculations import (
-    calc_disability_contr,
-    calc_health_care_contr,
-    calc_income,
-    calc_income_tax,
-    calc_pension_contr,
-    calc_sickness_contr,
-)
 from apps.earnings.services.working_hours import get_working_hours
 from apps.users.models import Profile
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+
+logger = logging.getLogger(__name__)
 
 
 class BaseModel(models.Model):
@@ -21,71 +19,45 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Earnings(BaseModel):
-    constant_pension_contribution = models.FloatField(
-        verbose_name="Pension Contribution",
-        default=constants.PENSION,
+class Settlements(BaseModel):
+    date = models.DateField(default=timezone.now)
+
+    user = models.OneToOneField("users.Profile", on_delete=models.CASCADE)
+    calculations = models.OneToOneField(
+        "earnings.Calculations", on_delete=models.CASCADE
     )
 
-    constant_disability_contribution = models.FloatField(
-        verbose_name="Disability Contribution",
-        default=constants.DISABILITY,
-    )
 
-    constant_sickness_contribution = models.FloatField(
-        verbose_name="Sickness Contribution",
-        default=constants.SICKNESS,
-    )
-
-    constant_health_care_contribution = models.FloatField(
-        verbose_name="Health Care Contribution",
-        default=constants.HEALTH_CARE,
-    )
-
-    constant_PIT = models.FloatField(
-        verbose_name="PIT tax",
+class Constants(models.Model):
+    PIT = models.FloatField(
+        verbose_name="Constant PIT tax",
         default=constants.PIT,
     )
 
-    user = models.ForeignKey(
-        Profile,
-        on_delete=models.CASCADE,
+    pension_contribution = models.FloatField(
+        verbose_name="Constant Pension Contribution",
+        default=constants.PENSION,
     )
 
-    @property
-    def age(self) -> int:
-        return int(self.user.age)
+    disability_contribution = models.FloatField(
+        verbose_name="Constant  Disability Contribution",
+        default=constants.DISABILITY,
+    )
 
-    @property
-    def brutto_salary(self) -> float:
-        return float(self.user.salary)
+    sickness_contribution = models.FloatField(
+        verbose_name="Constant Sickness Contribution",
+        default=constants.SICKNESS,
+    )
 
-    @property
-    def pension_contribution(self) -> float:
-        return float(
-            calc_pension_contr(
-                self.brutto_salary,
-                self.constant_pension_contribution,
-            )
-        )
+    health_care_contribution = models.FloatField(
+        verbose_name="Constant Health Care Contribution",
+        default=constants.HEALTH_CARE,
+    )
 
-    @property
-    def disability_contribution(self) -> float:
-        return float(
-            calc_disability_contr(
-                self.brutto_salary,
-                self.constant_disability_contribution,
-            )
-        )
+    user = models.ForeignKey("users.Profile", on_delete=models.CASCADE)
 
-    @property
-    def sickness_contribution(self) -> float:
-        return float(
-            calc_sickness_contr(
-                self.brutto_salary,
-                self.constant_sickness_contribution,
-            )
-        )
+    def __str__(self) -> str:
+        return f"Constants for {self.user}"
 
     @property
     def ZUS_contributions(self) -> float:
@@ -98,53 +70,86 @@ class Earnings(BaseModel):
             2,
         )
 
-    @property
-    def health_care_contribution(self) -> float:
-        return float(
-            calc_health_care_contr(
-                self.brutto_salary,
-                self.ZUS_contributions,
-                self.constant_health_care_contribution,
-            )
-        )
+
+class Calculations(models.Model):
+    pension_contribution = models.FloatField(
+        verbose_name="Pension Contribution", default=0
+    )
+    disability_contribution = models.FloatField(
+        verbose_name=" Disability Contribution", default=0
+    )
+    sickness_contribution = models.FloatField(
+        verbose_name="Sickness Contribution", default=0
+    )
+    health_care_contribution = models.FloatField(
+        verbose_name="Health Care Contribution", default=0
+    )
+    income = models.FloatField(verbose_name="Income", default=0)
+    income_tax = models.FloatField(verbose_name="Income tax", default=0)
+
+    constants = models.OneToOneField(Constants, on_delete=models.CASCADE)
+    hours = models.OneToOneField("earnings.JobHours", on_delete=models.CASCADE)
+    user = models.ForeignKey("users.Profile", on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.user} earned {self.netto_salary} PLN"
 
     @property
-    def income(self) -> float:
-        return float(
-            calc_income(
-                self.brutto_salary,
-                self.ZUS_contributions,
-            )
-        )
+    def brutto_salary(self) -> float:
+        # return self.salary.brutto
+        if self.user.salary > 0:
+            return self.user.salary
 
-    @property
-    def income_tax(self) -> int:
-        if self.user.age > 26:
-            return int(
-                calc_income_tax(
-                    self.income,
-                    int(self.constant_PIT),
-                )
+        if self.hours.extra_hours:
+            return (self.hours.hours * self.user.hours_brutto_salary) + (
+                self.hours.extra_hours * self.user.extra_hours_brutto_salary
             )
-        return 0
+        return self.hours.hours * self.user.hours_brutto_salary
 
     @property
     def netto_salary(self) -> float:
-        return round(
+        self.netto_salary = round(  # type: ignore
             (
                 self.brutto_salary
-                - self.ZUS_contributions
+                - self.constants.ZUS_contributions
                 - self.health_care_contribution
                 - self.income_tax
             ),
             2,
         )
+        return self.netto_salary
 
 
 class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
-    start_date = models.DateField(default=timezone.now)
-    end_date = models.DateField(default=timezone.now)
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(default=timezone.now)
+    hours = models.PositiveSmallIntegerField(
+        default=0,
+        validators=[
+            MinValueValidator(
+                limit_value=0,
+                message="Working hours cannot be less than 0",
+            ),
+            MaxValueValidator(
+                limit_value=24,
+                message="Working hours cannot be more than 24h. Day has 24h.",
+            ),
+        ],
+    )
+    extra_hours = models.PositiveSmallIntegerField(
+        default=0,
+        validators=[
+            MinValueValidator(
+                limit_value=0,
+                message="Working hours cannot be less than 0",
+            ),
+            MaxValueValidator(
+                limit_value=24,
+                message="Working hours cannot be more than 24h. Day has 24h.",
+            ),
+        ],
+    )
 
     user = models.ForeignKey(
         Profile,
@@ -152,32 +157,19 @@ class JobHours(BaseModel):
     )
 
     def __str__(self) -> str:
-        return f"{self.user} has {self.hours} hours in job"
+        return f"{self.user} has {self.hours} hours in date"
 
-    @property
-    def hours(self) -> int:
-        if self.user:
-            return int(
-                get_working_hours(
-                    self.user,
-                    self.start_date,
-                    self.end_date,
-                )
-            )
-        return 0
+    def save(self, *args, **kwargs):
+        self.hours = get_working_hours(self.user, self.start_date, self.end_date)
+        self.extra_hours = get_working_hours(
+            self.user, self.start_date, self.end_date, extra_hours=True
+        )
+        super(JobHours, self).save(*args, **kwargs)
 
-    @property
-    def extra_hours(self) -> int:
-        if self.user:
-            return int(
-                get_working_hours(
-                    self.user,
-                    self.start_date,
-                    self.end_date,
-                    extra_hours=True,
-                )
-            )
-        return 0
+    def clean(self):
+        super().clean()
+        if self.start_date > self.end_date:
+            raise ValidationError("End date must be after start date")
 
 
 # clean

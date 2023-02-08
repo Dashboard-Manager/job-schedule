@@ -9,7 +9,16 @@ class UserAdmin(admin.ModelAdmin):  # type: ignore
         (None, {"fields": ("username", "password")}),
         (
             _("Personal info"),
-            {"fields": ("first_name", "last_name", "email", "birth_date", "salary")},
+            {
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "email",
+                    "birth_date",
+                    "salary",
+                    ("hours_brutto_salary", "extra_hours_brutto_salary"),
+                )
+            },
         ),
         (
             _("Permissions"),

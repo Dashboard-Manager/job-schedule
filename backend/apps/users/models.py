@@ -22,6 +22,32 @@ class Profile(AbstractUser):
             ),
         ],
     )
+    hours_brutto_salary = models.FloatField(
+        default=0,
+        validators=[
+            MinValueValidator(
+                limit_value=0,
+                message="Salary cannot be less than 0",
+            ),
+            MaxValueValidator(
+                limit_value=9_999_999_999,
+                message="Sorry, but we need to have some limits",
+            ),
+        ],
+    )
+    extra_hours_brutto_salary = models.FloatField(
+        default=0,
+        validators=[
+            MinValueValidator(
+                limit_value=0,
+                message="Salary cannot be less than 0",
+            ),
+            MaxValueValidator(
+                limit_value=9_999_999_999,
+                message="Sorry, but we need to have some limits",
+            ),
+        ],
+    )
     birth_date = models.DateField(verbose_name="date of birth", blank=False, null=True)
 
     def __str__(self) -> str:
