@@ -1,18 +1,14 @@
+import logging
+
 from apps.earnings.services import constants
-from apps.earnings.services.calculations import (
-    calc_disability_contr,
-    calc_health_care_contr,
-    calc_income,
-    calc_income_tax,
-    calc_pension_contr,
-    calc_sickness_contr,
-)
 from apps.earnings.services.working_hours import get_working_hours
 from apps.users.models import Profile
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils import timezone
+
+logger = logging.getLogger(__name__)
 
 
 class BaseModel(models.Model):
@@ -23,7 +19,16 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Constants(BaseModel):
+class Settlements(BaseModel):
+    date = models.DateField(default=timezone.now)
+
+    user = models.OneToOneField("apps.users.models.Profile", on_delete=models.CASCADE)
+    calculations = models.OneToOneField(
+        "apps.earnings.models.Calculations", on_delete=models.CASCADE
+    )
+
+
+class Constants(models.Models):
     PIT = models.FloatField(
         verbose_name="Constant PIT tax",
         default=constants.PIT,
@@ -61,7 +66,7 @@ class Constants(BaseModel):
         )
 
 
-class Calculations(BaseModel):
+class Calculations(models.Models):
     pension_contribution = models.FloatField(
         verbose_name="Pension Contribution", default=0
     )
@@ -77,51 +82,22 @@ class Calculations(BaseModel):
     income = models.FloatField(verbose_name="Income", default=0)
     income_tax = models.FloatField(verbose_name="Income tax", default=0)
 
-    settlement = models.ForeignKey(
-        "Settlements", on_delete=models.CASCADE, related_name="employer"
+    constants = models.OneToOneField(Constants, on_delete=models.CASCADE)
+    hours = models.OneToOneField(
+        "apps.earnings.models.JobHours", on_delete=models.CASCADE
     )
-    constants = models.ForeignKey(Constants, on_delete=models.CASCADE)
 
     @property
     def brutto_salary(self) -> float:
-        return self.settlement.user.salary
+        # return self.salary.brutto
+        if self.hours.extra_hours:
+            return (self.hours.hours * self.user.hours_brutto_salary) + (
+                self.hours.extra_hours * self.user.extra_hours_brutto_salary
+            )
+        return self.hours.hours * self.user.hours_brutto_salary
 
     @property
-    def income(self) -> float:
-        return calc_income(
-            self.brutto_salary,
-            self.constants.ZUS_contributions,
-        )
-
-    def set_contributions(self):
-        self.pension_contribution = calc_pension_contr(
-            self.brutto_salary,
-            self.constants.pension_contribution,
-        )
-        self.disability_contribution = calc_disability_contr(
-            self.brutto_salary,
-            self.constants.disability_contribution,
-        )
-        self.sickness_contribution = calc_sickness_contr(
-            self.brutto_salary,
-            self.constants.sickness_contribution,
-        )
-        self.health_care_contribution = calc_health_care_contr(
-            self.brutto_salary,
-            self.constants.ZUS_contributions,
-            self.constants.health_care_contribution,
-        )
-        self.save()
-
-    def set_income_tax(self) -> int:
-        if self.user.age > 26:
-            self.income_tax = calc_income_tax(
-                self.income,
-                self.constants.PIT,
-            )
-            self.save()
-
-    def set_netto_salary(self) -> float:
+    def netto_salary(self) -> float:
         self.netto_salary = round(
             (
                 self.brutto_salary
@@ -131,41 +107,13 @@ class Calculations(BaseModel):
             ),
             2,
         )
-        self.save()
-
-
-class Salaries(BaseModel):
-    brutto_salary = models.FloatField()
-    netto_salary = models.FloatField()
-
-    calculations = models.ForeignKey(Calculations, on_delete=models.CASCADE)
-
-    def set_netto_salary(self):
-        self.netto_salary = self.calculations.netto_salary
-        self.save()
-
-    def set_brutto_salary(self):
-        self.brutto_salary = self.calculations.brutto_salary
-        self.save()
-
-
-class Settlements(BaseModel):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    constants = models.ForeignKey(
-        Constants, on_delete=models.CASCADE, related_name="contributions"
-    )
-    calculations = models.OneToOneField(
-        Calculations, on_delete=models.CASCADE, related_name="calculationed"
-    )
-    salary = models.ForeignKey(
-        Salaries, on_delete=models.CASCADE, related_name="converted"
-    )
+        return self.netto_salary
 
 
 class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
-    start_job = models.TimeField(auto_now_add=True, default=timezone.now)
-    end_job = models.TimeField(default=timezone.now)
+    start_date = models.TimeField(default=timezone.now)
+    end_date = models.TimeField(default=timezone.now)
     hours = models.PositiveSmallIntegerField(
         default=0,
         validators=[
@@ -186,19 +134,18 @@ class JobHours(BaseModel):
     )
 
     def __str__(self) -> str:
-        return f"{self.user} has {self.hours} hours in job"
+        return f"{self.user} has {self.hours} hours in date"
 
-    def set_hours(self):
-        self.hours = get_working_hours(
-            self.user,
-            self.start_job,
-            self.end_job,
+    def save(self, *args, **kwargs):
+        self.hours = get_working_hours(self.user, self.start_date, self.end_date)
+        self.extra_hours = get_working_hours(
+            self.user, self.start_date, self.end_date, extra_hours=True
         )
-        self.save()
+        super(JobHours, self).save(*args, **kwargs)
 
     def clean(self):
         super().clean()
-        if self.start_job > self.end_job:
+        if self.start_date > self.end_date:
             raise ValidationError("End date must be after start date")
 
 
