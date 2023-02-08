@@ -108,7 +108,7 @@ class Calculations(models.Model):
 
     @property
     def netto_salary(self) -> float:
-        self.netto_salary = round(
+        self.netto_salary = round(  # type: ignore
             (
                 self.brutto_salary
                 - self.constants.ZUS_contributions
