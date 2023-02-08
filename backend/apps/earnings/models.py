@@ -22,13 +22,13 @@ class BaseModel(models.Model):
 class Settlements(BaseModel):
     date = models.DateField(default=timezone.now)
 
-    user = models.OneToOneField("apps.users.models.Profile", on_delete=models.CASCADE)
+    user = models.OneToOneField("users.Profile", on_delete=models.CASCADE)
     calculations = models.OneToOneField(
-        "apps.earnings.models.Calculations", on_delete=models.CASCADE
+        "earnings.Calculations", on_delete=models.CASCADE
     )
 
 
-class Constants(models.Models):
+class Constants(models.Model):
     PIT = models.FloatField(
         verbose_name="Constant PIT tax",
         default=constants.PIT,
@@ -54,6 +54,11 @@ class Constants(models.Models):
         default=constants.HEALTH_CARE,
     )
 
+    user = models.ForeignKey("users.Profile", on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"Constants for {self.user}"
+
     @property
     def ZUS_contributions(self) -> float:
         return round(
@@ -66,7 +71,7 @@ class Constants(models.Models):
         )
 
 
-class Calculations(models.Models):
+class Calculations(models.Model):
     pension_contribution = models.FloatField(
         verbose_name="Pension Contribution", default=0
     )
@@ -83,13 +88,18 @@ class Calculations(models.Models):
     income_tax = models.FloatField(verbose_name="Income tax", default=0)
 
     constants = models.OneToOneField(Constants, on_delete=models.CASCADE)
-    hours = models.OneToOneField(
-        "apps.earnings.models.JobHours", on_delete=models.CASCADE
-    )
+    hours = models.OneToOneField("earnings.JobHours", on_delete=models.CASCADE)
+    user = models.ForeignKey("users.Profile", on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return f"{self.user} earned {self.netto_salary} PLN"
 
     @property
     def brutto_salary(self) -> float:
         # return self.salary.brutto
+        if self.user.salary > 0:
+            return self.user.salary
+
         if self.hours.extra_hours:
             return (self.hours.hours * self.user.hours_brutto_salary) + (
                 self.hours.extra_hours * self.user.extra_hours_brutto_salary
@@ -112,9 +122,22 @@ class Calculations(models.Models):
 
 class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
-    start_date = models.TimeField(default=timezone.now)
-    end_date = models.TimeField(default=timezone.now)
+    start_date = models.DateTimeField(default=timezone.now)
+    end_date = models.DateTimeField(default=timezone.now)
     hours = models.PositiveSmallIntegerField(
+        default=0,
+        validators=[
+            MinValueValidator(
+                limit_value=0,
+                message="Working hours cannot be less than 0",
+            ),
+            MaxValueValidator(
+                limit_value=24,
+                message="Working hours cannot be more than 24h. Day has 24h.",
+            ),
+        ],
+    )
+    extra_hours = models.PositiveSmallIntegerField(
         default=0,
         validators=[
             MinValueValidator(
