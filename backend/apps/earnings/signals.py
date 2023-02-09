@@ -7,6 +7,7 @@ from apps.earnings.services.calculations import (
     calc_pension_contr,
     calc_sickness_contr,
 )
+from apps.earnings.services.working_hours import get_working_hours
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
@@ -53,4 +54,18 @@ def set_netto_salary(sender, instance, **kwargs):
             - instance.income_tax
         ),
         2,
+    )
+
+
+@receiver(pre_save(), sender=Calculations)
+def get_workings_hours(sender, instance, **kwargs):
+    instance.hours = get_working_hours(
+        instance.user, instance.start_date, instance.end_date
+    )
+
+
+@receiver(pre_save(), sender=Calculations)
+def get_extra_workings_hours(sender, instance, **kwargs):
+    instance.extra_hours = get_working_hours(
+        instance.user, instance.start_date, instance.end_date, extra_hours=True
     )

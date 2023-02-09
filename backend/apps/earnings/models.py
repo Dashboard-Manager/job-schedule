@@ -1,7 +1,6 @@
 import logging
 
 from apps.earnings.services import constants
-from apps.earnings.services.working_hours import get_working_hours
 from apps.users.models import Profile
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
@@ -138,13 +137,6 @@ class JobHours(BaseModel):
 
     def __str__(self) -> str:
         return f"{self.user} has {self.hours} hours in date"
-
-    def save(self, *args, **kwargs):
-        self.hours = get_working_hours(self.user, self.start_date, self.end_date)
-        self.extra_hours = get_working_hours(
-            self.user, self.start_date, self.end_date, extra_hours=True
-        )
-        super(JobHours, self).save(*args, **kwargs)
 
     def clean(self):
         super().clean()
