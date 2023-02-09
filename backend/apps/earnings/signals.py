@@ -7,7 +7,7 @@ from apps.earnings.services.calculations import (
     calc_pension_contr,
     calc_sickness_contr,
 )
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 
@@ -43,9 +43,14 @@ def calculate_contributions(sender, instance, **kwargs):
         instance.income_tax = 0
 
 
-# @receiver(pre_save, sender=Salaries)
-# def set_salary(sender, instance, **kwargs):
-#     netto = instance.calculations.netto_salary
-#     instance.netto_salary = netto
-
-#     # instance.brutto_salary = instance.calculations.brutto_salary
+@receiver(post_save, sender=Calculations)
+def set_netto_salary(sender, instance, **kwargs):
+    instance.netto_salary = round(
+        (
+            instance.brutto_salary
+            - instance.constants.ZUS_contributions
+            - instance.health_care_contribution
+            - instance.income_tax
+        ),
+        2,
+    )
