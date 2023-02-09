@@ -57,14 +57,14 @@ def set_netto_salary(sender, instance, **kwargs):
     )
 
 
-@receiver(pre_save(), sender=Calculations)
+@receiver(pre_save, sender=Calculations)
 def get_workings_hours(sender, instance, **kwargs):
     instance.hours = get_working_hours(
         instance.user, instance.start_date, instance.end_date
     )
 
 
-@receiver(pre_save(), sender=Calculations)
+@receiver(pre_save, sender=Calculations)
 def get_extra_workings_hours(sender, instance, **kwargs):
     instance.extra_hours = get_working_hours(
         instance.user, instance.start_date, instance.end_date, extra_hours=True
