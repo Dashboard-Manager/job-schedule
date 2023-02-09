@@ -8,8 +8,27 @@ from apps.users.models import Profile
 from django.contrib import admin
 
 admin.site.register([Settlements, Calculations, Constants])
+admin.site.register([Settlements, Calculations, Constants])
 
 
+# @admin.register(Constants, Calculations, Salaries, Settlements)
+# class EarningsAdmin(admin.ModelAdmin):  # type: ignore
+#     list_display = [
+#         "Settlements.user",
+#         "Salaries.brutto_salary",
+#         "Salaries.netto_salary",
+#     ]
+#     readonly_fields = [
+#         "brutto_salary",
+#         "netto_salary",
+#         "pension_contribution",
+#         "disability_contribution",
+#         "sickness_contribution",
+#         "ZUS_contributions",
+#         "health_care_contribution",
+#         "income",
+#         "income_tax",
+#     ]
 @admin.register(Settlements)
 class SettlementsAdmin(admin.ModelAdmin):
     list_display = [
@@ -118,6 +137,15 @@ admin.site.register([Constants, Calculations, Salaries, Settlements])
 #     )
 #     add_fieldsets = ()
 
+# @admin.register(JobHours)
+# class JobAdmin(admin.ModelAdmin):  # type: ignore
+#     list_display = [
+#         "user",
+#         "start_date",
+#         "end_date",
+#         "hours",
+#         "extra_hours",
+#     ]
 
 # @admin.register(JobHours)
 # class JobAdmin(admin.ModelAdmin):  # type: ignore
