@@ -1,12 +1,4 @@
 from apps.earnings.services import constants
-from apps.earnings.services.calculations import (
-    calc_disability_contr,
-    calc_health_care_contr,
-    calc_income,
-    calc_income_tax,
-    calc_pension_contr,
-    calc_sickness_contr,
-)
 from apps.earnings.services.working_hours import get_working_hours
 from apps.users.models import Profile
 from django.db import models
@@ -74,53 +66,15 @@ class Calculations(BaseModel):
     )
     income = models.FloatField(verbose_name="Income", default=0)
     income_tax = models.FloatField(verbose_name="Income tax", default=0)
+    netto_salary = models.FloatField(default=0)
 
     settlement = models.ForeignKey(
         "Settlements", on_delete=models.CASCADE, related_name="employer"
     )
     constants = models.ForeignKey(Constants, on_delete=models.CASCADE)
 
-    @property
-    def brutto_salary(self) -> float:
-        return self.settlement.user.salary
-
-    @property
-    def income(self) -> float:
-        return calc_income(
-            self.brutto_salary,
-            self.constants.ZUS_contributions,
-        )
-
-    def set_contributions(self):
-        self.pension_contribution = calc_pension_contr(
-            self.brutto_salary,
-            self.constants.pension_contribution,
-        )
-        self.disability_contribution = calc_disability_contr(
-            self.brutto_salary,
-            self.constants.disability_contribution,
-        )
-        self.sickness_contribution = calc_sickness_contr(
-            self.brutto_salary,
-            self.constants.sickness_contribution,
-        )
-        self.health_care_contribution = calc_health_care_contr(
-            self.brutto_salary,
-            self.constants.ZUS_contributions,
-            self.constants.health_care_contribution,
-        )
-        self.save()
-
-    def set_income_tax(self) -> int:
-        if self.user.age > 26:
-            self.income_tax = calc_income_tax(
-                self.income,
-                self.constants.PIT,
-            )
-            self.save()
-
-    def set_netto_salary(self) -> float:
-        self.netto_salary = round(
+    def save(self, *args, **kwargs):
+        self.netto_salary = round(  # type: ignore
             (
                 self.brutto_salary
                 - self.constants.ZUS_contributions
@@ -129,35 +83,11 @@ class Calculations(BaseModel):
             ),
             2,
         )
-        self.save()
+        super(Calculations, self).save(*args, **kwargs)
 
-
-class Salaries(BaseModel):
-    brutto_salary = models.FloatField()
-    netto_salary = models.FloatField()
-
-    calculations = models.ForeignKey(Calculations, on_delete=models.CASCADE)
-
-    def set_netto_salary(self):
-        self.netto_salary = self.calculations.netto_salary
-        self.save()
-
-    def set_brutto_salary(self):
-        self.brutto_salary = self.calculations.brutto_salary
-        self.save()
-
-
-class Settlements(BaseModel):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    constants = models.ForeignKey(
-        Constants, on_delete=models.CASCADE, related_name="contributions"
-    )
-    calculations = models.OneToOneField(
-        Calculations, on_delete=models.CASCADE, related_name="calculationed"
-    )
-    salary = models.ForeignKey(
-        Salaries, on_delete=models.CASCADE, related_name="converted"
-    )
+    @property
+    def brutto_salary(self) -> float:
+        return self.settlement.user.salary
 
 
 class JobHours(BaseModel):

@@ -7,6 +7,28 @@ from apps.earnings.models import (  # JobHours,
 from apps.users.models import Profile
 from django.contrib import admin
 
+admin.site.register([Settlements, Calculations, Constants])
+
+
+@admin.register(Settlements)
+class SettlementsAdmin(admin.ModelAdmin):
+    list_display = [
+        "date",
+        "user",
+        "calculations",
+    ]
+
+
+@admin.register(Constants)
+class ConstantsAdmin(admin.ModelAdmin):
+    list_display = [
+        "user",
+        "ZUS_contributions",
+    ]
+    readonly_fields = [
+        "ZUS_contributions",
+    ]
+
 
 class ProfileInLine(admin.TabularInline):  # type: ignore
     model = Profile
