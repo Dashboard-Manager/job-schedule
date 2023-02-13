@@ -1,4 +1,4 @@
-from apps.earnings.models import Calculations
+from apps.earnings.models import Calculations, JobHours
 from apps.earnings.services.calculations import (
     calc_disability_contr,
     calc_health_care_contr,
@@ -7,7 +7,8 @@ from apps.earnings.services.calculations import (
     calc_pension_contr,
     calc_sickness_contr,
 )
-from django.db.models.signals import pre_save
+from apps.earnings.services.working_hours import get_working_hours
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 
@@ -43,9 +44,28 @@ def calculate_contributions(sender, instance, **kwargs):
         instance.income_tax = 0
 
 
-# @receiver(pre_save, sender=Salaries)
-# def set_salary(sender, instance, **kwargs):
-#     netto = instance.calculations.netto_salary
-#     instance.netto_salary = netto
+@receiver(post_save, sender=Calculations)
+def set_netto_salary(sender, instance, **kwargs):
+    instance.netto_salary = round(
+        (
+            instance.brutto_salary
+            - instance.constants.ZUS_contributions
+            - instance.health_care_contribution
+            - instance.income_tax
+        ),
+        2,
+    )
 
-#     # instance.brutto_salary = instance.calculations.brutto_salary
+
+@receiver(pre_save, sender=JobHours)
+def get_workings_hours(sender, instance, **kwargs):
+    instance.hours = get_working_hours(
+        instance.user, instance.start_date, instance.end_date
+    )
+
+
+@receiver(pre_save, sender=JobHours)
+def get_extra_workings_hours(sender, instance, **kwargs):
+    instance.extra_hours = get_working_hours(
+        instance.user, instance.start_date, instance.end_date, extra_hours=True
+    )

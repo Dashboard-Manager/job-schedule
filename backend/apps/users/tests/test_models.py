@@ -1,7 +1,8 @@
 from datetime import date, timedelta
 
 import pytest
-from apps.users.tests.factories import ProfileFactory
+from apps.users.tests.factory import ProfileFactory
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 
@@ -70,3 +71,24 @@ class TestProfileModel:
 
     def test_absolute_url(self, profile):
         assert profile.get_absolute_url() == f"profile/{profile.username}/"
+
+
+class TestUser:
+    @pytest.fixture
+    def user_data(
+        self,
+    ):
+        return {
+            "username": "Robert",
+            "password": "robert123",
+        }
+
+    def test_user_data_username(self, user_data):
+        User = get_user_model()
+        user = User(**user_data)
+        assert user.username == "Robert"
+
+    def test_user_data_password(self, user_data):
+        User = get_user_model()
+        user = User(**user_data)
+        assert user.password == "robert123"

@@ -1,10 +1,9 @@
 import logging
 
 from apps.earnings.services import constants
-from apps.earnings.services.working_hours import get_working_hours
 from apps.users.models import Profile
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 
@@ -73,19 +72,20 @@ class Constants(models.Model):
 
 class Calculations(models.Model):
     pension_contribution = models.FloatField(
-        verbose_name="Pension Contribution", default=0
+        verbose_name="Pension Contribution", default=0.0
     )
     disability_contribution = models.FloatField(
-        verbose_name=" Disability Contribution", default=0
+        verbose_name=" Disability Contribution", default=0.0
     )
     sickness_contribution = models.FloatField(
-        verbose_name="Sickness Contribution", default=0
+        verbose_name="Sickness Contribution", default=0.0
     )
     health_care_contribution = models.FloatField(
-        verbose_name="Health Care Contribution", default=0
+        verbose_name="Health Care Contribution", default=0.0
     )
-    income = models.FloatField(verbose_name="Income", default=0)
-    income_tax = models.FloatField(verbose_name="Income tax", default=0)
+    income = models.FloatField(verbose_name="Income", default=0.0)
+    income_tax = models.FloatField(verbose_name="Income tax", default=0.0)
+    netto_salary = models.FloatField(default=0)
 
     constants = models.OneToOneField(Constants, on_delete=models.CASCADE)
     hours = models.OneToOneField("earnings.JobHours", on_delete=models.CASCADE)
@@ -96,57 +96,35 @@ class Calculations(models.Model):
 
     @property
     def brutto_salary(self) -> float:
-        # return self.salary.brutto
         if self.user.salary > 0:
             return self.user.salary
 
         if self.hours.extra_hours:
-            return (self.hours.hours * self.user.hours_brutto_salary) + (
-                self.hours.extra_hours * self.user.extra_hours_brutto_salary
+            return (self.hours.hours * self.user.hourly_pay) + (
+                self.hours.extra_hours * self.user.extra_hourly_pay
             )
-        return self.hours.hours * self.user.hours_brutto_salary
-
-    @property
-    def netto_salary(self) -> float:
-        self.netto_salary = round(  # type: ignore
-            (
-                self.brutto_salary
-                - self.constants.ZUS_contributions
-                - self.health_care_contribution
-                - self.income_tax
-            ),
-            2,
-        )
-        return self.netto_salary
+        return self.hours.hours * self.user.hourly_pay
 
 
 class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
-    start_date = models.DateTimeField(default=timezone.now)
-    end_date = models.DateTimeField(default=timezone.now)
-    hours = models.PositiveSmallIntegerField(
+    start_date = models.DateField(default=timezone.now)
+    end_date = models.DateField(default=timezone.now)
+    hours = models.IntegerField(
         default=0,
         validators=[
             MinValueValidator(
                 limit_value=0,
                 message="Working hours cannot be less than 0",
-            ),
-            MaxValueValidator(
-                limit_value=24,
-                message="Working hours cannot be more than 24h. Day has 24h.",
             ),
         ],
     )
-    extra_hours = models.PositiveSmallIntegerField(
+    extra_hours = models.IntegerField(
         default=0,
         validators=[
             MinValueValidator(
                 limit_value=0,
                 message="Working hours cannot be less than 0",
-            ),
-            MaxValueValidator(
-                limit_value=24,
-                message="Working hours cannot be more than 24h. Day has 24h.",
             ),
         ],
     )
@@ -159,17 +137,10 @@ class JobHours(BaseModel):
     def __str__(self) -> str:
         return f"{self.user} has {self.hours} hours in date"
 
-    def save(self, *args, **kwargs):
-        self.hours = get_working_hours(self.user, self.start_date, self.end_date)
-        self.extra_hours = get_working_hours(
-            self.user, self.start_date, self.end_date, extra_hours=True
-        )
-        super(JobHours, self).save(*args, **kwargs)
-
-    def clean(self):
-        super().clean()
+    def clean(self, *args, **kwargs):
         if self.start_date > self.end_date:
             raise ValidationError("End date must be after start date")
+        super(JobHours, self).clean(*args, **kwargs)
 
 
 # clean
