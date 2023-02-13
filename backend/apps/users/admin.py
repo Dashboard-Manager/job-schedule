@@ -16,7 +16,7 @@ class UserAdmin(admin.ModelAdmin):  # type: ignore
                     "email",
                     "birth_date",
                     "salary",
-                    ("hours_brutto_salary", "extra_hours_brutto_salary"),
+                    ("hourly_pay", "extra_hourly_pay"),
                 )
             },
         ),
