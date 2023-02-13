@@ -69,7 +69,7 @@ class TestCalculations:
         return CalculationsFactory.create()
 
     def custom_calculations(self, *args, **kwargs):
-        return CalculationsFactory.build(*args, **kwargs)
+        return CalculationsFactory.create(*args, **kwargs)
 
     def test_netto_salary(self):
         calculated_netto_for_less_than_26 = 3263.51

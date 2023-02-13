@@ -100,10 +100,10 @@ class Calculations(models.Model):
             return self.user.salary
 
         if self.hours.extra_hours:
-            return (self.hours.hours * self.user.hours_brutto_salary) + (
-                self.hours.extra_hours * self.user.extra_hours_brutto_salary
+            return (self.hours.hours * self.user.hourly_pay) + (
+                self.hours.extra_hours * self.user.extra_hourly_pay
             )
-        return self.hours.hours * self.user.hours_brutto_salary
+        return self.hours.hours * self.user.hourly_pay
 
 
 class JobHours(BaseModel):
