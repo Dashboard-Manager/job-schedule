@@ -96,7 +96,6 @@ class Calculations(models.Model):
 
     @property
     def brutto_salary(self) -> float:
-        # return self.salary.brutto
         if self.user.salary > 0:
             return self.user.salary
 
@@ -109,9 +108,9 @@ class Calculations(models.Model):
 
 class JobHours(BaseModel):
     date = models.DateField(default=timezone.now)
-    start_date = models.DateTimeField(default=timezone.now)
-    end_date = models.DateTimeField(default=timezone.now)
-    hours = models.PositiveSmallIntegerField(
+    start_date = models.DateField(default=timezone.now)
+    end_date = models.DateField(default=timezone.now)
+    hours = models.IntegerField(
         default=0,
         validators=[
             MinValueValidator(
@@ -120,7 +119,7 @@ class JobHours(BaseModel):
             ),
         ],
     )
-    extra_hours = models.PositiveSmallIntegerField(
+    extra_hours = models.IntegerField(
         default=0,
         validators=[
             MinValueValidator(
@@ -138,10 +137,10 @@ class JobHours(BaseModel):
     def __str__(self) -> str:
         return f"{self.user} has {self.hours} hours in date"
 
-    def clean(self):
-        super().clean()
+    def clean(self, *args, **kwargs):
         if self.start_date > self.end_date:
             raise ValidationError("End date must be after start date")
+        super(JobHours, self).clean(*args, **kwargs)
 
 
 # clean
