@@ -72,19 +72,19 @@ class Constants(models.Model):
 
 class Calculations(models.Model):
     pension_contribution = models.FloatField(
-        verbose_name="Pension Contribution", default=0
+        verbose_name="Pension Contribution", default=0.0
     )
     disability_contribution = models.FloatField(
-        verbose_name=" Disability Contribution", default=0
+        verbose_name=" Disability Contribution", default=0.0
     )
     sickness_contribution = models.FloatField(
-        verbose_name="Sickness Contribution", default=0
+        verbose_name="Sickness Contribution", default=0.0
     )
     health_care_contribution = models.FloatField(
-        verbose_name="Health Care Contribution", default=0
+        verbose_name="Health Care Contribution", default=0.0
     )
-    income = models.FloatField(verbose_name="Income", default=0)
-    income_tax = models.FloatField(verbose_name="Income tax", default=0)
+    income = models.FloatField(verbose_name="Income", default=0.0)
+    income_tax = models.FloatField(verbose_name="Income tax", default=0.0)
     netto_salary = models.FloatField(default=0)
 
     constants = models.OneToOneField(Constants, on_delete=models.CASCADE)

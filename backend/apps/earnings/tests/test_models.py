@@ -1,10 +1,14 @@
 import datetime
 
 import pytest
-from apps.earnings.tests.factory import JobHoursFactory
+from apps.earnings import signals
+from apps.earnings.models import Constants
+from apps.earnings.tests.factory import CalculationsFactory, JobHoursFactory
 from apps.users.models import Profile
+from apps.users.tests.factory import ProfileFactory
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from factory.django import mute_signals
 
 
 @pytest.mark.django_db
@@ -24,11 +28,13 @@ class TestJobHours:
         assert isinstance(jobhours.hours, int)
         assert isinstance(jobhours.extra_hours, int)
 
+    @mute_signals(signals.pre_save, signals.post_save)
     def test_limits_for_hours(self, jobhours):
         instance = JobHoursFactory(hours=0)
         instance.full_clean()
 
-        instance = JobHoursFactory(hours=-1)
+        instance = JobHoursFactory.create(hours=-1)
+        # pdb.set_trace()
         with pytest.raises(ValidationError) as exception:
             instance.full_clean()
         assert "Working hours cannot be less than 0" in str(exception.value)
@@ -49,3 +55,31 @@ class TestJobHours:
         with pytest.raises(ValidationError) as e:
             instance.full_clean()
         assert "End date must be after start date" in str(e.value)
+
+
+@pytest.mark.django_db
+class TestCalculations:
+    @staticmethod
+    def get_age(age: int) -> datetime.date:
+        today = datetime.date.today()
+        return today.replace(year=today.year - age)
+
+    @pytest.fixture
+    def calculations(self):
+        return CalculationsFactory.create()
+
+    def custom_calculations(self, *args, **kwargs):
+        return CalculationsFactory.build(*args, **kwargs)
+
+    def test_netto_salary(self):
+        calculated_netto_for_less_than_26 = 3263.51
+        user = ProfileFactory.create(salary=3600, birth_date=self.get_age(26))
+        constants = Constants.objects.create(user=user)
+        instance = self.custom_calculations(constants=constants, user=user)  # noqa
+        assert instance.netto_salary == calculated_netto_for_less_than_26
+
+        calculated_netto_for_more_than_26 = 3163.51
+        user = ProfileFactory.create(salary=3600, birth_date=self.get_age(27))
+        constants = Constants.objects.create(user=user)
+        instance = self.custom_calculations(constants=constants, user=user)  # noqa
+        assert instance.netto_salary == calculated_netto_for_more_than_26
