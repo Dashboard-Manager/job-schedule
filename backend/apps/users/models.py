@@ -22,7 +22,7 @@ class Profile(AbstractUser):
             ),
         ],
     )
-    hours_brutto_salary = models.FloatField(
+    hourly_pay = models.FloatField(
         default=0,
         validators=[
             MinValueValidator(
@@ -35,7 +35,7 @@ class Profile(AbstractUser):
             ),
         ],
     )
-    extra_hours_brutto_salary = models.FloatField(
+    extra_hourly_pay = models.FloatField(
         default=0,
         validators=[
             MinValueValidator(
