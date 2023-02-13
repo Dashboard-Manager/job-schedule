@@ -63,7 +63,7 @@ class Profile(AbstractUser):
         return f"profile/{self.username}/"
 
     def clean(self, *args, **kwargs):
-        super().clean()
+        super(Profile, self).clean(*args, **kwargs)
         if self.birth_date > datetime.date.today():
             raise ValidationError(
                 {"birth_date": "The birth date cannot be in the past.."}

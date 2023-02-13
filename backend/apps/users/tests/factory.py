@@ -24,5 +24,7 @@ class ProfileFactory(DjangoModelFactory):
     salary = LazyFunction(
         lambda: faker.pyfloat(right_digits=2, min_value=0, max_value=9_999_999_999)
     )
+    hours_brutto_salary = LazyFunction(lambda: faker.random_int(min=0))
+    extra_hours_brutto_salary = LazyFunction(lambda: faker.random_int(min=0))
 
     birth_date = LazyFunction(lambda: faker.date_of_birth(minimum_age=18))
