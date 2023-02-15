@@ -14,38 +14,41 @@ from django.dispatch import receiver
 
 @receiver(pre_save, sender=Calculations)
 def calculate_contributions(sender, instance, **kwargs):
-    instance.pension_contribution = calc_pension_contr(
-        instance.brutto_salary,
-        instance.constants.pension_contribution,
-    )
-    instance.disability_contribution = calc_disability_contr(
-        instance.brutto_salary,
-        instance.constants.disability_contribution,
-    )
-    instance.sickness_contribution = calc_sickness_contr(
-        instance.brutto_salary,
-        instance.constants.sickness_contribution,
-    )
-    instance.health_care_contribution = calc_health_care_contr(
-        instance.brutto_salary,
-        instance.constants.ZUS_contributions,
-        instance.constants.health_care_contribution,
-    )
-    instance.income = calc_income(
-        instance.brutto_salary,
-        instance.constants.ZUS_contributions,
-    )
-    if instance.user.age > 26:
-        instance.income_tax = calc_income_tax(
-            instance.income,
-            instance.constants.PIT,
+    if not instance.user.financials.student:
+        instance.pension_contribution = calc_pension_contr(
+            instance.brutto_salary,
+            instance.constants.pension_contribution,
         )
-    else:
-        instance.income_tax = 0
+        instance.disability_contribution = calc_disability_contr(
+            instance.brutto_salary,
+            instance.constants.disability_contribution,
+        )
+        instance.sickness_contribution = calc_sickness_contr(
+            instance.brutto_salary,
+            instance.constants.sickness_contribution,
+        )
+        instance.health_care_contribution = calc_health_care_contr(
+            instance.brutto_salary,
+            instance.constants.ZUS_contributions,
+            instance.constants.health_care_contribution,
+        )
+        instance.income = calc_income(
+            instance.brutto_salary,
+            instance.constants.ZUS_contributions,
+        )
+        if instance.user.age > 26:
+            instance.income_tax = calc_income_tax(
+                instance.income,
+                instance.constants.PIT,
+            )
+        else:
+            instance.income_tax = 0
 
 
 @receiver(post_save, sender=Calculations)
 def set_netto_salary(sender, instance, **kwargs):
+    if instance.user.financials.student:
+        instance.netto_salary = instance.brutto_salary
     instance.netto_salary = round(
         (
             instance.brutto_salary
@@ -59,13 +62,22 @@ def set_netto_salary(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=JobHours)
 def get_workings_hours(sender, instance, **kwargs):
-    instance.hours = get_working_hours(
-        instance.user, instance.start_date, instance.end_date
+    salary = get_working_hours(instance.user, instance.start_date, instance.end_date)
+    extra_salary = get_working_hours(
+        instance.user, instance.start_date, instance.end_date, extra_hours=True
     )
+    if instance.user.financials.have_extra_salary:
+        instance.hours = salary
+    else:
+        instance.hours = salary + extra_salary
 
 
 @receiver(pre_save, sender=JobHours)
 def get_extra_workings_hours(sender, instance, **kwargs):
-    instance.extra_hours = get_working_hours(
+    extra_salary = get_working_hours(
         instance.user, instance.start_date, instance.end_date, extra_hours=True
     )
+    if instance.user.financials.have_extra_salary:
+        instance.extra_hours = extra_salary
+    else:
+        instance.extra_hours = 0
