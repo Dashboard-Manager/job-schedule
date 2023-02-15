@@ -6,6 +6,7 @@
 
 # Job-schedule
 The project presents interactiv dashboard for managing the enterprise, employees, budget and statistics.
+
 ### Needed to install
 | Program | Version | Links |
 | ----------- | ----------- | ----------- |
