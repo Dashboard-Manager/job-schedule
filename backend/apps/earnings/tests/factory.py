@@ -56,37 +56,15 @@ class CalculationsFactory(DjangoModelFactory):
     class Meta:
         model = Calculations
 
-    # pension_contribution = LazyFunction(
-    #     lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    # )
-    # disability_contribution = LazyFunction(
-    #     lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    # )
-
-    # sickness_contribution = LazyFunction(
-    #     lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    # )
-
-    # health_care_contribution = LazyFunction(
-    #     lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    # )
-    # income = LazyFunction(
-    #     lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    # )
-    # income_tax = LazyFunction(
-    #     lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    # )
-    # netto_salary = LazyFunction(
-    #     lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    # )
     pension_contribution = LazyFunction(lambda: faker.random_int(min=0))
     disability_contribution = LazyFunction(lambda: faker.random_int(min=0))
-
     sickness_contribution = LazyFunction(lambda: faker.random_int(min=0))
 
     health_care_contribution = LazyFunction(lambda: faker.random_int(min=0))
+
     income = LazyFunction(lambda: faker.random_int(min=0))
     income_tax = LazyFunction(lambda: faker.random_int(min=0))
+
     netto_salary = LazyFunction(lambda: faker.random_int(min=0))
 
     constants = LazyFunction(lambda: SubFactory(ConstantsFactory))

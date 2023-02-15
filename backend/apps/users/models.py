@@ -1,6 +1,6 @@
 import datetime
 from random import choice
-from string import ascii_letters, digits
+from string import digits
 
 from apps.earnings.services import constants
 from django.contrib.auth.models import User
@@ -21,7 +21,7 @@ class Profile(models.Model):
         default=(timezone.now() - datetime.timedelta(days=16 * 365)),
     )
     user = models.OneToOneField(
-        User, verbose_name=_("user"), on_delete=models.CASCADE, related_name="profile"
+        User, verbose_name=_("User"), on_delete=models.CASCADE, related_name="profile"
     )
 
     def __str__(self) -> str:
@@ -40,7 +40,7 @@ class Profile(models.Model):
             return int(timezone.now().year - self.birth_date.year)
         return 0
 
-    def id_generator(self, size: int = 6, chars: str = ascii_letters + digits):
+    def id_generator(self, size: int = 6, chars: str = digits):
         return "".join(choice(chars) for _ in range(size))
 
     def clean(self, *args, **kwargs):
@@ -62,7 +62,7 @@ class Financials(models.Model):
     COMMISSION_WITH_ECONOMIC_ENTITY = "commission with economic entity"
     INTERSHIP = "intership"
     CONTRACTS = [
-        (EMPLOYMENT, _("Employment contract)")),
+        (EMPLOYMENT, _("Employment contract")),
         (COMMISSION, _("Commission contract")),
         (SPECIFIC_TASK, _("Specific-task contract")),
         (
@@ -142,4 +142,4 @@ class Financials(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.contract}"
+        return f"{self.user.profile.identificator}"
