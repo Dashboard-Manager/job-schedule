@@ -89,6 +89,9 @@ class Financials(models.Model):
         _("Joint taxation of spouses"),
         default=False,
     )
+    have_extra_salary = models.BooleanField(
+        _("Have you extra salary for over time?"), default=True
+    )
 
     salary = models.FloatField(
         verbose_name=_("Brutto salary"),
@@ -143,3 +146,7 @@ class Financials(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.profile.identificator}"
+
+    def clean(self, *args, **kwargs):
+        # xxx
+        super(Financials, self).clean(*args, **kwargs)
