@@ -96,14 +96,14 @@ class Calculations(models.Model):
 
     @property
     def brutto_salary(self) -> float:
-        if self.user.financials.salary > 0:
-            return self.user.financials.salary
+        if self.user.financials.salary > 0:  # type: ignore
+            return self.user.financials.salary  # type: ignore
 
         if self.hours.extra_hours:
-            return (self.hours.hours * self.user.financials.hourly_pay) + (
-                self.hours.extra_hours * self.user.financials.extra_hourly_pay
+            return (self.hours.hours * self.user.financials.hourly_pay) + (  # type: ignore
+                self.hours.extra_hours * self.user.financials.extra_hourly_pay  # type: ignore
             )
-        return self.hours.hours * self.user.financials.hourly_pay
+        return self.hours.hours * self.user.financials.hourly_pay  # type: ignore
 
 
 class JobHours(BaseModel):

@@ -145,9 +145,8 @@ class Financials(models.Model):
     )
 
     def __str__(self) -> str:
-        return f"{self.user.profile.identificator}"
+        return f"{self.user.profile.identificator}"  # type: ignore
 
-    # type: ignore
     def clean(self, *args, **kwargs):
         # xxx
         super(Financials, self).clean(*args, **kwargs)
