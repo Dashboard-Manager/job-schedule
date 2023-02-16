@@ -1,5 +1,5 @@
 from apps.schedules.services import get_hours
-from apps.users.models import Profile
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
@@ -26,7 +26,7 @@ class Event(BaseModel):
     end_time = models.DateTimeField()
 
     from_user = models.ForeignKey(
-        Profile,
+        User,
         verbose_name="Event author",
         blank=True,
         null=True,
@@ -34,7 +34,7 @@ class Event(BaseModel):
         on_delete=models.SET_NULL,
     )
     to_user = models.ForeignKey(
-        Profile,
+        User,
         verbose_name="Event performer",
         blank=True,
         null=True,
@@ -54,7 +54,7 @@ class Job(BaseModel):
     )
     end_job = models.DateTimeField(verbose_name="Stop working", blank=True, null=True)
 
-    user = models.ForeignKey(Profile, related_name="employer", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="employer", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.user} worked by {self.job_hours} hours"

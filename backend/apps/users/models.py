@@ -18,7 +18,7 @@ class Profile(models.Model):
     birth_date = models.DateField(
         verbose_name=_("Birth date"),
         blank=False,
-        default=(timezone.now() - datetime.timedelta(days=16 * 365)),
+        default=timezone.now,
     )
     user = models.OneToOneField(
         User, verbose_name=_("User"), on_delete=models.CASCADE, related_name="profile"
@@ -74,7 +74,7 @@ class Financials(models.Model):
     contract = models.CharField(
         _("Type of contract"), choices=CONTRACTS, max_length=50, default=EMPLOYMENT
     )
-    student = models.BooleanField(verbose_name=_("Student status"), default=False)
+    is_student = models.BooleanField(verbose_name=_("Student status"), default=False)
 
     work_in_the_place_of_residence = models.BooleanField(
         _("Work in the place of residence"), default=True
@@ -147,6 +147,7 @@ class Financials(models.Model):
     def __str__(self) -> str:
         return f"{self.user.profile.identificator}"
 
+    # type: ignore
     def clean(self, *args, **kwargs):
         # xxx
         super(Financials, self).clean(*args, **kwargs)

@@ -8,13 +8,13 @@ from apps.earnings.services.calculations import (
     calc_sickness_contr,
 )
 from apps.earnings.services.working_hours import get_working_hours
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 
 @receiver(pre_save, sender=Calculations)
 def calculate_contributions(sender, instance, **kwargs):
-    if not instance.user.financials.student:
+    if not instance.user.financials.is_student:
         instance.pension_contribution = calc_pension_contr(
             instance.brutto_salary,
             instance.constants.pension_contribution,
@@ -32,11 +32,14 @@ def calculate_contributions(sender, instance, **kwargs):
             instance.constants.ZUS_contributions,
             instance.constants.health_care_contribution,
         )
-        instance.income = calc_income(
-            instance.brutto_salary,
-            instance.constants.ZUS_contributions,
-        )
-        if instance.user.age > 26:
+        if instance.user.profile.age > 26:
+            instance.income = calc_income(
+                instance.brutto_salary,
+                instance.constants.ZUS_contributions,
+            )
+        else:
+            instance.income = 0
+        if instance.user.profile.age > 26:
             instance.income_tax = calc_income_tax(
                 instance.income,
                 instance.constants.PIT,
@@ -45,11 +48,9 @@ def calculate_contributions(sender, instance, **kwargs):
             instance.income_tax = 0
 
 
-@receiver(post_save, sender=Calculations)
+@receiver(pre_save, sender=Calculations)
 def set_netto_salary(sender, instance, **kwargs):
-    if instance.user.financials.student:
-        instance.netto_salary = instance.brutto_salary
-    instance.netto_salary = round(
+    salary = round(
         (
             instance.brutto_salary
             - instance.constants.ZUS_contributions
@@ -58,6 +59,10 @@ def set_netto_salary(sender, instance, **kwargs):
         ),
         2,
     )
+    if not instance.user.financials.is_student:
+        instance.netto_salary = salary
+    else:
+        instance.netto_salary = instance.brutto_salary
 
 
 @receiver(pre_save, sender=JobHours)

@@ -30,6 +30,12 @@ class CalculationsAdmin(admin.ModelAdmin):
         "netto_salary",
     ]
     readonly_fields = [
+        "pension_contribution",
+        "disability_contribution",
+        "sickness_contribution",
+        "health_care_contribution",
+        "income",
+        "income_tax",
         "netto_salary",
     ]
 

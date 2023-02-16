@@ -1,7 +1,7 @@
 import logging
 
 from apps.earnings.services import constants
-from apps.users.models import Profile
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -21,7 +21,7 @@ class BaseModel(models.Model):
 class Settlements(BaseModel):
     date = models.DateField(default=timezone.now)
 
-    user = models.OneToOneField("users.Profile", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     calculations = models.OneToOneField(
         "earnings.Calculations", on_delete=models.CASCADE
     )
@@ -53,7 +53,7 @@ class Constants(models.Model):
         default=constants.HEALTH_CARE,
     )
 
-    user = models.ForeignKey("users.Profile", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"Constants for {self.user}"
@@ -75,7 +75,7 @@ class Calculations(models.Model):
         verbose_name="Pension Contribution", default=0.0
     )
     disability_contribution = models.FloatField(
-        verbose_name=" Disability Contribution", default=0.0
+        verbose_name="Disability Contribution", default=0.0
     )
     sickness_contribution = models.FloatField(
         verbose_name="Sickness Contribution", default=0.0
@@ -85,25 +85,25 @@ class Calculations(models.Model):
     )
     income = models.FloatField(verbose_name="Income", default=0.0)
     income_tax = models.FloatField(verbose_name="Income tax", default=0.0)
-    netto_salary = models.FloatField(default=0)
+    netto_salary = models.FloatField(verbose_name="Netto salary", default=0)
 
     constants = models.OneToOneField(Constants, on_delete=models.CASCADE)
     hours = models.OneToOneField("earnings.JobHours", on_delete=models.CASCADE)
-    user = models.ForeignKey("users.Profile", on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.user} earned {self.netto_salary} PLN"
 
     @property
     def brutto_salary(self) -> float:
-        if self.user.salary > 0:
-            return self.user.salary
+        if self.user.financials.salary > 0:
+            return self.user.financials.salary
 
         if self.hours.extra_hours:
-            return (self.hours.hours * self.user.hourly_pay) + (
-                self.hours.extra_hours * self.user.extra_hourly_pay
+            return (self.hours.hours * self.user.financials.hourly_pay) + (
+                self.hours.extra_hours * self.user.financials.extra_hourly_pay
             )
-        return self.hours.hours * self.user.hourly_pay
+        return self.hours.hours * self.user.financials.hourly_pay
 
 
 class JobHours(BaseModel):
@@ -130,7 +130,7 @@ class JobHours(BaseModel):
     )
 
     user = models.ForeignKey(
-        Profile,
+        User,
         on_delete=models.CASCADE,
     )
 
