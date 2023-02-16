@@ -28,7 +28,7 @@ class TestJobHours:
         assert isinstance(jobhours.hours, int)
         assert isinstance(jobhours.extra_hours, int)
 
-    @mute_signals(signals.pre_save, signals.post_save)
+    @mute_signals(signals.pre_save)
     def test_limits_for_hours(self, jobhours):
         instance = JobHoursFactory(hours=0)
         instance.full_clean()
