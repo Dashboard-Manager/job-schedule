@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -53,6 +54,9 @@ class Profile(models.Model):
             raise ValidationError(
                 {"error": _("You are too young to use this application.")}
             )
+
+    def get_absolute_url(self):
+        return reverse("profile", kwargs={"identificator": self.identificator})
 
 
 class Financials(models.Model):
@@ -146,7 +150,3 @@ class Financials(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.profile.identificator}"  # type: ignore
-
-    def clean(self, *args, **kwargs):
-        # xxx
-        super(Financials, self).clean(*args, **kwargs)

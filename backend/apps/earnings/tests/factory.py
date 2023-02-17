@@ -1,7 +1,7 @@
 from datetime import timedelta
 
 from apps.earnings.models import Calculations, Constants, JobHours, Settlements
-from apps.users.tests.factory import ProfileFactory
+from apps.users.tests.factory import UserFactory
 from django.utils import timezone
 from factory import LazyAttribute, LazyFunction, SubFactory
 from factory.django import DjangoModelFactory
@@ -19,7 +19,7 @@ class JobHoursFactory(DjangoModelFactory):
         model = JobHours
 
     date = LazyFunction(lambda: timezone.now())
-    user = SubFactory(ProfileFactory)
+    user = SubFactory(UserFactory)
     start_date = LazyFunction(lambda: faker.date_object())
     end_date = LazyAttribute(
         lambda instance: instance.start_date + timedelta(days=faker.random_int(min=0))
@@ -49,7 +49,7 @@ class ConstantsFactory(DjangoModelFactory):
     health_care_contribution = LazyFunction(
         lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
     )
-    user = LazyFunction(lambda: SubFactory(ProfileFactory))
+    user = LazyFunction(lambda: SubFactory(UserFactory))
 
 
 class CalculationsFactory(DjangoModelFactory):
@@ -75,6 +75,6 @@ class SettlementsFactory(DjangoModelFactory):
     class Meta:
         model = Settlements
 
-    user = LazyFunction(lambda: SubFactory(ProfileFactory))
+    user = LazyFunction(lambda: SubFactory(UserFactory))
     date = LazyFunction(lambda: timezone.now())
     calculations = LazyFunction(lambda: SubFactory(CalculationsFactory))
