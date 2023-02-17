@@ -122,7 +122,7 @@ class TestProfileMode:
     #     assert profile.get_absolute_url() == excepted_url  # type: ignore
 
 
-class Testuser:
+class TestUser:
     @pytest.fixture
     def user_data(
         self,
@@ -134,10 +134,10 @@ class Testuser:
 
     def test_user_data_username(self, user_data):
         user = get_user_model()
-        user = user(**user_data)
-        assert user.username == "Robert"
+        instance = user(**user_data)
+        assert instance.username == "Robert"
 
     def test_user_data_password(self, user_data):
         user = get_user_model()
-        user = user(**user_data)
-        assert user.password == "robert123"
+        instance = user(**user_data)
+        assert instance.password == "robert123"
