@@ -99,7 +99,7 @@ class Financials(models.Model):
 
     salary = models.FloatField(
         verbose_name=_("Brutto salary"),
-        default=0.0,
+        default=0,
         validators=[
             MinValueValidator(
                 limit_value=0,
@@ -113,7 +113,7 @@ class Financials(models.Model):
     )
     hourly_pay = models.FloatField(
         verbose_name=_("Hourly brutto pay"),
-        default=0.0,
+        default=0,
         validators=[
             MinValueValidator(
                 limit_value=0,
@@ -128,7 +128,7 @@ class Financials(models.Model):
     extra_hourly_pay = models.FloatField(
         verbose_name=_("Hourly extra brutto pay"),
         help_text=_("Extra pay for overtime"),
-        default=0.0,
+        default=0,
         validators=[
             MinValueValidator(
                 limit_value=0,

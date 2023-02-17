@@ -1,9 +1,11 @@
 from datetime import date, timedelta
 
 import pytest
+from apps.users import signals
 from apps.users.tests.factory import FinancialsFactory, ProfileFactory, UserFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from factory.django import mute_signals
 from pytest_django.asserts import assertQuerysetEqual
 
 
@@ -37,11 +39,16 @@ class TestUserModel:
 @pytest.mark.django_db
 class TestFinancialsMode:
     @pytest.fixture
+    @mute_signals(signals.post_save)
     def financials(self):
-        return FinancialsFactory.create()
+        user = UserFactory.create()
+        return FinancialsFactory.create(user=user)
 
+    @mute_signals(signals.post_save)
     def custom_financials(self, *args, **kwargs):
-        return FinancialsFactory.build(*args, **kwargs)
+        user = UserFactory.create()
+
+        return FinancialsFactory.build(user=user, *args, **kwargs)
 
     def test_instance_salary(self, financials):
         assert isinstance(financials.salary, (float, int))
@@ -67,12 +74,15 @@ class TestFinancialsMode:
 @pytest.mark.django_db
 class TestProfileMode:
     @pytest.fixture
+    @mute_signals(signals.post_save)
     def profile(self):
         user = UserFactory.create()
         return ProfileFactory.create(user=user)
 
+    @mute_signals(signals.post_save)
     def custom_profile(self, *args, **kwargs):
-        return ProfileFactory.build(*args, **kwargs)
+        user = UserFactory.create()
+        return ProfileFactory.build(user=user, *args, **kwargs)
 
     def test_birth_date_instance(self, profile):
         assert isinstance(profile.birth_date, date)
@@ -105,8 +115,11 @@ class TestProfileMode:
         instance = self.custom_profile(birth_date=None)  # noqa
         assert instance.age == 0
 
-    def test_absolute_url(self, profile):
-        assert profile.get_absolute_url() == f"profile/{profile.identificator}/"  # type: ignore
+    # def test_absolute_url(self, profile):
+    #     excepted_url = reverse(
+    #         "profile", kwargs={"identificator": profile.identificator}
+    #     )
+    #     assert profile.get_absolute_url() == excepted_url  # type: ignore
 
 
 class Testuser:

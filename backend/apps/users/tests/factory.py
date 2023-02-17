@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 from apps.users.models import Financials, Profile
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
@@ -23,16 +21,6 @@ class UserFactory(DjangoModelFactory):
     email = LazyAttribute(lambda o: f"{o.username}@example.com")
     is_staff = False
     is_superuser = False
-    # profile = RelatedFactory(ProfileFactory)
-    # financials = RelatedFactory(FinancialsFactory)
-
-    # @classmethod
-    # def _after_postgeneration(cls, instance, create, results=None):
-    #     if create:
-    #         ProfileFactory.create(user=instance)
-    #         FinancialsFactory.create(user=instance)
-
-    #     return super()._after_postgeneration(instance, create, results)
 
 
 class ProfileFactory(DjangoModelFactory):
@@ -48,21 +36,9 @@ class FinancialsFactory(DjangoModelFactory):
     class Meta:
         model = Financials
 
+    user = SubFactory(UserFactory)
     contract = LazyFunction(
-        lambda: faker.random_elements(
-            elements=OrderedDict(
-                [
-                    ("employment", "Employment contract"),
-                    ("commission", "Commission contract"),
-                    ("specific-task", "Specific-task contract"),
-                    (
-                        "commission with economic entity",
-                        "Commission contract with an economic entity",
-                    ),
-                    ("intership", "Student and postgraduate internship contract"),
-                ]
-            )
-        )
+        lambda: faker.random_element(elements=[x[0] for x in Financials.CONTRACTS])
     )
     is_student = LazyFunction(lambda: faker.boolean())
     work_in_the_place_of_residence = LazyFunction(lambda: faker.boolean())
@@ -77,4 +53,3 @@ class FinancialsFactory(DjangoModelFactory):
     )
     hourly_pay = LazyFunction(lambda: faker.random_int(min=0))
     extra_hourly_pay = LazyFunction(lambda: faker.random_int(min=0))
-    user = SubFactory(UserFactory)
