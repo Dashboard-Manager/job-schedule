@@ -15,8 +15,10 @@ def calc_health_care_contr(salary: float, zus: float, health_care: float) -> flo
 
 
 def calc_income(salary: float, zus: float) -> float:
-    return round(salary - zus - 250, 2)
+    result = round(salary - zus - 250, 2)
+    return result if result >= 0 else 0
 
 
 def calc_income_tax(income: float, pit: int) -> int:
-    return int(income * (pit / 100) - 300)
+    result = int(income * (pit / 100) - 300)
+    return result if result >= 0 else 0
