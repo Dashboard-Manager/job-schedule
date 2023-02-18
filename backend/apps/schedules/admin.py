@@ -9,12 +9,12 @@ class JobAdmin(admin.ModelAdmin):  # type: ignore
     list_display = [
         "user",
         "date",
-        "job_hours",
-        "extra_job_hours",
+        "hours",
+        "extra_hours",
     ]
     readonly_fields = [
-        "job_hours",
-        "extra_job_hours",
+        "hours",
+        "extra_hours",
     ]
 
     fieldsets = (
@@ -23,8 +23,8 @@ class JobAdmin(admin.ModelAdmin):  # type: ignore
             {
                 "fields": (
                     "user",
-                    "job_hours",
-                    "extra_job_hours",
+                    "hours",
+                    "extra_hours",
                     "date",
                 )
             },

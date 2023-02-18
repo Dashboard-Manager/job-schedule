@@ -135,7 +135,7 @@ class JobHours(BaseModel):
     )
 
     def __str__(self) -> str:
-        return f"{self.user} has {self.hours} hours in date"
+        return f"{self.user} has {self.hours} hours and {self.extra_hours} extra hours"
 
     def clean(self, *args, **kwargs):
         if self.start_date > self.end_date:

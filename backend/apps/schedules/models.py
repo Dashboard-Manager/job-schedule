@@ -1,7 +1,7 @@
-from apps.schedules.services import get_hours
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class BaseModel(models.Model):
@@ -54,24 +54,17 @@ class Job(BaseModel):
     )
     end_job = models.DateTimeField(verbose_name="Stop working", blank=True, null=True)
 
+    hours = models.FloatField(_("Working hours"), default=0)
+    extra_hours = models.FloatField(_("Working overtime hours"), default=0)
+
     user = models.ForeignKey(User, related_name="employer", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.user} worked by {self.job_hours} hours"
+        return f"{self.user} worked by {self.hours} and {self.extra_hours} hours"
 
-    @property
-    def job_hours(self):
-        if not self.end_job:
-            return 0
-        hours = get_hours(self.end_job, self.start_job)
-        return min(hours, 8.0)
+    # def save(self, *args, **kwargs):
 
-    @property
-    def extra_job_hours(self):
-        if not self.end_job:
-            return 0
-        hours = get_hours(self.end_job, self.start_job)
-        return max(0, hours - 8)
+    #     super(Job, self).save(*args, **kwargs)
 
 
 # TODO: class Task(BaseModel)... #noqa #type: ignore

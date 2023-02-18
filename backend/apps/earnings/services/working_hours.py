@@ -13,10 +13,7 @@ def get_working_hours(
             user=user,
         )
         total_hours = sum(
-            [
-                job.extra_job_hours if extra_hours else job.job_hours
-                for job in working_days
-            ]
+            [job.extra_hours if extra_hours else job.hours for job in working_days]
         )
     except ValueError:
         return 0
