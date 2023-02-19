@@ -25,10 +25,6 @@ class TestUserModel:
         assert user.profile is not None
         assert user.profile.user == user
 
-    def test_user_factory_with_financials(self, user):
-        assert user.financials is not None
-        assert user.financials.user == user
-
     def test_user_factory_batch(self):
         users = UserFactory.create_batch(5)
         User = get_user_model()
@@ -42,13 +38,15 @@ class TestFinancialsMode:
     @mute_signals(signals.post_save)
     def financials(self):
         user = UserFactory.create()
-        return FinancialsFactory.create(user=user)
+        profile = ProfileFactory.create(user=user)
+        return FinancialsFactory.create(profile=profile)
 
     @mute_signals(signals.post_save)
     def custom_financials(self, *args, **kwargs):
         user = UserFactory.create()
+        profile = ProfileFactory.create(user=user)
 
-        return FinancialsFactory.build(user=user, *args, **kwargs)
+        return FinancialsFactory.build(profile=profile, *args, **kwargs)
 
     def test_instance_salary(self, financials):
         assert isinstance(financials.salary, (float, int))

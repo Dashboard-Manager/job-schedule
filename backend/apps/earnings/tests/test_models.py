@@ -18,7 +18,10 @@ class TestJobHours:
         return JobHoursFactory.create()
 
     def test_str_jobhours(self, jobhours):
-        assert str(jobhours) == f"{jobhours.user} has {jobhours.hours} hours in date"
+        assert (
+            str(jobhours)
+            == f"{jobhours.user} has {jobhours.hours} hours and {jobhours.extra_hours} extra hours"
+        )
 
     def test_instance_jobhours(self, jobhours):
         assert isinstance(jobhours.date, timezone.datetime)
@@ -67,19 +70,19 @@ class TestCalculations:
         return CalculationsFactory.create(*args, **kwargs)
 
     def test_netto_salary(self):  # noqa
-        calculated_netto_for_less_than_26 = 3263.51
+        calculated_netto_for_less_than_26 = 2784.21
         user = UserFactory.create()
-        user.financials.salary = 3600
+        user.profile.financials.salary = 3600
         user.profile.birth_date = self.get_age(26)  # noqa
-        constants = Constants.objects.create(user=user)
+        constants = Constants.objects.create()
         instance = self.custom_calculations(constants=constants, user=user)  # noqa
         assert instance.netto_salary == calculated_netto_for_less_than_26
 
-        calculated_netto_for_more_than_26 = 3163.51
+        calculated_netto_for_more_than_26 = 2784.21
         user = UserFactory.create()
-        user.financials.salary = 3600
+        user.profile.financials.salary = 3600
         user.profile.birth_date = self.get_age(27)
-        constants = Constants.objects.create(user=user)
+        constants = Constants.objects.create()
         instance = self.custom_calculations(constants=constants, user=user)  # noqa
         assert instance.netto_salary == calculated_netto_for_more_than_26
 
