@@ -15,6 +15,6 @@ def get_working_hours(
         total_hours = sum(
             [job.extra_hours if extra_hours else job.hours for job in working_days]
         )
-    except ValueError:
+    except Job.DoesNotExist:
         return 0
     return int(total_hours)
