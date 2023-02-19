@@ -1,0 +1,16 @@
+{
+"auth_user": [
+	{
+		"id" : 1,
+		"password" : "pbkdf2_sha256$390000$1zWxC9ph97AiohsF826Dsd$p4nf7Bvld8Uwq+He2t0KILgsxf03cTW8S5XGgmmptw8=",
+		"last_login" : "2023-02-19T15:26:50.006Z",
+		"is_superuser" : true,
+		"username" : "kwiatuh",
+		"first_name" : "",
+		"last_name" : "",
+		"email" : "kwiatuh@exmaple.com",
+		"is_staff" : true,
+		"is_active" : true,
+		"date_joined" : "2023-02-19T15:26:37.687Z"
+	}
+]}

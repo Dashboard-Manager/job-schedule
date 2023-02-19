@@ -133,7 +133,7 @@ class TestUser:
     def test_user_data_username(self, user_data):
         user = get_user_model()
         instance = user(**user_data)
-        assert instance.username == "Robert"
+        assert instance.username == "Robert"  # type: ignore
 
     def test_user_data_password(self, user_data):
         user = get_user_model()

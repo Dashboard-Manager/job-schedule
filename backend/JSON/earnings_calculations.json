@@ -1,0 +1,16 @@
+{
+"earnings_calculations": [
+	{
+		"id" : 1,
+		"pension_contribution" : 39.12,
+		"disability_contribution" : 6.0,
+		"sickness_contribution" : 9.8,
+		"health_care_contribution" : 31.06,
+		"income" : 95.08,
+		"income_tax" : 0.0,
+		"netto_salary" : 314.02,
+		"constants_id" : 1,
+		"hours_id" : 1,
+		"user_id" : 1
+	}
+]}
