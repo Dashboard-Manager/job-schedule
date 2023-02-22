@@ -77,10 +77,8 @@ def set_netto_salary(sender, instance, **kwargs):
         ),
         2,
     )
-    if not instance.user.profile.financials.is_student:
-        instance.netto_salary = salary
-    else:
-        instance.netto_salary = instance.brutto_salary
+    is_student = instance.user.profile.financials.is_student
+    instance.netto_salary = salary if not is_student else instance.brutto_salary
 
 
 @receiver(pre_save, sender=JobHours)

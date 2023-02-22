@@ -113,15 +113,14 @@ class Calculations(models.Model):
         profile_financials = self.user.profile.financials  # type: ignore
         hourly_pay = profile_financials.hourly_pay
         extra_hourly_pay = profile_financials.extra_hourly_pay
-
+        extra_hours = self.hours.extra_hours
+        calc = (self.hours.hours * hourly_pay) + (
+            self.hours.extra_hours * extra_hourly_pay
+        )
         if profile_financials.salary > 0:
             return profile_financials.salary
 
-        if self.hours.extra_hours:
-            return (self.hours.hours * hourly_pay) + (
-                self.hours.extra_hours * extra_hourly_pay
-            )
-        return self.hours.hours * hourly_pay
+        return calc if extra_hours else self.hours.hours * hourly_pay
 
 
 class JobHours(BaseModel):

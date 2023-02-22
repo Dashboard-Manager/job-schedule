@@ -32,24 +32,14 @@ class ConstantsFactory(DjangoModelFactory):
     class Meta:
         model = Constants
 
-    PIT = LazyFunction(
-        lambda: faker.pydecimal(left_digit=2, right_digit=2, positive=True)
-    )
-    pension_contribution = LazyFunction(
-        lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    )
-    disability_contribution = LazyFunction(
-        lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    )
+    PIT = LazyFunction(lambda: faker.pydecimal(positive=True))
+    pension_contribution = LazyFunction(lambda: faker.pydecimal(positive=True))
+    disability_contribution = LazyFunction(lambda: faker.pydecimal(positive=True))
 
-    sickness_contribution = LazyFunction(
-        lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    )
+    sickness_contribution = LazyFunction(lambda: faker.pydecimal(positive=True))
 
-    health_care_contribution = LazyFunction(
-        lambda: faker.pydecimal(left_digit=1, right_digit=2, positive=True)
-    )
-    user = LazyFunction(lambda: SubFactory(UserFactory))
+    health_care_contribution = LazyFunction(lambda: faker.pydecimal(positive=True))
+    date = LazyFunction(lambda: timezone.now())
 
 
 class CalculationsFactory(DjangoModelFactory):

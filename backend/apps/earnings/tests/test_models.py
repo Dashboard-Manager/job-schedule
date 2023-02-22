@@ -3,12 +3,26 @@ import datetime
 import pytest
 from apps.earnings import signals
 from apps.earnings.models import Constants
-from apps.earnings.tests.factory import CalculationsFactory, JobHoursFactory
+from apps.earnings.tests.factory import (
+    CalculationsFactory,
+    ConstantsFactory,
+    JobHoursFactory,
+)
 from apps.users.tests.factory import UserFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from factory.django import mute_signals
+
+
+@pytest.mark.django_db
+class TestConstants:
+    @pytest.fixture
+    def constants(self):
+        return ConstantsFactory.create()
+
+    def test_str_constant(self, constants):
+        assert str(constants) == f"Constants at {constants.date}"
 
 
 @pytest.mark.django_db
@@ -62,8 +76,21 @@ class TestJobHours:
 
 @pytest.mark.django_db
 class TestCalculations:
+    @pytest.fixture
+    def calculations(self):
+        constants = ConstantsFactory.create()
+
+        user = UserFactory.create()
+        return CalculationsFactory(constants=constants, user=user)
+
     def custom_calculations(self, *args, **kwargs):
         return CalculationsFactory.create(*args, **kwargs)
+
+    def test_str_calculations(self, calculations):
+        assert (
+            str(calculations)
+            == f"{calculations.user} earned {calculations.netto_salary} PLN"
+        )
 
     def test_netto_salary(self):  # noqa
         calculated_netto_for_less_than_26 = 2784.21
