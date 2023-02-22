@@ -60,6 +60,7 @@ class Profile(models.Model):
             )
 
     def get_absolute_url(self):
+        # return f"profile/{self.identificator}"
         return reverse("profile", kwargs={"identificator": self.identificator})
 
 
@@ -119,6 +120,7 @@ class Financials(models.Model):
             ),
         ],
     )
+
     hourly_pay = models.FloatField(
         verbose_name=_("Hourly brutto pay"),
         default=0,
@@ -133,6 +135,7 @@ class Financials(models.Model):
             ),
         ],
     )
+
     extra_hourly_pay = models.FloatField(
         verbose_name=_("Hourly extra brutto pay"),
         help_text=_("Extra pay for overtime"),

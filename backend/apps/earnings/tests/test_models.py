@@ -62,10 +62,6 @@ class TestJobHours:
 
 @pytest.mark.django_db
 class TestCalculations:
-    @pytest.fixture
-    def calculations(self):
-        return CalculationsFactory.create()
-
     def custom_calculations(self, *args, **kwargs):
         return CalculationsFactory.create(*args, **kwargs)
 
@@ -85,6 +81,14 @@ class TestCalculations:
         constants = Constants.objects.create()
         instance = self.custom_calculations(constants=constants, user=user)  # noqa
         assert instance.netto_salary == calculated_netto_for_more_than_26
+
+        user = UserFactory.create()
+        user.profile.financials.salary = 3600
+        user.profile.birth_date = self.get_age(26)
+        user.profile.financials.is_student = True
+        constants = Constants.objects.create()
+        instance = self.custom_calculations(constants=constants, user=user)  # noqa
+        assert instance.netto_salary == 3600
 
     @staticmethod
     def get_age(age: int) -> datetime.date:

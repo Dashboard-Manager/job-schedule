@@ -54,17 +54,13 @@ class Job(BaseModel):
     )
     end_job = models.DateTimeField(verbose_name="Stop working", blank=True, null=True)
 
-    hours = models.FloatField(_("Working hours"), default=0)
-    extra_hours = models.FloatField(_("Working overtime hours"), default=0)
+    hours = models.FloatField(_("Working hours"), default=0)  # <8
+    extra_hours = models.FloatField(_("Working overtime hours"), default=0)  # >8
 
     user = models.ForeignKey(User, related_name="employer", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
         return f"{self.user} worked by {self.hours} and {self.extra_hours} hours"
-
-    # def save(self, *args, **kwargs):
-
-    #     super(Job, self).save(*args, **kwargs)
 
 
 # TODO: class Task(BaseModel)... #noqa #type: ignore

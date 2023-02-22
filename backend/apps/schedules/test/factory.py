@@ -28,7 +28,7 @@ class JobFactory(DjangoModelFactory):
     extra_hours = LazyFunction(lambda: faker.random_int(min=0, max=24))
     user = SubFactory(UserFactory)
 
-    created_at = LazyFunction(lambda: faker.date_time())
-    updated_at = LazyAttribute(
-        lambda instance: instance.created_at + datetime.timedelta(minutes=1)
-    )
+    # created_at = LazyFunction(lambda: faker.date_time())
+    # updated_at = LazyAttribute(
+    #     lambda instance: instance.created_at + datetime.timedelta(minutes=1)
+    # )

@@ -94,3 +94,4 @@ def get_workings_hours(sender, instance, **kwargs):
         instance.extra_hours = extra_hours
     else:
         instance.hours = hours + extra_hours
+        instance.extra_hours = 0
