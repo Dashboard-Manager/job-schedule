@@ -3,8 +3,10 @@ from datetime import date, timedelta
 import pytest
 from apps.users import signals
 from apps.users.tests.factory import FinancialsFactory, ProfileFactory, UserFactory
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.test import Client
 from django.urls import reverse
 from factory.django import mute_signals
 from pytest_django.asserts import assertQuerysetEqual
@@ -152,3 +154,13 @@ class TestUser:
         user = get_user_model()
         instance = user(**user_data)
         assert instance.password == "robert123"
+
+
+# TODO: MOVE TO GLOBAL TESTS????
+def test_debug_toolbar():
+    if settings.DEBUG:
+        client = Client()
+        response = client.get(reverse("debug_toolbar:debug_toolbar"))
+        assert response.status_code == 200
+    else:
+        assert True
