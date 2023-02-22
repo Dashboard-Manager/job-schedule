@@ -157,6 +157,7 @@ class TestUser:
 
 
 # TODO: MOVE TO GLOBAL TESTS????
+@pytest.mark.no_cover
 def test_debug_toolbar():
     if settings.DEBUG:
         client = Client()
