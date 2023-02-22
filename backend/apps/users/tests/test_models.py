@@ -5,6 +5,7 @@ from apps.users import signals
 from apps.users.tests.factory import FinancialsFactory, ProfileFactory, UserFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 from factory.django import mute_signals
 from pytest_django.asserts import assertQuerysetEqual
 
@@ -25,10 +26,6 @@ class TestUserModel:
         assert user.profile is not None
         assert user.profile.user == user
 
-    def test_user_factory_with_financials(self, user):
-        assert user.financials is not None
-        assert user.financials.user == user
-
     def test_user_factory_batch(self):
         users = UserFactory.create_batch(5)
         User = get_user_model()
@@ -42,13 +39,18 @@ class TestFinancialsMode:
     @mute_signals(signals.post_save)
     def financials(self):
         user = UserFactory.create()
-        return FinancialsFactory.create(user=user)
+        profile = ProfileFactory.create(user=user)
+        return FinancialsFactory.create(profile=profile)
 
     @mute_signals(signals.post_save)
     def custom_financials(self, *args, **kwargs):
         user = UserFactory.create()
+        profile = ProfileFactory.create(user=user)
 
-        return FinancialsFactory.build(user=user, *args, **kwargs)
+        return FinancialsFactory.build(profile=profile, *args, **kwargs)
+
+    def test_str_financials(self, financials):
+        assert str(financials) == financials.profile.identificator
 
     def test_instance_salary(self, financials):
         assert isinstance(financials.salary, (float, int))
@@ -83,6 +85,15 @@ class TestProfileMode:
     def custom_profile(self, *args, **kwargs):
         user = UserFactory.create()
         return ProfileFactory.build(user=user, *args, **kwargs)
+
+    def test_str_profile(self, profile):
+        assert str(profile) == profile.identificator
+
+    def test_get_absolute_url(self, profile):
+        expected_url = reverse(
+            "profile", kwargs={"identificator": profile.identificator}
+        )
+        assert profile.get_absolute_url() == expected_url
 
     def test_birth_date_instance(self, profile):
         assert isinstance(profile.birth_date, date)
@@ -135,7 +146,7 @@ class TestUser:
     def test_user_data_username(self, user_data):
         user = get_user_model()
         instance = user(**user_data)
-        assert instance.username == "Robert"
+        assert instance.username == "Robert"  # type: ignore
 
     def test_user_data_password(self, user_data):
         user = get_user_model()

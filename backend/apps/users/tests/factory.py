@@ -36,7 +36,7 @@ class FinancialsFactory(DjangoModelFactory):
     class Meta:
         model = Financials
 
-    user = SubFactory(UserFactory)
+    profile = SubFactory(ProfileFactory)
     contract = LazyFunction(
         lambda: faker.random_element(elements=[x[0] for x in Financials.CONTRACTS])
     )

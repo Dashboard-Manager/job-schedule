@@ -3,12 +3,26 @@ import datetime
 import pytest
 from apps.earnings import signals
 from apps.earnings.models import Constants
-from apps.earnings.tests.factory import CalculationsFactory, JobHoursFactory
+from apps.earnings.tests.factory import (
+    CalculationsFactory,
+    ConstantsFactory,
+    JobHoursFactory,
+)
 from apps.users.tests.factory import UserFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from factory.django import mute_signals
+
+
+@pytest.mark.django_db
+class TestConstants:
+    @pytest.fixture
+    def constants(self):
+        return ConstantsFactory.create()
+
+    def test_str_constant(self, constants):
+        assert str(constants) == f"Constants at {constants.date}"
 
 
 @pytest.mark.django_db
@@ -18,7 +32,10 @@ class TestJobHours:
         return JobHoursFactory.create()
 
     def test_str_jobhours(self, jobhours):
-        assert str(jobhours) == f"{jobhours.user} has {jobhours.hours} hours in date"
+        assert (
+            str(jobhours)
+            == f"{jobhours.user} has {jobhours.hours} hours and {jobhours.extra_hours} extra hours"
+        )
 
     def test_instance_jobhours(self, jobhours):
         assert isinstance(jobhours.date, timezone.datetime)
@@ -61,25 +78,51 @@ class TestJobHours:
 class TestCalculations:
     @pytest.fixture
     def calculations(self):
-        return CalculationsFactory.create()
+        constants = ConstantsFactory.create()
+
+        user = UserFactory.create()
+        return CalculationsFactory(constants=constants, user=user)
 
     def custom_calculations(self, *args, **kwargs):
         return CalculationsFactory.create(*args, **kwargs)
 
+    def test_str_calculations(self, calculations):
+        assert (
+            str(calculations)
+            == f"{calculations.user} earned {calculations.netto_salary} PLN"
+        )
+
     def test_netto_salary(self):  # noqa
-        calculated_netto_for_less_than_26 = 3263.51
+        calculated_netto_for_less_than_26 = 2784.21
         user = UserFactory.create()
-        user.financials.salary = 3600
+        user.profile.financials.salary = 3600
         user.profile.birth_date = self.get_age(26)  # noqa
-        constants = Constants.objects.create(user=user)
+        constants = Constants.objects.create()
         instance = self.custom_calculations(constants=constants, user=user)  # noqa
         assert instance.netto_salary == calculated_netto_for_less_than_26
 
-        calculated_netto_for_more_than_26 = 3163.51
+        calculated_netto_for_more_than_26 = 2784.21
         user = UserFactory.create()
-        user.financials.salary = 3600
+        user.profile.financials.salary = 3600
         user.profile.birth_date = self.get_age(27)
-        constants = Constants.objects.create(user=user)
+        constants = Constants.objects.create()
+        instance = self.custom_calculations(constants=constants, user=user)  # noqa
+        assert instance.netto_salary == calculated_netto_for_more_than_26
+
+        user = UserFactory.create()
+        user.profile.financials.salary = 3600
+        user.profile.birth_date = self.get_age(26)
+        user.profile.financials.is_student = True
+        constants = Constants.objects.create()
+        instance = self.custom_calculations(constants=constants, user=user)  # noqa
+        assert instance.netto_salary == 3600
+
+        calculated_netto_for_more_than_26 = 2853.47
+        user = UserFactory.create()
+        user.profile.financials.salary = 3600
+        user.profile.financials.voluntary_health_insurance = False
+        user.profile.birth_date = self.get_age(27)
+        constants = Constants.objects.create()
         instance = self.custom_calculations(constants=constants, user=user)  # noqa
         assert instance.netto_salary == calculated_netto_for_more_than_26
 

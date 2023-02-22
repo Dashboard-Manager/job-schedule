@@ -10,6 +10,7 @@ from apps.earnings.services.calculations import (
     calc_sickness_contr,
 )
 from apps.earnings.services.working_hours import get_working_hours
+from apps.schedules.test.factory import JobFactory
 from apps.users.tests.factory import UserFactory
 
 
@@ -62,12 +63,15 @@ class TestWorkingHours:
     @pytest.fixture
     def user(self):
         user = UserFactory.create()
+
         return user
 
-    def test_get_working_hours(self, user):
-        result = get_working_hours(
-            user, date(2022, 1, 1), date(2022, 1, 2), extra_hours=False
-        )
+    @pytest.fixture
+    def job(self, user):
+        return JobFactory.create(user=user)
+
+    def test_get_working_hours(self, user, job):
+        result = get_working_hours(user, job.date, job.date, extra_hours=False)
         assert result == 0  # TODO: Create JobFactory
 
         result = get_working_hours(

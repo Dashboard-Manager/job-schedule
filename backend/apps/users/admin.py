@@ -21,7 +21,7 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(Financials)
 class FinancialsAdmin(admin.ModelAdmin):
     list_display = [
-        "user",
+        "profile",
         "salary",
         "hourly_pay",
         "extra_hourly_pay",

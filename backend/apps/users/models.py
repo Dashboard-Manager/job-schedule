@@ -13,6 +13,10 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Profile(models.Model):
+    class Meta:
+        verbose_name = "user profile"
+        verbose_name_plural = "User profiles"
+
     identificator = models.CharField(
         _("User identificator"), max_length=6, unique=True, editable=False
     )
@@ -56,10 +60,15 @@ class Profile(models.Model):
             )
 
     def get_absolute_url(self):
+        # return f"profile/{self.identificator}"
         return reverse("profile", kwargs={"identificator": self.identificator})
 
 
 class Financials(models.Model):
+    class Meta:
+        verbose_name = "financial profile"
+        verbose_name_plural = "Financial profiles"
+
     EMPLOYMENT = "employment"
     COMMISSION = "commission"
     SPECIFIC_TASK = "specific-task"
@@ -111,6 +120,7 @@ class Financials(models.Model):
             ),
         ],
     )
+
     hourly_pay = models.FloatField(
         verbose_name=_("Hourly brutto pay"),
         default=0,
@@ -125,6 +135,7 @@ class Financials(models.Model):
             ),
         ],
     )
+
     extra_hourly_pay = models.FloatField(
         verbose_name=_("Hourly extra brutto pay"),
         help_text=_("Extra pay for overtime"),
@@ -141,12 +152,12 @@ class Financials(models.Model):
         ],
     )
 
-    user = models.OneToOneField(
-        User,
-        verbose_name=_("user"),
+    profile = models.OneToOneField(
+        Profile,
+        verbose_name=_("User profile"),
         on_delete=models.CASCADE,
         related_name="financials",
     )
 
     def __str__(self) -> str:
-        return f"{self.user.profile.identificator}"  # type: ignore
+        return f"{self.profile.identificator}"  # type: ignore
