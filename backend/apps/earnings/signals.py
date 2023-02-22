@@ -89,9 +89,6 @@ def get_workings_hours(sender, instance, **kwargs):
     extra_hours = get_working_hours(
         instance.user, instance.start_date, instance.end_date, extra_hours=True
     )
-    if instance.user.profile.financials.have_extra_salary:
-        instance.hours = hours
-        instance.extra_hours = extra_hours
-    else:
-        instance.hours = hours + extra_hours
-        instance.extra_hours = 0
+    have_extra_salary = instance.user.profile.financials.have_extra_salary
+    instance.hours = hours if have_extra_salary else hours + extra_hours
+    instance.extra_hours = extra_hours if have_extra_salary else 0

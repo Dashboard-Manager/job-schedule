@@ -90,6 +90,15 @@ class TestCalculations:
         instance = self.custom_calculations(constants=constants, user=user)  # noqa
         assert instance.netto_salary == 3600
 
+        calculated_netto_for_more_than_26 = 2853.47
+        user = UserFactory.create()
+        user.profile.financials.salary = 3600
+        user.profile.financials.voluntary_health_insurance = False
+        user.profile.birth_date = self.get_age(27)
+        constants = Constants.objects.create()
+        instance = self.custom_calculations(constants=constants, user=user)  # noqa
+        assert instance.netto_salary == calculated_netto_for_more_than_26
+
     @staticmethod
     def get_age(age: int) -> datetime.date:
         today = datetime.date.today()
