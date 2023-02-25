@@ -1,42 +1,99 @@
 from datetime import date, timedelta
 
 import pytest
-from apps.users.tests.factory import ProfileFactory
+from apps.users import signals
+from apps.users.tests.factory import FinancialsFactory, ProfileFactory, UserFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.urls import reverse
+from factory.django import mute_signals
+from pytest_django.asserts import assertQuerysetEqual
 
 
 @pytest.mark.django_db
-class TestProfileModel:
+class TestUserModel:
     @pytest.fixture
-    def profile(self):
-        return ProfileFactory.create()
+    def user(self):
+        return UserFactory.create()
 
-    def custom_profile(self, *args, **kwargs):
-        return ProfileFactory.build(*args, **kwargs)
+    def test_user_factory(self, user):
+        User = get_user_model()
+        assert isinstance(user, User)
+        assert user.pk is not None
+        assert User.objects.filter(pk=user.pk).exists()
 
-    def test_str(self, profile):
-        assert str(profile) == profile.username
+    def test_user_factory_with_profile(self, user):
+        assert user.profile is not None
+        assert user.profile.user == user
 
-    def test_instance_salary(self, profile):
-        assert isinstance(profile.salary, float)
+    def test_user_factory_batch(self):
+        users = UserFactory.create_batch(5)
+        User = get_user_model()
+        assert len(users) == 5
+        assertQuerysetEqual(User.objects.all(), users, ordered=False)
+
+
+@pytest.mark.django_db
+class TestFinancialsMode:
+    @pytest.fixture
+    @mute_signals(signals.post_save)
+    def financials(self):
+        user = UserFactory.create()
+        profile = ProfileFactory.create(user=user)
+        return FinancialsFactory.create(profile=profile)
+
+    @mute_signals(signals.post_save)
+    def custom_financials(self, *args, **kwargs):
+        user = UserFactory.create()
+        profile = ProfileFactory.create(user=user)
+
+        return FinancialsFactory.build(profile=profile, *args, **kwargs)
+
+    def test_str_financials(self, financials):
+        assert str(financials) == financials.profile.identificator
+
+    def test_instance_salary(self, financials):
+        assert isinstance(financials.salary, (float, int))
 
     def test_salary_validation(self):
-        instance = self.custom_profile(salary=-1)  # noqa
+        instance = self.custom_financials(salary=-1)  # noqa
         with pytest.raises(ValidationError) as exception:
             instance.full_clean()
         assert "Salary cannot be less than 0" in str(exception.value)
 
-        instance = self.custom_profile(salary=0)  # noqa
+        instance = self.custom_financials(salary=0)  # noqa
         instance.full_clean()
 
-        instance = self.custom_profile(salary=10_000_000_000)  # noqa
+        instance = self.custom_financials(salary=10_000_000_000)  # noqa
         with pytest.raises(ValidationError) as exception:
             instance.full_clean()
         assert "Sorry, but we need to have some limits" in str(exception.value)
 
-        instance = self.custom_profile(salary=3700)  # noqa
+        instance = self.custom_financials(salary=3700)  # noqa
         instance.full_clean()
+
+
+@pytest.mark.django_db
+class TestProfileMode:
+    @pytest.fixture
+    @mute_signals(signals.post_save)
+    def profile(self):
+        user = UserFactory.create()
+        return ProfileFactory.create(user=user)
+
+    @mute_signals(signals.post_save)
+    def custom_profile(self, *args, **kwargs):
+        user = UserFactory.create()
+        return ProfileFactory.build(user=user, *args, **kwargs)
+
+    def test_str_profile(self, profile):
+        assert str(profile) == profile.identificator
+
+    def test_get_absolute_url(self, profile):
+        expected_url = reverse(
+            "profile", kwargs={"identificator": profile.identificator}
+        )
+        assert profile.get_absolute_url() == expected_url
 
     def test_birth_date_instance(self, profile):
         assert isinstance(profile.birth_date, date)
@@ -69,8 +126,11 @@ class TestProfileModel:
         instance = self.custom_profile(birth_date=None)  # noqa
         assert instance.age == 0
 
-    def test_absolute_url(self, profile):
-        assert profile.get_absolute_url() == f"profile/{profile.username}/"
+    # def test_absolute_url(self, profile):
+    #     excepted_url = reverse(
+    #         "profile", kwargs={"identificator": profile.identificator}
+    #     )
+    #     assert profile.get_absolute_url() == excepted_url  # type: ignore
 
 
 class TestUser:
@@ -84,11 +144,11 @@ class TestUser:
         }
 
     def test_user_data_username(self, user_data):
-        User = get_user_model()
-        user = User(**user_data)
-        assert user.username == "Robert"
+        user = get_user_model()
+        instance = user(**user_data)
+        assert instance.username == "Robert"  # type: ignore
 
     def test_user_data_password(self, user_data):
-        User = get_user_model()
-        user = User(**user_data)
-        assert user.password == "robert123"
+        user = get_user_model()
+        instance = user(**user_data)
+        assert instance.password == "robert123"

@@ -1,0 +1,14 @@
+{
+"earnings_jobhours": [
+	{
+		"id" : 1,
+		"created_at" : "2023-02-19T15:28:28.619Z",
+		"updated_at" : "2023-02-19T15:28:28.665Z",
+		"date" : "2023-02-19",
+		"start_date" : "2023-02-01",
+		"end_date" : "2023-02-28",
+		"hours" : 16,
+		"extra_hours" : 0,
+		"user_id" : 1
+	}
+]}
