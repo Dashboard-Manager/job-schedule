@@ -12,13 +12,6 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name_plural = "Categories"
-
-
 class Task(BaseModel):
     PRIORITY_CHOICES = [
         ('lowest', 'Lowest'),
@@ -26,14 +19,19 @@ class Task(BaseModel):
         ('medium', 'Medium'),
         ('high', 'High'),
         ('highest', 'Highest')
-
     ]
+
     title = models.CharField(
         max_length=255,
         null=False,
         blank=False)
     description = models.TextField(
         max_length=2000
+    )
+    priority = models.CharField(
+        choices=PRIORITY_CHOICES,
+        max_length=20,
+        default='medium'
     )
     created_by = models.ForeignKey(
         Profile,
@@ -50,12 +48,9 @@ class Task(BaseModel):
         on_delete=models.PROTECT,
         related_name="task_performer",
     )
-    priority = models.CharField(
-        choices=PRIORITY_CHOICES,
-        max_length=20,
-        default='medium'
-    )
-    categories = models.ManyToManyField(Category)
+
+    def __str__(self) -> str:
+        return f"{self.title}"
 
 
 class Event(BaseModel):

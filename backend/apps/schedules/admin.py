@@ -1,4 +1,4 @@
-from .models import Event, Job, Task, Category
+from apps.schedules.models import Event, Job, Task
 from django.contrib import admin
 
 admin.site.register(Event)
@@ -44,4 +44,3 @@ class JobAdmin(admin.ModelAdmin):  # type: ignore
 
 
 admin.site.register(Task)
-admin.site.register(Category)
