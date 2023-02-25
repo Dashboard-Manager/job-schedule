@@ -1,5 +1,6 @@
-from .models import Event, Job, Task, Category
 from django.contrib import admin
+
+from .models import Category, Event, Job, Task
 
 admin.site.register(Event)
 

@@ -1,7 +1,7 @@
-from factory import LazyAttribute, LazyFunction, SubFactory
-from factory.django import DjangoModelFactory
 from apps.schedules.models import Task
 from apps.users.tests.factory import ProfileFactory
+from factory import LazyAttribute, LazyFunction, SubFactory
+from factory.django import DjangoModelFactory
 from faker import Faker
 from faker.providers import date_time, internet, python
 
@@ -18,6 +18,6 @@ class TaskFactory(DjangoModelFactory):
 
     title = LazyFunction(lambda: faker.sentence(nb_words=5))
     description = LazyFunction(lambda: faker.sentence(nb_words=100))
-    priority = 'medium'
+    priority = "medium"
     created_by = SubFactory(ProfileFactory)
     assigned_user = SubFactory(ProfileFactory)
