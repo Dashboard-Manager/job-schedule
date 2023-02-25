@@ -1,4 +1,4 @@
-from factory import LazyAttribute, LazyFunction, SubFactory
+from factory import LazyFunction, SubFactory
 from factory.django import DjangoModelFactory
 from apps.schedules.models import Task
 from apps.users.tests.factory import ProfileFactory
