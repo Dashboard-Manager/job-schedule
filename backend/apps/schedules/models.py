@@ -14,31 +14,24 @@ class BaseModel(models.Model):
 
 class Task(BaseModel):
     PRIORITY_CHOICES = [
-        ('lowest', 'Lowest'),
-        ('low', 'Low'),
-        ('medium', 'Medium'),
-        ('high', 'High'),
-        ('highest', 'Highest')
+        ("lowest", "Lowest"),
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+        ("highest", "Highest"),
     ]
 
-    title = models.CharField(
-        max_length=255,
-        null=False,
-        blank=False)
-    description = models.TextField(
-        max_length=2000
-    )
+    title = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(max_length=2000)
     priority = models.CharField(
-        choices=PRIORITY_CHOICES,
-        max_length=20,
-        default='medium'
+        choices=PRIORITY_CHOICES, max_length=20, default="medium"
     )
     created_by = models.ForeignKey(
         Profile,
         null=True,
         blank=True,
         on_delete=models.PROTECT,
-        related_name="task_author"
+        related_name="task_author",
     )
 
     assigned_user = models.ForeignKey(

@@ -1,5 +1,4 @@
 import pytest
-
 from apps.schedules.tests.factory import TaskFactory
 from apps.users.models import Profile
 
