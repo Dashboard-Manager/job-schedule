@@ -1,11 +1,14 @@
-import pytest
-from apps.schedules.tests.factory import TaskFactory, JobFactory
-from apps.schedules.services import get_hours
-from apps.users.models import User
 import datetime
-from faker import Faker
 from logging import warning
+
+import pytest
+from apps.schedules.services import get_hours
+from apps.schedules.tests.factory import JobFactory, TaskFactory
+from apps.users.models import User
+from faker import Faker
+
 faker = Faker()
+
 
 @pytest.mark.django_db
 class TestTask:

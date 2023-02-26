@@ -17,7 +17,9 @@ class TaskFactory(DjangoModelFactory):
 
     title = LazyFunction(lambda: faker.sentence(nb_words=5))
     description = LazyFunction(lambda: faker.sentence(nb_words=100))
-    priority = LazyFunction(lambda: faker.random_element(elements=Task.PRIORITY_CHOICES)[0])
+    priority = LazyFunction(
+        lambda: faker.random_element(elements=Task.PRIORITY_CHOICES)[0]
+    )
     created_by = SubFactory(UserFactory)
     assigned_user = SubFactory(UserFactory)
 
