@@ -27,7 +27,7 @@ class Task(BaseModel):
         choices=PRIORITY_CHOICES, max_length=20, default="medium"
     )
     created_by = models.ForeignKey(
-        Profile,
+        User,
         null=True,
         blank=True,
         on_delete=models.PROTECT,
@@ -35,7 +35,7 @@ class Task(BaseModel):
     )
 
     assigned_user = models.ForeignKey(
-        Profile,
+        User,
         null=True,
         blank=True,
         on_delete=models.PROTECT,

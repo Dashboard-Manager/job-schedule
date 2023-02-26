@@ -10,7 +10,7 @@ from apps.earnings.services.calculations import (
     calc_sickness_contr,
 )
 from apps.earnings.services.working_hours import get_working_hours
-from apps.schedules.test.factory import JobFactory
+from apps.schedules.tests.factory import JobFactory
 from apps.users.tests.factory import UserFactory
 
 
