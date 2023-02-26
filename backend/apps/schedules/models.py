@@ -12,6 +12,40 @@ class BaseModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class Task(BaseModel):
+    PRIORITY_CHOICES = [
+        ("lowest", "Lowest"),
+        ("low", "Low"),
+        ("medium", "Medium"),
+        ("high", "High"),
+        ("highest", "Highest"),
+    ]
+
+    title = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(max_length=2000)
+    priority = models.CharField(
+        choices=PRIORITY_CHOICES, max_length=20, default="medium"
+    )
+    created_by = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="task_author",
+    )
+
+    assigned_user = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="task_performer",
+    )
+
+    def __str__(self) -> str:
+        return f"{self.title}"
+
+
 class Event(BaseModel):
     title = models.TextField(
         verbose_name="Title of event",

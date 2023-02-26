@@ -1,8 +1,37 @@
 import datetime
+from logging import warning
 
 import pytest
 from apps.schedules.services import get_hours
-from apps.schedules.test.factory import JobFactory
+from apps.schedules.tests.factory import JobFactory, TaskFactory
+from apps.users.models import User
+from faker import Faker
+
+faker = Faker()
+
+
+@pytest.mark.django_db
+class TestTask:
+    @pytest.fixture
+    def task(self, *args, **kwargs):
+        return TaskFactory.create(*args, **kwargs)
+
+    def test_instance_task(self, task):
+        assert isinstance(task.title, str)
+        assert isinstance(task.description, str)
+
+        assert isinstance(task.priority, str)
+        print(f"jestem {task.priority} !!")
+        assert isinstance(task.created_by, User)
+        assert isinstance(task.assigned_user, User)
+
+    def custom_task(self, *args, **kwargs):
+        return TaskFactory.create(*args, **kwargs)
+
+    def test_title_validations(self):
+        tsk = self.custom_task(title=faker.text(max_nb_chars=255))
+
+        assert len(tsk.title) <= 255
 
 
 @pytest.mark.django_db

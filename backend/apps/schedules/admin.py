@@ -1,4 +1,4 @@
-from apps.schedules.models import Event, Job
+from apps.schedules.models import Event, Job, Task
 from django.contrib import admin
 
 admin.site.register(Event)
@@ -41,3 +41,6 @@ class JobAdmin(admin.ModelAdmin):  # type: ignore
             },
         ),
     )
+
+
+admin.site.register(Task)
