@@ -2,8 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.schedules.services import get_hours
-from apps.users.models import Profile
+from django.contrib.auth.models import User
 
 
 class BaseModel(models.Model):
