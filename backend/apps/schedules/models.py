@@ -1,7 +1,8 @@
-from apps.schedules.services import get_hours
-from apps.users.models import Profile
 from django.db import models
 from django.utils import timezone
+
+from apps.schedules.services import get_hours
+from apps.users.models import Profile
 
 
 class BaseModel(models.Model):

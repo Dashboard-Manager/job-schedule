@@ -1,5 +1,6 @@
-from apps.schedules.models import Event, Job
 from django.contrib import admin
+
+from apps.schedules.models import Event, Job
 
 admin.site.register(Event)
 

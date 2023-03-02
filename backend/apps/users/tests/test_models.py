@@ -1,9 +1,10 @@
 from datetime import date, timedelta
 
 import pytest
-from apps.users.tests.factory import ProfileFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
+from apps.users.tests.factory import ProfileFactory
 
 
 @pytest.mark.django_db

@@ -1,11 +1,12 @@
 import logging
 
-from apps.earnings.services import constants
-from apps.users.models import Profile
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
+
+from apps.earnings.services import constants
+from apps.users.models import Profile
 
 logger = logging.getLogger(__name__)
 

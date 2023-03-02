@@ -1,5 +1,6 @@
-from apps.earnings.models import Calculations, Constants, JobHours, Settlements
 from django.contrib import admin
+
+from apps.earnings.models import Calculations, Constants, JobHours, Settlements
 
 
 @admin.register(Settlements)

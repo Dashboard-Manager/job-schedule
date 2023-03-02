@@ -14,13 +14,12 @@ if [ $PWD == "/src" ]; then
     mypy . --config-file mypy.ini
     echo "End mypy"
 
-    cd ..
     echo "Run flake8"
-    flake8 /src --config=setup.cfg
+    flake8 . --config=setup.cfg
     echo "End flake8"
 
     echo "Run isort"
-    isort /src --settings-path=.isort.cfg
+    isort . --settings-path=.isort.cfg
     echo "End isort"
 else
     echo "Run pytest"
@@ -34,7 +33,6 @@ else
     echo "Run mypy"
     pipenv run mypy . --config-file mypy.ini
     echo "End mypy"
-    cd ..
     echo "Run flake8"
     flake8 . --config=setup.cfg
     echo "End flake8"

@@ -5,30 +5,94 @@ volumes:
 
 services:
 
-  web:
-    container_name: local_django
-    platform: linux/amd64
+  django: &django
     build:
-      context: ./backend
-      dockerfile: ./docker/Dockerfile
+     context: ./backend
+     dockerfile: ./docker/Dockerfile
+    image: job_dev_django
+    container_name: job_dev_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+      - redis
     volumes:
       - ./backend:/src:z
+    env_file:
+      - ./.envs/dev/django.env
+      - ./.envs/dev/postgres.env
     ports:
       - "8000:8000"
-    env_file:
-      - ./.envs/docker.env
-      - ./.envs/postgres.env
-    depends_on:
-      - db
-    command: /django.sh
-  db:
+      - "7777:7777"
+    command: /django-commands.sh
+    healthcheck:
+      test: "${DOCKER_WEB_HEALTHCHECK_TEST:-curl localhost:8000/up}"
+      interval: "60s"
+      timeout: "3s"
+      start_period: "5s"
+      retries: 3
+
+  postgres:
     image: postgres:15-alpine
-    container_name: local_postgres
-    restart: always
-    env_file:
-      - ./.envs/postgres.env
+    container_name: job_dev_postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.envs/dev/postgres.env
+    expose:
+      - "5432"
     ports:
-    - "5432:5432/tcp"
-    - "5433:5432" # second port to connect to dbeaver
+      - "5433:5432"
+
+  redis:
+    image: redis:7
+    container_name: job_dev_redis
+
+  celery_worker:
+    <<: *django
+    image: job_dev_celery_worker
+    container_name: job_dev_celery_worker
+    depends_on:
+      - redis
+      - postgres
+    restart: "no"
+    ports: []
+    command: bash -c "sleep 2 && /celery/worker.sh"
+
+  celery_beat:
+    <<: *django
+    image: job_dev_celery_beat
+    container_name: job_dev_celery_beat
+    depends_on:
+      - redis
+      - postgres
+    restart: "no"
+    ports: []
+    command: bash -c "sleep 2 && /celery/beat.sh"
+
+  flower:
+    <<: *django
+    image: job_dev_flower
+    container_name: job_dev_flower
+    restart: "no"
+    ports:
+      - "5555:5555"
+    command: bash -c "sleep 5 && /celery/flower.sh"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./docker/dev/Dockerfile
+      args:
+        - NODE_ENV=development
+    container_name: job_dev_frontend
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - django

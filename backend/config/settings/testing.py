@@ -1,5 +1,6 @@
 from config.env import env
 from config.settings.base import *  # noqa
+from config.settings.dev import *  # noqa
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -11,18 +12,27 @@ SECRET_KEY = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
-# Databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "db_local.sqlite3",
-    }
-}
+# DATABASES
+# ------------------------------------------------------------------------------
+DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+
+
+# MIGRATIONS
+class DisableMigrations:
+    def __contains__(self, item):
+        return True
+
+    def __getitem__(self, item):
+        return None
+
+
+MIGRATION_MODULES = DisableMigrations()
 
 # EMAIL
 # ------------------------------------------------------------------------------

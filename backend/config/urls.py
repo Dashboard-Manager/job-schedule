@@ -17,15 +17,58 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
 urlpatterns = [
+    # ADMIN PATHS
     path("admin/", admin.site.urls),
+    path("api/auth/", include("dj_rest_auth.urls")),
+    path("api/auth/register/", include("dj_rest_auth.registration.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
+    path(
+        "api/redoc/",
+        SpectacularRedocView.as_view(url_name="api-schema"),
+        name="api-redoc",
+    ),
     path(
         "api/docs/",
         SpectacularSwaggerView.as_view(url_name="api-schema"),
         name="api-docs",
+    ),
+    # APPS PATHS
+    path(
+        "api/earnings/",
+        include("apps.earnings.urls"),
+        name="earnings",
+    ),
+    path(
+        "api/filesaver/",
+        include("apps.filesaver.urls"),
+        name="filesaver",
+    ),
+    path(
+        "api/schedules/",
+        include("apps.schedules.urls"),
+        name="schedules",
+    ),
+    path(
+        "api/workstations/",
+        include("apps.workstations.urls"),
+        name="workstations",
+    ),
+    path(
+        "api/users/",
+        include("apps.users.urls"),
+        name="users",
+    ),
+    path(
+        "api/presentation_app/",
+        include("apps.presentation_app.urls"),
+        name="presentation_app",
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
