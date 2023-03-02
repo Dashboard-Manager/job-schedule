@@ -34,8 +34,6 @@ jobs:
         shell: bash
         run: |
             cd backend
-            mkdir requirements.txt
-            chmod +x requirements.txt
             poetry export --with production --with dev -f requirements.txt --output requirements.txt
             pip install -r requirements.txt
 
