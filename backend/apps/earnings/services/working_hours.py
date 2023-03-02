@@ -1,7 +1,8 @@
 from datetime import date
 
-from apps.schedules.models import Job
 from django.contrib.auth.models import User
+
+from apps.schedules.models import Job
 
 
 def get_working_hours(

@@ -1,6 +1,7 @@
 import datetime
 
 import pytest
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from factory.django import mute_signals
@@ -13,10 +14,6 @@ from apps.earnings.tests.factory import (
     JobHoursFactory,
 )
 from apps.users.tests.factory import UserFactory
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from factory.django import mute_signals
 
 
 @pytest.mark.django_db

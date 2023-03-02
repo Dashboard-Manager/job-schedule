@@ -5,12 +5,7 @@
     },
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
   },
@@ -35,11 +30,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "jsx-a11y",
-    "jest"
-  ],
+  "plugins": ["react", "jsx-a11y", "jest"],
   "root": true,
   "rules": {
     "react/react-in-jsx-scope": "off",

@@ -2,7 +2,6 @@ import datetime
 from random import choice
 from string import digits
 
-from apps.earnings.services import constants
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -10,6 +9,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+from apps.earnings.services import constants
 
 
 class Profile(models.Model):

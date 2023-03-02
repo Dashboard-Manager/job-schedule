@@ -1,11 +1,12 @@
 import datetime
 
-from apps.schedules.models import Job
-from apps.users.tests.factory import UserFactory
 from factory import LazyAttribute, LazyFunction, SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 from faker.providers import date_time
+
+from apps.schedules.models import Job
+from apps.users.tests.factory import UserFactory
 
 faker = Faker()
 faker.add_provider(date_time)

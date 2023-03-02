@@ -1,4 +1,3 @@
-from apps.users.views import ProfileDetailView
 from dj_rest_auth.registration.views import (
     ConfirmEmailView,
     RegisterView,
@@ -11,6 +10,8 @@ from dj_rest_auth.views import (
     PasswordResetView,
 )
 from django.urls import path
+
+from apps.users.views import ProfileDetailView
 
 urlpatterns = [
     path("profile/<int:identificator>", ProfileDetailView.as_view(), name="profile"),
