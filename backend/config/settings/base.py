@@ -245,7 +245,7 @@ REST_FRAMEWORK = {
 # ------------------------------------------------------------------------------
 # https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
 REST_USE_JWT = True
-REST_SESSION_LOGIN = False
+# REST_SESSION_LOGIN = False
 REST_AUTH_TOKEN_MODEL = None
 JWT_AUTH_COOKIE = "job-schedule-auth-cookie"
 JWT_AUTH_REFRESH_COOKIE = "job-schedule-auth-token"
