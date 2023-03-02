@@ -21,6 +21,12 @@ The project presents interactiv dashboard for managing the enterprise, employees
   git clone https://github.com/kwiats/job-schedule job-schedule
 ```
 
+### Run project
+
+```bash
+  docker-compose up --build
+```
+
 # Local
 If you need install some new dependencies, do it like this:
 
@@ -30,6 +36,7 @@ If you need install some new dependencies, do it like this:
   # you can use version-number or latest
   cd backend
   poetry install <package-name>@latest
+  poetry export --with production --with dev -f requirements.txt --output requirements.txt
 ```
 
 ### Install frontend installation
