@@ -1,3 +1,4 @@
+from apps.users.views import ProfileDetailView
 from dj_rest_auth.registration.views import (
     ConfirmEmailView,
     RegisterView,
@@ -12,6 +13,7 @@ from dj_rest_auth.views import (
 from django.urls import path
 
 urlpatterns = [
+    path("profile/<int:identificator>", ProfileDetailView.as_view(), name="profile"),
     path("register/", RegisterView.as_view()),
     path("login/", LoginView.as_view()),
     path("logout/", LogoutView.as_view()),
@@ -32,4 +34,3 @@ urlpatterns = [
         PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
-]

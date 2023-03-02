@@ -1,46 +1,27 @@
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
-
 from apps.users.models import Profile
 
 
 @admin.register(Profile)
-class UserAdmin(admin.ModelAdmin):  # type: ignore
-    fieldsets = (
-        (None, {"fields": ("username", "password")}),
-        (
-            _("Personal info"),
-            {
-                "fields": (
-                    "first_name",
-                    "last_name",
-                    "email",
-                    "birth_date",
-                    "salary",
-                    ("hourly_pay", "extra_hourly_pay"),
-                )
-            },
-        ),
-        (
-            _("Permissions"),
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                    "groups",
-                    "user_permissions",
-                ),
-            },
-        ),
-        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
-    )
-    add_fieldsets = (
-        (
-            None,
-            {
-                "classes": ("wide",),
-                "fields": ("username", "password1", "password2"),
-            },
-        ),
-    )
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = [
+        "user",
+        "identificator",
+        "birth_date",
+        "age",
+    ]
+    readonly_fields = [
+        "identificator",
+        "age",
+    ]
+
+
+@admin.register(Financials)
+class FinancialsAdmin(admin.ModelAdmin):
+    list_display = [
+        "profile",
+        "salary",
+        "hourly_pay",
+        "extra_hourly_pay",
+        "is_student",
+    ]

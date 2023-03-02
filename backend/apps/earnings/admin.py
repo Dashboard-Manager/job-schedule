@@ -15,11 +15,12 @@ class SettlementsAdmin(admin.ModelAdmin):
 @admin.register(Constants)
 class ConstantsAdmin(admin.ModelAdmin):
     list_display = [
-        "user",
-        "ZUS_contributions",
-    ]
-    readonly_fields = [
-        "ZUS_contributions",
+        "date",
+        "PIT",
+        "pension_contribution",
+        "disability_contribution",
+        "sickness_contribution",
+        "health_care_contribution",
     ]
 
 
@@ -31,6 +32,12 @@ class CalculationsAdmin(admin.ModelAdmin):
         "netto_salary",
     ]
     readonly_fields = [
+        "pension_contribution",
+        "disability_contribution",
+        "sickness_contribution",
+        "health_care_contribution",
+        "income",
+        "income_tax",
         "netto_salary",
     ]
 

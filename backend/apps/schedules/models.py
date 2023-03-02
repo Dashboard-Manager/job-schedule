@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.schedules.services import get_hours
 from apps.users.models import Profile
@@ -27,7 +28,7 @@ class Event(BaseModel):
     end_time = models.DateTimeField()
 
     from_user = models.ForeignKey(
-        Profile,
+        User,
         verbose_name="Event author",
         blank=True,
         null=True,
@@ -35,7 +36,7 @@ class Event(BaseModel):
         on_delete=models.SET_NULL,
     )
     to_user = models.ForeignKey(
-        Profile,
+        User,
         verbose_name="Event performer",
         blank=True,
         null=True,
@@ -55,24 +56,13 @@ class Job(BaseModel):
     )
     end_job = models.DateTimeField(verbose_name="Stop working", blank=True, null=True)
 
-    user = models.ForeignKey(Profile, related_name="employer", on_delete=models.CASCADE)
+    hours = models.FloatField(_("Working hours"), default=0)  # <8
+    extra_hours = models.FloatField(_("Working overtime hours"), default=0)  # >8
+
+    user = models.ForeignKey(User, related_name="employer", on_delete=models.CASCADE)
 
     def __str__(self) -> str:
-        return f"{self.user} worked by {self.job_hours} hours"
-
-    @property
-    def job_hours(self):
-        if not self.end_job:
-            return 0
-        hours = get_hours(self.end_job, self.start_job)
-        return min(hours, 8.0)
-
-    @property
-    def extra_job_hours(self):
-        if not self.end_job:
-            return 0
-        hours = get_hours(self.end_job, self.start_job)
-        return max(0, hours - 8)
+        return f"{self.user} worked by {self.hours} and {self.extra_hours} hours"
 
 
 # TODO: class Task(BaseModel)... #noqa #type: ignore

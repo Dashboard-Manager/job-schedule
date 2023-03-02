@@ -1,0 +1,17 @@
+{
+"users_financials": [
+	{
+		"id" : 1,
+		"contract" : "commission",
+		"is_student" : false,
+		"work_in_the_place_of_residence" : true,
+		"voluntary_health_insurance" : true,
+		"health_insurance" : 2.45,
+		"joint_taxation_of_spouses" : false,
+		"have_extra_salary" : true,
+		"salary" : 0.0,
+		"hourly_pay" : 25.0,
+		"extra_hourly_pay" : 0.0,
+		"profile_id" : 1
+	}
+]}

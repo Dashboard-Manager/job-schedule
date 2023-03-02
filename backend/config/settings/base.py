@@ -70,14 +70,14 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 
 # MIGRATIONS
-# # ------------------------------------------------------------------------------
-# MIGRATION_MODULES = {
-#     "earnings": "apps.earnings.migrations",
-#     "filesaver": "apps.filesaver.migrations",
-#     "schedules": "apps.schedules.migrations",
-#     "users": "apps.users.migrations",
-#     "workstations": "apps.workstations.migrations",
-# }
+# ------------------------------------------------------------------------------
+MIGRATION_MODULES = {
+    "earnings": "apps.earnings.migrations",
+    "filesaver": "apps.filesaver.migrations",
+    "schedules": "apps.schedules.migrations",
+    "users": "apps.users.migrations",
+    "workstations": "apps.workstations.migrations",
+}
 
 
 # AUTHENTICATION
@@ -87,6 +87,7 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.Profile"
 
@@ -250,6 +251,7 @@ JWT_AUTH_COOKIE = "job-schedule-auth-cookie"
 JWT_AUTH_REFRESH_COOKIE = "job-schedule-auth-token"
 JWT_AUTH = {"JWT_EXPIRATION_DELTA": timedelta(hours=24)}
 
+
 # DJANGO-CORS-HEADERS
 # ------------------------------------------------------------------------------
 # https://github.com/adamchainz/django-cors-headers#setup
@@ -257,6 +259,8 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_URLS_REGEX = r"^/api/.*$"
 CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:3000",)
+
+
 # DRF-SPECTACULAR
 # ------------------------------------------------------------------------------
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html
@@ -269,8 +273,3 @@ SPECTACULAR_SETTINGS = {
         {"url": "http://127.0.0.1:8000", "description": "Local Development server"},
     ],
 }
-
-# CSRF_COOKIE_NAME = "XSRF-TOKEN"
-# CSRF_HEADER_NAME = "HTTP_X_XSRF_TOKEN"
-
-# LOGIN_URL = "http://127.0.0.1:8000/api/users/login"

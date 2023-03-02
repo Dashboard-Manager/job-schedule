@@ -1,0 +1,12 @@
+{
+"earnings_constants": [
+	{
+		"id" : 1,
+		"date" : "2023-02-19",
+		"PIT" : 12.0,
+		"pension_contribution" : 9.78,
+		"disability_contribution" : 1.5,
+		"sickness_contribution" : 2.45,
+		"health_care_contribution" : 9.0
+	}
+]}
