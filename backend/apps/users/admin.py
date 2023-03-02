@@ -1,5 +1,6 @@
-from apps.users.models import Financials, Profile
 from django.contrib import admin
+
+from apps.users.models import Financials, Profile
 
 
 @admin.register(Profile)
