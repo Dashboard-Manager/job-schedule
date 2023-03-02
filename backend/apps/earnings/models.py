@@ -28,8 +28,7 @@ class Settlements(BaseModel):
 
     date = models.DateField(default=timezone.now)
 
-    user = models.OneToOneField(
-      , on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     calculations = models.OneToOneField(
         "earnings.Calculations", on_delete=models.CASCADE
     )
