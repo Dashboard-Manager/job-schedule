@@ -30,7 +30,7 @@ class Profile(models.Model):
         User, verbose_name=_("User"), on_delete=models.CASCADE, related_name="profile"
     )
 
-    USERNAME_FIELD = "user.username"
+    USERNAME_FIELD = "user__username"
 
     def __str__(self) -> str:
         return f"{self.identificator}"
