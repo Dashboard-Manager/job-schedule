@@ -1,3 +1,4 @@
+import os
 import socket
 import sys
 
@@ -130,10 +131,8 @@ INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
-import os
-
 if os.environ.get("RUN_MAIN") or os.environ.get("WERKZEUG_RUN_MAIN"):
-    import debugpy
+    import debugpy  # noqa: E402
 
     debugpy.listen(("0.0.0.0", 7777))
-    print("========== DJANGO DEBUGPY ==========")
+    print("========== DJANGO DEBUGPY ==========")  # noqa: T201

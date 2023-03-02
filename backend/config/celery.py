@@ -14,4 +14,4 @@ app.autodiscover_tasks()
 
 @app.task
 def hello_world():
-    print("Hello, celery!")
+    print("Hello, celery!")  # noqa: T201

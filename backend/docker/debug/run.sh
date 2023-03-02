@@ -22,24 +22,7 @@ if [ $PWD == "/src" ]; then
     isort . --settings-path=.isort.cfg
     echo "End isort"
 else
-    echo "Run pytest"
-    pipenv run pytest -s -v --no-migrations
-    echo "End pytest"
-
-    echo "Run coverage"
-    pipenv run pytest --cov=apps --cov=config --cov-config=.coveragerc && coverage html
-    echo "End coverage"
-
-    echo "Run mypy"
-    pipenv run mypy . --config-file mypy.ini
-    echo "End mypy"
-    echo "Run flake8"
-    flake8 . --config=setup.cfg
-    echo "End flake8"
-
-    echo "Run isort"
-    isort . --settings-path=.isort.cfg
-    echo "End isort"
+    echo "Wrong run"
 fi
 
 echo "End of tests and linter configuration"
