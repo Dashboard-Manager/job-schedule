@@ -1,10 +1,11 @@
-from config.settings.base import *  # noqa
 import os
 import socket
 import sys
 
 import environ
+
 from config.env import BACKEND_DIR, ENV_DIR, env
+from config.settings.base import *  # noqa
 
 environ.Env.read_env(os.path.join(ENV_DIR, "postgres.env"))
 environ.Env.read_env(os.path.join(ENV_DIR, "docker.env"))

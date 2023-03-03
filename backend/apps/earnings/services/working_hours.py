@@ -1,8 +1,7 @@
 from datetime import date
 
-from apps.users.models import Profile
-
 from apps.schedules.models import Job
+from apps.users.models import Profile
 
 
 def get_working_hours(
