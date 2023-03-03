@@ -1,11 +1,6 @@
 import datetime
 
 import pytest
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.utils import timezone
-from factory.django import mute_signals
-
 from apps.earnings import signals
 from apps.earnings.models import Constants
 from apps.earnings.tests.factory import (
@@ -14,6 +9,10 @@ from apps.earnings.tests.factory import (
     JobHoursFactory,
 )
 from apps.users.tests.factory import UserFactory
+from apps.users.models import User
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+from factory.django import mute_signals
 
 
 @pytest.mark.django_db
@@ -40,7 +39,7 @@ class TestJobHours:
 
     def test_instance_jobhours(self, jobhours):
         assert isinstance(jobhours.date, timezone.datetime)
-        assert isinstance(jobhours.user, get_user_model())
+        assert isinstance(jobhours.user, User)
         assert isinstance(jobhours.start_date, datetime.date)
         assert isinstance(jobhours.end_date, datetime.date)
         assert isinstance(jobhours.hours, int)

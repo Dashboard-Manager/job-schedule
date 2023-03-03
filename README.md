@@ -90,6 +90,8 @@ To navigate if database is builded
   # if you got "No changes detected in app '<app-name>'"
   # and you dont have makemigrations folder in your app
   docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
+  # if you need you can remove postgres database
+  docker volume rm job_schedule_postgres_data
 ```
 
 ## Deployment

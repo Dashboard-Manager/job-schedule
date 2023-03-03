@@ -1,12 +1,9 @@
 from django.contrib import admin
 
-from apps.users.models import Financials, Profile
-from django.contrib.auth import get_user_model
+from apps.users.models import Financials, Profile, User
 from apps.users.forms import UserAdminChangeForm, UserAdminCreationForm
 from django.contrib.auth import admin as auth_admin
 from django.utils.translation import gettext_lazy as _
-
-User = get_user_model()
 
 
 @admin.register(User)

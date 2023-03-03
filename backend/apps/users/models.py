@@ -2,14 +2,13 @@ import datetime
 from random import choice
 from string import digits
 
+from apps.earnings.services import constants
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from apps.earnings.services import constants
 from django.contrib.auth.models import AbstractUser
 
 
@@ -31,10 +30,7 @@ class Profile(models.Model):
         default=timezone.now,
     )
     user = models.OneToOneField(
-        User,
-        verbose_name=_("User"),
-        on_delete=models.CASCADE,
-        related_name="profile",
+        User, verbose_name=_("User"), on_delete=models.CASCADE, related_name="profile"
     )
 
     def __str__(self) -> str:
@@ -43,9 +39,9 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         if not self.identificator:
             self.identificator = self.id_generator()
-            while User.objects.filter(identificator=self.identificator).exists():
+            while Profile.objects.filter(identificator=self.identificator).exists():
                 self.identificator = self.id_generator()
-        super(User, self).save(*args, **kwargs)
+        super(Profile, self).save(*args, **kwargs)
 
     @property
     def age(self) -> int:
@@ -57,7 +53,7 @@ class Profile(models.Model):
         return "".join(choice(chars) for _ in range(size))
 
     def clean(self, *args, **kwargs):
-        super(User, self).clean(*args, **kwargs)
+        super(Profile, self).clean(*args, **kwargs)
         if self.birth_date and self.birth_date > datetime.date.today():
             raise ValidationError(
                 {"error": _("The birth date cannot be in the past..")}

@@ -1,13 +1,12 @@
 from datetime import timedelta
 
+from apps.earnings.models import Calculations, Constants, JobHours, Settlements
+from apps.users.tests.factory import UserFactory
 from django.utils import timezone
 from factory import LazyAttribute, LazyFunction, SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 from faker.providers import date_time, internet, python
-
-from apps.earnings.models import Calculations, Constants, JobHours, Settlements
-from apps.users.tests.factory import ProfileFactory, UserFactory
 
 faker = Faker()
 faker.add_provider(internet)
