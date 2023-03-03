@@ -1,14 +1,16 @@
 <<<<<<< HEAD
-from apps.users.models import User, Financials, Profile
+from apps.users.models import Financials, Profile, User
+
 =======
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+
 >>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
+from django.contrib.auth.hashers import make_password
 from factory import LazyAttribute, LazyFunction, PostGenerationMethodCall, SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 from faker.providers import date_time, internet, python
-from django.contrib.auth.hashers import make_password
 
 faker = Faker()
 faker.add_provider(internet)

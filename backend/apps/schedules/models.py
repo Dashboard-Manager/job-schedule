@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 from apps.users.models import User
+
 =======
 >>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
 from django.db import models

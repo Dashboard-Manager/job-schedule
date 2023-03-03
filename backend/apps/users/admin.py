@@ -1,8 +1,10 @@
 from django.contrib import admin
+
 <<<<<<< HEAD
 
-from apps.users.models import Financials, Profile, User
 from apps.users.forms import UserAdminChangeForm, UserAdminCreationForm
+from apps.users.models import Financials, Profile, User
+
 =======
 >>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
 from django.contrib.auth import admin as auth_admin
