@@ -1,22 +1,10 @@
 from django.contrib import admin
-<<<<<<< HEAD
 
 from apps.users.models import Financials, Profile, User
 from apps.users.forms import UserAdminChangeForm, UserAdminCreationForm
-=======
->>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
 from django.contrib.auth import admin as auth_admin
-from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-<<<<<<< HEAD
-=======
-from apps.users.forms import UserAdminChangeForm, UserAdminCreationForm
-from apps.users.models import Financials, Profile
-
-User = get_user_model()
-
->>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
 
 @admin.register(User)
 class UserAdmin(auth_admin.UserAdmin):

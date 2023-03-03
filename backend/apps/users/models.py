@@ -2,23 +2,15 @@ import datetime
 from random import choice
 from string import digits
 
-<<<<<<< HEAD
-from apps.earnings.services import constants
-=======
 from django.contrib.auth.models import AbstractUser
->>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-<<<<<<< HEAD
-from django.contrib.auth.models import AbstractUser
-=======
 
 from apps.earnings.services import constants
->>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
 
 
 class User(AbstractUser):

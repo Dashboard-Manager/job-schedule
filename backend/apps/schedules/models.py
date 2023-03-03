@@ -1,12 +1,7 @@
-<<<<<<< HEAD
 from apps.users.models import User
-=======
->>>>>>> 4ca880af9fcf30359d413ed2149db66b8c5a59f6
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
-from apps.users.models import Profile
 
 
 class BaseModel(models.Model):
