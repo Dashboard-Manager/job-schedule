@@ -1,5 +1,5 @@
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from factory import LazyAttribute, LazyFunction, PostGenerationMethodCall, SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
@@ -11,6 +11,8 @@ faker = Faker()
 faker.add_provider(internet)
 faker.add_provider(date_time)
 faker.add_provider(python)
+
+User = get_user_model()
 
 
 class UserFactory(DjangoModelFactory):

@@ -80,6 +80,18 @@ To navigate if database is builded
   docker-compose stop postgres
 ```
 
+### Backend makemigrations app
+
+```bash
+  # use if django don't stand up
+  docker-compose run --rm django sh -c "python manage.py makemigrations <app-name>"
+  # use when django is running
+  docker-compose exec -it django sh -c "python manage.py makemigrations <app-name>"
+  # if you got "No changes detected in app '<app-name>'"
+  # and you dont have makemigrations folder in your app
+  docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
+```
+
 ## Deployment
 
 ### Run only backend

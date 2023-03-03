@@ -1,12 +1,12 @@
 from datetime import date
 
-from django.contrib.auth.models import User
+from apps.users.models import Profile
 
 from apps.schedules.models import Job
 
 
 def get_working_hours(
-    user: User, start_date: date, end_date: date, extra_hours: bool = False
+    user: Profile, start_date: date, end_date: date, extra_hours: bool = False
 ) -> int:
     working_days = Job.objects.filter(
         date__range=(start_date, end_date),
