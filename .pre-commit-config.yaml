@@ -51,15 +51,6 @@ repos:
         - flake8-simplify
         - flake8-warnings
 
--   repo: poetry-hooks
-    hooks:
-    -   id: export-requirements
-        name: Export requeriments.txt
-        language: system
-        pass_filenames: false
-        entry: poetry export --with production --with dev -f requirements.txt --output requirements.txt
-        files: ^backend/(pyproject.toml|poetry.lock)$
-
 -   repo: https://github.com/pre-commit/mirrors-prettier
     rev: v3.0.0-alpha.4
     hooks:
