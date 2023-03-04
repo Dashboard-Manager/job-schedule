@@ -1,3 +1,6 @@
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+
 from apps.earnings.models import Calculations, JobHours
 from apps.earnings.services import constants
 from apps.earnings.services.calculations import (
@@ -9,8 +12,6 @@ from apps.earnings.services.calculations import (
     calc_sickness_contr,
 )
 from apps.earnings.services.working_hours import get_working_hours
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 
 
 @receiver(pre_save, sender=Calculations)

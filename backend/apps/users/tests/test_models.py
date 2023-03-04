@@ -1,13 +1,14 @@
 from datetime import date, timedelta
 
 import pytest
-from apps.users import signals
-from apps.users.tests.factory import FinancialsFactory, ProfileFactory, UserFactory
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from factory.django import mute_signals
 from pytest_django.asserts import assertQuerysetEqual
+
+from apps.users import signals
+from apps.users.tests.factory import FinancialsFactory, ProfileFactory, UserFactory
 
 
 @pytest.mark.django_db

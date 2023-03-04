@@ -1,6 +1,7 @@
 from datetime import date
 
 import pytest
+
 from apps.earnings.services.calculations import (
     calc_disability_contr,
     calc_health_care_contr,

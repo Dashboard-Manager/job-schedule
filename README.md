@@ -12,7 +12,7 @@ The project presents interactiv dashboard for managing the enterprise, employees
 | ----------- | ----------- | ----------- |
 | Python | 3.11.1 | [link](https://www.python.org/downloads/) |
 | Docker | 20.10.22 | [link](https://docs.docker.com/compose/install/) |
-| Pipenv | 2022.12.19 | [link](https://pypi.org/project/pipenv/#installation) |
+| Poetry | 1.3.2 | [link](https://python-poetry.org/docs/#installation) |
 | PostgreSQL | 15.1 | [link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) |
 | DBeaver | 22.3.4 | [link](https://dbeaver.io/download)
 ### Clone the project
@@ -21,7 +21,39 @@ The project presents interactiv dashboard for managing the enterprise, employees
   git clone https://github.com/kwiats/job-schedule job-schedule
 ```
 
-## Local
+### Run project
+
+```bash
+  docker-compose up --build
+```
+
+# Local
+If you need install some new dependencies, do it like this:
+
+### Install backend packages
+
+```bash
+  # you can use version-number or latest
+  cd backend
+  poetry install <package-name>@latest
+  poetry export --with production --with dev -f requirements.txt --output requirements.txt
+```
+
+### Install frontend installation
+
+```bash
+  # you can use version-number or latest
+  cd frontend
+  npm install <package-name>@latest
+```
+
+If you install some new dependencies, again build app.
+
+```bash
+  docker-compose up --build
+```
+
+## Local install only postgres
 
 To your connection in Dbeaver or other you use:
 
@@ -33,94 +65,110 @@ To your connection in Dbeaver or other you use:
   Password: django-app
 ```
 
-Build database and run connections
+Build postgres database and run connections
 
 ```bash
-  docker-compose up db --build
+  docker-compose up postgres --build
 ```
 
 To navigate if database is builded
 
 ```bash
   #to start
-  docker-compose start db
+  docker-compose start postgres
   #to stop
-  docker-compose stop db
+  docker-compose stop postgres
 ```
 
-### Now run your django application locally when database is started
+### Backend makemigrations app
 
 ```bash
-  cd job-schedule/backend
-```
-
-Install dependencies
-
-```bash
-  pipenv install --system
-```
-
-Create virtual environment
-
-```bash
-  pipenv shell
-```
-
-Start the server
-
-```bash
-  pipenv run python manage.py runserver_plus
-```
-
-Go to site:
-
-```bash
-  http://127.0.0.1:8000
+  # use if django don't stand up
+  docker-compose run --rm django sh -c "python manage.py makemigrations <app-name>"
+  # use when django is running
+  docker-compose exec -it django sh -c "python manage.py makemigrations <app-name>"
+  # if you got "No changes detected in app '<app-name>'"
+  # and you dont have makemigrations folder in your app
+  docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
+  # if you need you can remove postgres database
+  docker volume rm job_schedule_postgres_data
 ```
 
 ## Deployment
 
+### Run only backend
+
 ```bash
-  cd job-schedule
+  docker-compose up django
 ```
 
-Run docker
+### Run only frontend
 
 ```bash
-  docker-compose up --build -d
+  docker-compose up frontend
 ```
 
-Go to site:
+# for Develop
+
+## Backend
+
+### Create app in apps
 
 ```bash
-  http://127.0.0.1:8000
-```
-
-## for Develop
-### Install packages
-
-```bash
+  # connect container django
   cd backend
-  pipenv install [package]
-  #or for dev
-  pipenv install [package] --dev
+  # create new app
+  python manage.py startapp <app-name>
+  # move app to folder apps in project
+  mv <app-name> apps
 ```
 
-### run local develop script
+The next you need do some steps with app
+
+```py
+  # change apps.py in your app folder
+  in apps/<app-name>/apps.py change name to: "apps.<app-name>"
+  # add your app to project LOCAL_APPS
+  in config/settings.base LOCAL_APPS add "apps.<app-name>"
+  # create urls.py in app dir and create empty urlpatterns
+  in apps/<app-name> create urls.py with urlpatterns = []
+  # in config urls add paths to your app
+  in config/urls.py add path("api/<app-name>/", include("apps.<app-name>.urls")),
+```
+
+### Run tests and linters after deployment app
 
 ```bash
-  cd backend
-  ./dev_valid.sh
+  # checks:pytest, coverage, mypy tests
+  # -flake8, isort styles
+  docker-compose exec -it django bash -c "docker/debug/run.sh"
 ```
 
-### run test docker script
+Run one test only
 
 ```bash
-  #build test script
-  docker-compose -f docker-compose.tests.yml up --build
-  #or use only docker-compose up
-  docker-compose -f docker-compose.tests.yml up
-  #run coverage html result
-  start ./htmlcov/index.html
-
+  # pytest
+  docker-compose exec -it django pytest -s -v --no-migrations
+  # coverage
+  docker-compose exec -it django pytest --cov=apps --cov=config --cov-config=.coveragerc && coverage html
+  # mypy
+  docker-compose exec -it django mypy . --config-file mypy.ini
+  # flake8
+  docker-compose exec -it django flake8 . --config=setup.cfg
+  # isort
+  docker-compose exec -it django isort . --settings-path=.isort.cfg
 ```
+
+You can still do this commands inside virtual enviroments like:
+
+```bash
+  docker-compose exec -it django bash
+```
+
+then you are logged in container as root:
+
+```bash
+  root@some_number:/some_path# flake8 . --config=setup.cfg
+```
+
+and do this same commands

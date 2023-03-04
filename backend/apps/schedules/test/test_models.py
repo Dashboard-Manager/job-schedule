@@ -1,6 +1,7 @@
 import datetime
 
 import pytest
+
 from apps.schedules.services import get_hours
 from apps.schedules.test.factory import JobFactory
 

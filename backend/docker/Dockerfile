@@ -1,45 +1,88 @@
-ARG PYTHON_VERSION=3.11.1-slim-bullseye
+ARG PYTHON_VERSION=3.10.7
+ARG PYTHON_TYPE=slim-bullseye
 
-FROM python:${PYTHON_VERSION}
+###########
+# PREPARE #
+###########
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PIPENV_IGNORE_VIRTUALENVS=1
+
+FROM python:${PYTHON_VERSION}-${PYTHON_TYPE} as python
+
+# Install apt packages
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    # dependencies for building Python packages
+    build-essential
+
+# Set environment variables
+ENV POETRY_VERSION=1.3.2
+
+# Install poetry
+RUN pip install poetry==$POETRY_VERSION --no-cache-dir
+
+# Add linter configs
+COPY setup.cfg .isort.cfg ./
+
+# RUN mkdir celery && chmod +x /celery
+COPY ./docker/dev/celery/* ./celery/
+
+COPY ./docker/dev/django.sh /django-commands.sh
+RUN sed -i 's/\r$//g' /django-commands.sh && chmod +x /django-commands.sh
+
+# Set the entrypoint script
+COPY ./docker/entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r$//g' /entrypoint.sh && chmod +x /entrypoint.sh
+
+###########
+# BUILDER #
+###########
+
+# Python build stage
+FROM python as python-build-stage
 
 ARG APP_HOME=/src
 WORKDIR ${APP_HOME}
 
-COPY Pipfile Pipfile.lock ${APP_HOME}/
+# Copy the poetry.lock and pyproject.toml files.
+COPY ./poetry.lock ./pyproject.toml ./
 
+# Install poetry
+COPY ./requirements.txt .
+RUN poetry export --with production --with dev -f requirements.txt --output requirements.txt
+RUN pip wheel --wheel-dir /usr/src/app/wheels  \
+    -r requirements.txt
+
+###########
+# EXECUTE #
+###########
+
+# Python 'run' stage
+FROM python as python-run-stage
+
+ARG BUILD_ENVIRONMENT=dev
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+ARG APP_HOME=/src
+WORKDIR ${APP_HOME}
+
+# Install apt packages
 RUN apt-get update && apt-get install --no-install-recommends -y \
     # psycopg2 dependencies
     libpq-dev \
-    && pip install pipenv \
-    && pipenv requirements > requirements.txt \
-    && pipenv requirements --dev > dev-requirements.txt \
-    && pip install -r requirements.txt \
-    && pip install -r dev-requirements.txt \
+    # translations dependencies
+    gettext \
+    # Additional dependencies
+    procps \
     # cleaning up unused files
-    && pipenv lock --clear \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy the installed packages from the python-build-stage
+COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
+RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
+    && rm -rf /wheels/
 
-ADD ./docker/entrypoint.sh /entrypoint.sh
-RUN sed -i 's/\r//' /entrypoint.sh
-RUN chmod a+x /entrypoint.sh
-
-ADD ./docker/django.sh /django.sh
-RUN sed -i 's/\r//' /django.sh
-RUN chmod a+x /django.sh
-
-ADD ./dev_valid.sh /dev_valid.sh
-RUN sed -i 's/\r//' /dev_valid.sh
-RUN chmod a+x /dev_valid.sh
-
-ADD . /setup.cfg
-ADD . /.isort.cfg
-
+# Copy the rest of the application code to the container
 COPY . ${APP_HOME}
 
 ENTRYPOINT ["/entrypoint.sh"]

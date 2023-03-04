@@ -6,8 +6,8 @@
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
-db_local.sqlite3
+dev_settings.py
+db_dev.sqlite3
 db.sqlite3
 db.sqlite3-journal
 media
@@ -184,7 +184,6 @@ cython_debug/
 # Icon must end with two \r
 Icon
 
-
 # Thumbnails
 ._*
 
@@ -254,6 +253,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,windows,django,visualstudiocode
-.vscode
+# .vscode
 .static
 .media
