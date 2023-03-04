@@ -1,9 +1,10 @@
-from apps.users.models import User, Financials, Profile
 from django.contrib.auth.hashers import make_password
 from factory import LazyAttribute, LazyFunction, PostGenerationMethodCall, SubFactory
 from factory.django import DjangoModelFactory
 from faker import Faker
 from faker.providers import date_time, internet, python
+
+from apps.users.models import Financials, Profile, User
 
 faker = Faker()
 faker.add_provider(internet)
