@@ -1,6 +1,7 @@
 from django.contrib.auth import forms as admin_forms
-from apps.users.models import User
 from django.utils.translation import gettext_lazy as _
+
+from apps.users.models import User
 
 
 class UserAdminChangeForm(admin_forms.UserChangeForm):
