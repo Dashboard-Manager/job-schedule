@@ -1,5 +1,5 @@
 import datetime
-from random import choice
+from random import choice  # noqa DUO102
 from string import digits
 
 from django.contrib.auth.models import AbstractUser
