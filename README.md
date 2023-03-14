@@ -13,6 +13,7 @@ The project presents interactiv dashboard for managing the enterprise, employees
 | Python | 3.11.1 | [link](https://www.python.org/downloads/) |
 | Docker | 20.10.22 | [link](https://docs.docker.com/compose/install/) |
 | Poetry | 1.3.2 | [link](https://python-poetry.org/docs/#installation) |
+| Node.js | 9.5.21 | [link](https://nodejs.org/en/) |
 | PostgreSQL | 15.1 | [link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) |
 | DBeaver | 22.3.4 | [link](https://dbeaver.io/download)
 ### Clone the project
@@ -83,6 +84,8 @@ To navigate if database is builded
 ### Backend makemigrations app
 
 ```bash
+  # remove migration
+  rm -rf backend/apps/<app>/migrations/
   # use if django don't stand up
   docker-compose run --rm django sh -c "python manage.py makemigrations <app-name>"
   # use when django is running
@@ -92,6 +95,8 @@ To navigate if database is builded
   docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
   # if you need you can remove postgres database
   docker volume rm job_schedule_postgres_data
+  # remeber you can connect commands like remove migrations and add changes in one step
+  rm -rf backend/apps/<app>/migrations/ && docker-compose run --rm django python manage.py makemigrations <app-name>
 ```
 
 ## Deployment
