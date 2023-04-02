@@ -1,11 +1,10 @@
-import datetime
-from logging import warning
-
 import pytest
+from apps.schedules.tests.factory import TaskFactory, JobFactory
 from apps.schedules.services import get_hours
-from apps.schedules.tests.factory import JobFactory, TaskFactory
 from apps.users.models import User
+import datetime
 from faker import Faker
+
 
 faker = Faker()
 
@@ -19,19 +18,42 @@ class TestTask:
     def test_instance_task(self, task):
         assert isinstance(task.title, str)
         assert isinstance(task.description, str)
-
         assert isinstance(task.priority, str)
-        print(f"jestem {task.priority} !!")
         assert isinstance(task.created_by, User)
         assert isinstance(task.assigned_user, User)
 
     def custom_task(self, *args, **kwargs):
         return TaskFactory.create(*args, **kwargs)
 
-    def test_title_validations(self):
+    def test_title_length(self):
         tsk = self.custom_task(title=faker.text(max_nb_chars=255))
-
         assert len(tsk.title) <= 255
+
+    def test_description_length(self):
+        tsk = self.custom_task(description=faker.text(max_nb_chars=2000))
+        assert len(tsk.description) <= 2000
+
+    def test_priority_choices(self):
+        tsk = self.custom_task(priority="lowest")
+        assert tsk.priority == "lowest"
+
+        tsk = self.custom_task(priority="high")
+        assert tsk.priority == "high"
+
+    def test_created_by(self):
+        author = User.objects.create(username="author")
+        tsk = self.custom_task(created_by=author)
+        assert tsk.created_by == author
+
+    def test_assigned_user(self):
+        performer = User.objects.create(username="performer")
+        tsk = self.custom_task(assigned_user=performer)
+        assert tsk.assigned_user == performer
+
+    def test_task_string_representation(self):
+        tsk = self.custom_task(title="Test task")
+        assert str(tsk) == "Test task"
+
 
 
 @pytest.mark.django_db
