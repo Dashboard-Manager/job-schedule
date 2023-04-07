@@ -51,13 +51,10 @@ DJANGO_APPS = [
 
 
 THIRD_PARTY_APPS = [
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "dj_rest_auth",
-    "dj_rest_auth.registration",
     "django_celery_beat",
     "rest_framework",
+    "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
     "drf_spectacular",
     "django_extensions",
@@ -70,8 +67,6 @@ LOCAL_APPS = [
     "apps.workstations",
     "apps.schedules",
     "apps.filesaver",
-    # TODO remove app presentation_app after meetup
-    "apps.presentation_app",
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -94,7 +89,6 @@ MIGRATION_MODULES = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
@@ -204,10 +198,7 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
-)
+EMAIL_BACKEND = env("EMAIL_BACKEND")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
@@ -305,32 +296,10 @@ CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
-        "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
-
-
-# DJANGO-ALLAUTH
-# ------------------------------------------------------------------------------
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_USERNAME_REQUIRED = False
-
-
-# DJ-REST-AUTH
-# ------------------------------------------------------------------------------
-# https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
-REST_USE_JWT = True
-# REST_SESSION_LOGIN = False
-REST_AUTH_TOKEN_MODEL = None
-JWT_AUTH_COOKIE = "job-schedule-auth-cookie"
-JWT_AUTH_REFRESH_COOKIE = "job-schedule-auth-token"
-JWT_AUTH = {"JWT_EXPIRATION_DELTA": timedelta(hours=24)}
 
 
 # DJANGO-CORS-HEADERS
@@ -354,3 +323,18 @@ SPECTACULAR_SETTINGS = {
         {"url": "http://127.0.0.1:8000", "description": "Local Development server"},
     ],
 }
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=90),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
+}
+
+EMAIL_BACKEND = env("EMAIL_BACKEND")
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_USE_TLS = env("EMAIL_USE_TLS")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")

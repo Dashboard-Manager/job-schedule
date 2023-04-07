@@ -23,13 +23,9 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
-from apps.users import urls as user_urls
-
 urlpatterns = [
     # ADMIN PATHS
     path("admin/", admin.site.urls),
-    path("api/auth/", include("dj_rest_auth.urls")),
-    path("api/auth/register/", include("dj_rest_auth.registration.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
     path(
         "api/redoc/",
@@ -67,18 +63,9 @@ urlpatterns = [
         include("apps.users.urls"),
         name="users",
     ),
-    path(
-        "api/presentation_app/",
-        include("apps.presentation_app.urls"),
-        name="presentation_app",
-    ),
-    path(
-        "user/",
-        include(user_urls),
-    ),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
-if settings.DEBUG:
-    urlpatterns += [
-        path("debug/", include("debug_toolbar.urls")),
-    ]
+if settings.DEBUG is True:
+    urlpatterns += (path("debug/", include("debug_toolbar.urls")),)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

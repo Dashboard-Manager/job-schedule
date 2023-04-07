@@ -1,72 +1,8 @@
-import datetime
-from random import choice  # noqa DUO102
-from string import digits
-
-from django.contrib.auth.models import AbstractUser
-from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.urls import reverse
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-
+from django.core.validators import MaxValueValidator, MinValueValidator
 from apps.earnings.services import constants
-
-
-class User(AbstractUser):
-    pass
-
-
-class Profile(models.Model):
-    class Meta:
-        verbose_name = "user profile"
-        verbose_name_plural = "User profiles"
-
-    identificator = models.CharField(
-        _("User identificator"), max_length=6, unique=True, editable=False
-    )
-    birth_date = models.DateField(
-        verbose_name=_("Birth date"),
-        blank=False,
-        default=timezone.now,
-    )
-    user = models.OneToOneField(
-        User, verbose_name=_("User"), on_delete=models.CASCADE, related_name="profile"
-    )
-
-    def __str__(self) -> str:
-        return f"{self.identificator}"
-
-    def save(self, *args, **kwargs):
-        if not self.identificator:
-            self.identificator = self.id_generator()
-            while Profile.objects.filter(identificator=self.identificator).exists():
-                self.identificator = self.id_generator()
-        super(Profile, self).save(*args, **kwargs)
-
-    @property
-    def age(self) -> int:
-        if self.birth_date:
-            return int(timezone.now().year - self.birth_date.year)
-        return 0
-
-    def id_generator(self, size: int = 6, chars: str = digits):
-        return "".join(choice(chars) for _ in range(size))
-
-    def clean(self, *args, **kwargs):
-        super(Profile, self).clean(*args, **kwargs)
-        if self.birth_date and self.birth_date > datetime.date.today():
-            raise ValidationError(
-                {"error": _("The birth date cannot be in the past..")}
-            )
-        if self.age < 16:
-            raise ValidationError(
-                {"error": _("You are too young to use this application.")}
-            )
-
-    def get_absolute_url(self):
-        # return f"profile/{self.identificator}"
-        return reverse("profile", kwargs={"identificator": self.identificator})
+from apps.users.models import User
 
 
 class Financials(models.Model):
@@ -158,10 +94,10 @@ class Financials(models.Model):
     )
 
     profile = models.OneToOneField(
-        Profile,
-        verbose_name=_("User profile"),
+        User,
+        verbose_name=_("User financial"),
         on_delete=models.CASCADE,
-        related_name="financials",
+        related_name="financial",
     )
 
     def __str__(self) -> str:
