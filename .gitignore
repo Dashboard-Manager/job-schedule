@@ -256,3 +256,6 @@ $RECYCLE.BIN/
 # .vscode
 .static
 .media
+
+# envs
+.envs/dev/email.env

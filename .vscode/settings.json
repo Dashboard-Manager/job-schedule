@@ -1,0 +1,11 @@
+{
+  "python.analysis.typeCheckingMode": "basic",
+  "python.linting.lintOnSave": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintArgs": [
+    "--disable=django-not-configured",
+    "--django-settings-module=backend.config.settings.dev",
+    "--disable=C0111", // missing docstring
+    "--load-plugins=pylint_django,pylint_celery",
+  ],
+}

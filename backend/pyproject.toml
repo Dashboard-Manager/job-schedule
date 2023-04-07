@@ -9,7 +9,6 @@ version = "0.1.0"
 [tool.poetry.dependencies]
 argon2-cffi = "^21.3.0"
 debugpy = "^1.6.6"
-dj-rest-auth = {extras = ["with-social"], version = "^2.2.5"}
 django = "^4.1.6"
 django-celery-beat = "^2.4.0"
 django-cors-headers = "^3.13.0"
