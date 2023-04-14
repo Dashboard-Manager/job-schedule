@@ -1,4 +1,4 @@
-from .users_models import (
+from apps.users.models.users_models import (
     CustomUser,
     User,
     UserChief,
@@ -9,3 +9,13 @@ from .users_models import (
 from .financials_models import (
     Financials,
 )
+
+__all__ = [
+    "CustomUser",
+    "User",
+    "UserChief",
+    "UserAccountant",
+    "UserTeamLeader",
+    "UserEmployee",
+    "Financials",
+]

@@ -15,10 +15,18 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "username",
             "password",
+            "password2",
             "email",
             "first_name",
             "last_name",
+            "birth_date",
         )
+        extra_kwargs = {
+            "password": {"write_only": True},
+            "birth_date": {
+                "format": "%d-%m-%Y",
+            },
+        }
 
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
@@ -34,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data["password"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
+            birth_date=validated_data["birth_date"],
         )
 
         return user

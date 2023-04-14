@@ -3,10 +3,10 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.urls import reverse
-from django.core.exceptions import ValidationError
 import uuid
 from apps.users.managers import UserManager
-from apps.users.validations import validate_age, validate_future_date
+from django.core.exceptions import ValidationError
+import datetime
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
@@ -27,10 +27,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     birth_date = models.DateField(
         verbose_name=_("Birth date"),
         blank=False,
-        validators=[
-            validate_age,
-            validate_future_date,
-        ],
     )
     is_staff = models.BooleanField(
         default=False,
@@ -54,22 +50,37 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         default=False,
     )
 
+    objects = UserManager()
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "birth_date"]
 
-    objects = UserManager()
+    class Meta:
+        verbose_name = "user"
+        verbose_name_plural = "users"
 
     def __str__(self) -> str:
         return self.email
 
+    def clean_future_date(self):
+        if self.birth_date > datetime.date.today():
+            raise ValidationError({_("The birth date cannot be in the future..")})
+
+    def clean(self):
+        self.clean_future_date()
+        super().clean()
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+
 
 class User(CustomUser):
-    ROLE_CHOICES = [
-        ("chief", "Chief"),
-        ("team leader", "Team Leader"),
-        ("accountant", "Accountant"),
-        ("employee", "Employee"),
-    ]
+    class Roles(models.TextChoices):
+        CHIEF = "chief", "Chief"
+        TEAM_LEADER = "team leader", "Team Leader"
+        ACCOUNTANT = "accountant", "Accountant"
+        EMPLOYEE = "employee", "Employee"
 
     identificator = models.UUIDField(
         verbose_name=_("User identificator"),
@@ -88,17 +99,40 @@ class User(CustomUser):
 
     username = None
 
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, editable=False)
+    role = models.CharField(
+        max_length=20, choices=Roles.choices, editable=False, blank=False
+    )
+
+    @property
+    def age(self) -> int:
+        return int(timezone.now().year - self.birth_date.year)
+
+    class Meta:
+        ordering = ["-identificator"]
+        indexes = [
+            models.Index(fields=["-identificator"]),
+        ]
+
+    def __str__(self) -> str:
+        return self.email
+
+    def clean_age(self):
+        age = int(timezone.now().year - self.birth_date.year)
+        if age < 16:
+            raise ValidationError({_("You are too young to use this application.")})
 
     def clean_username_id(self) -> None:
         """user function to set username id number"""
         if User.objects.exists():
             user = User.objects.last()
             if user:
-                self.username_id = str(int(user.username_id) + 1)
+                num = int(user.username_id)
+                num += 1
+                self.username_id = f"{num:08}"
         else:
             if not self.username_id:
-                self.username_id = "00000000"
+                num = 0
+                self.username_id = f"{num:08}"
 
     def clean_username(self) -> None:
         """user function create username field from firstname and lastname
@@ -109,13 +143,7 @@ class User(CustomUser):
         if all([self.first_name, self.last_name, self.username_id]):
             self.username = f"{self.first_name}{self.last_name}#{self.username_id}"
         else:
-            raise ValidationError(
-                {"error": _("You must fill both first and last names")}
-            )
-
-    @property
-    def age(self) -> int:
-        return int(timezone.now().year - self.birth_date.year)
+            raise ValidationError({_("You must fill both first and last names")})
 
     @classmethod
     def select_active_role(cls) -> None:
@@ -129,12 +157,25 @@ class User(CustomUser):
         elif cls.role == "employee":
             cls.is_employee = True
 
+    def clean(self):
+        self.clean_age()
+        self.clean_username_id()
+        self.clean_username()
+        super().clean()
+
     def save(self, *args, **kwargs):
         self.select_active_role()
+        self.full_clean()
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse("users", kwargs={"identificator": self.identificator})
+        return reverse(
+            "users",
+            kwargs={
+                "identificator": self.identificator,
+                "username_id": self.username_id,
+            },
+        )
 
 
 class UserChief(User):

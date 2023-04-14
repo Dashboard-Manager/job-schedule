@@ -8,7 +8,7 @@ from config.env import BACKEND_DIR, ENV_DIR, env
 from config.settings.base import *  # noqa
 
 environ.Env.read_env(os.path.join(ENV_DIR, "postgres.env"))
-environ.Env.read_env(os.path.join(ENV_DIR, "docker.env"))
+environ.Env.read_env(os.path.join(ENV_DIR, "django.env"))
 
 # PATHS
 path_list = [
@@ -32,9 +32,13 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
 INSTALLED_APPS += [  # noqa F405
     "debug_toolbar",
+    "silk",
 ]
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa F405
+MIDDLEWARE += [
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "silk.middleware.SilkyMiddleware",
+]  # noqa F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
 DEBUG_TOOLBAR_CONFIG = {
     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
