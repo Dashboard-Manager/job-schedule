@@ -13,4 +13,4 @@ RUN apk add --no-cache make gcc g++ python3 && \
 
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]
