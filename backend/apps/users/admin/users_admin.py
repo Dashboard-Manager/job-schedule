@@ -20,6 +20,8 @@ class UserAdmin(admin.ModelAdmin):
         "birth_date",
         "last_login",
     )
+    date_hierarchy = "last_login"
+    ordering = ["birth_date", "last_login"]
 
     def name_surname(self, obj):
         return f"{obj.first_name} {obj.last_name}"

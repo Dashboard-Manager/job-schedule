@@ -4,11 +4,24 @@ from apps.users.tasks import send_token_email
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.core.exceptions import ValidationError
+import logging
 
 
 class CreateUserTokenView(generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        logger = logging.getLogger("request-response-logger")
+        logger.info("Logging inside view")
+
+        return Response(
+            {
+                "status": 200,
+                "data": {},
+                "message": "Test successfull",
+            }
+        )
 
     def perform_create(self, serializer):
         try:
@@ -18,6 +31,8 @@ class CreateUserTokenView(generics.CreateAPIView):
             raise ValidationError(e.message_dict)
 
     def post(self, request, *args, **kwargs):
+        logger = logging.getLogger("request-response-logger")
+        logger.info("Logging inside view")
         response = super().post(request, *args, **kwargs)
 
         url = reverse("users:login")

@@ -38,6 +38,7 @@ INSTALLED_APPS += [  # noqa F405
 MIDDLEWARE += [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "silk.middleware.SilkyMiddleware",
+    "config.middleware.RequestResponseMiddleware",
 ]  # noqa F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
 DEBUG_TOOLBAR_CONFIG = {

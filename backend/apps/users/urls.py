@@ -1,7 +1,7 @@
 from django.urls import path
 
-from apps.users.views import CreateUserTokenView
+from apps.users import views
 
 urlpatterns = [
-    path("users/", CreateUserTokenView.as_view(), name="users"),
+    path("create-token/", views.CreateUserTokenView.as_view(), name="create-token"),
 ]

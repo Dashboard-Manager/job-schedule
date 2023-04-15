@@ -121,7 +121,7 @@ class User(CustomUser):
         if age < 16:
             raise ValidationError({_("You are too young to use this application.")})
 
-    def clean_username_id(self) -> None:
+    def clean_username_id(self) -> str:
         """user function to set username id number"""
         if User.objects.exists():
             user = User.objects.last()
@@ -133,15 +133,17 @@ class User(CustomUser):
             if not self.username_id:
                 num = 0
                 self.username_id = f"{num:08}"
+        return self.username_id
 
-    def clean_username(self) -> None:
+    @classmethod
+    def set_username(cls) -> None | str:
         """user function create username field from firstname and lastname
 
         Raises:
             ValidationError: You must fill both first and last names
         """
-        if all([self.first_name, self.last_name, self.username_id]):
-            self.username = f"{self.first_name}{self.last_name}#{self.username_id}"
+        if all([cls.first_name, cls.last_name, cls.username_id]):
+            cls.username = f"{cls.first_name}{cls.last_name}#{cls.username_id}"
         else:
             raise ValidationError({_("You must fill both first and last names")})
 
@@ -160,10 +162,10 @@ class User(CustomUser):
     def clean(self):
         self.clean_age()
         self.clean_username_id()
-        self.clean_username()
         super().clean()
 
     def save(self, *args, **kwargs):
+        self.set_username()
         self.select_active_role()
         self.full_clean()
         super().save(*args, **kwargs)

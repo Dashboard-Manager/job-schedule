@@ -2,6 +2,8 @@ from datetime import timedelta
 
 from config.env import BACKEND_DIR, env
 
+import threading, logging, os
+
 # GENERAL
 # ------------------------------------------------------------------------------
 TIME_ZONE = "UTC"
@@ -216,19 +218,55 @@ ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#logging
 # See https://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+THREAD_LOCALS = threading.local()
+LOGS_DIR = BACKEND_DIR / "logs"
+LOG_PATH = LOGS_DIR / "jobs.log"
+
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
+
+
+class RequestFilter(logging.Filter):
+    def filter(self, record):
+        request_id = getattr(THREAD_LOCALS, "request_id", "")
+        record.request_id = request_id
+        return True
+
+
+class RequestFormatter(logging.Formatter):
+    def format(self, record):
+        return super().format(record)
+
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "filters": {
+        "request_id": {
+            "()": RequestFilter,
+        },
+    },
     "formatters": {
+        "request": {
+            "()": RequestFormatter,
+            "format": "[%(asctime)s] [%(levelname)s] [%(request_id)s] \n%(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
         "verbose": {
-            "format": " [logging] %(levelname)s %(asctime)s %(module)s ",
-            "process": "%(process)d line:%(thread)d) %(message)s ",
+            "format": " [logging] %(levelname)s %(asctime)s %(module)s "
+            + "%(process)d line:%(thread)d) %(message)s ",
         },
         "standard": {
             "format": "[standard] %(asctime)-15s %(message)s",
         },
     },
     "handlers": {
+        "file-log": {
+            "class": "logging.FileHandler",
+            "filename": LOG_PATH,
+            "formatter": "request",
+            "filters": ["request_id"],
+        },
         "console": {
             "level": "DEBUG",
             "class": "logging.StreamHandler",
@@ -241,14 +279,18 @@ LOGGING = {
         },
     },
     "loggers": {
+        "request-response-logger": {
+            "handlers": ["file-log"],
+            "level": "DEBUG",
+        },
         "django": {
             "handlers": ["djdt_log", "console"],
-            "level": "WARNING",
+            "level": "INFO",
             "propagate": False,
         },
         "django.utils.autoreload": {
             "handlers": ["console"],
-            "level": "WARNING",
+            "level": "INFO",
             "propagate": False,
         },
     },
