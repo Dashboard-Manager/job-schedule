@@ -60,7 +60,7 @@ export function Dashboard() {
 
   return (
     <div>
-      Dashboard
+      DashboardPage
       {/* <h1>Welcome Back: {name}</h1>
             <table className="table is-striped is-fullwidth">
                 <thead>
