@@ -32,5 +32,3 @@ export const formSchema = yup.object().shape({
     .required('Password confirmation is required')
     .oneOf([yup.ref('password')], 'Passwords must match'),
 });
-
-
