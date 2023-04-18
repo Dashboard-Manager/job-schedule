@@ -53,5 +53,6 @@ export function Register() {
         </DescriptionTypography>
       </Board>
     </div>
+
   )
 }
