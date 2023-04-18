@@ -4,11 +4,10 @@ volumes:
   postgres_data:
 
 services:
-
   django: &django
     build:
-     context: ./backend
-     dockerfile: ./docker/Dockerfile
+      context: ./backend
+      dockerfile: ./docker/Dockerfile
     image: job_dev_django
     container_name: job_dev_django
     platform: linux/x86_64
@@ -82,17 +81,17 @@ services:
     build:
       context: ./frontend
       dockerfile: ./docker/dev/Dockerfile
-      args:
-        - NODE_ENV=development
     container_name: job_dev_frontend
     environment:
       - NODE_ENV=development
+      - WDS_SOCKET_HOST=127.0.0.1
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    stdin_open: true
     ports:
       - 3000:3000
     volumes:
       - ./frontend:/app
       - /app/node_modules
-      - /app/.next
-    depends_on:
-      - django
+    # depends_on:
+    #   - django

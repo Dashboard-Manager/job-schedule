@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom'
 
 
 export function Register() {
-  const {errors, handleBlur, handleChange, handleSubmit, values} = useFormik({
+  const { handleBlur, handleChange, handleSubmit, values} = useFormik({
     initialValues: {
       name: '',
       username: '',

@@ -1,21 +1,25 @@
  <!-- markdownlint-disable MD033 MD022 MD001 MD041 -->
-| Apps | Results |
-| ----------- | ----------- |
+
+| Apps       | Results                                                                                                                                                                                        |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Dashboard-Manager/job-schedule/main.svg)](https://results.pre-commit.ci/latest/github/Dashboard-Manager/job-schedule/main) |
-| coverage | [![Coverage Status](https://coveralls.io/repos/github/Dashboard-Manager/job-schedule/badge.svg?branch=main)](https://coveralls.io/github/Dashboard-Manager/job-schedule?branch=main) |
+| coverage   | [![Coverage Status](https://coveralls.io/repos/github/Dashboard-Manager/job-schedule/badge.svg?branch=main)](https://coveralls.io/github/Dashboard-Manager/job-schedule?branch=main)           |
 
 # Job-schedule
+
 The project presents interactiv dashboard for managing the enterprise, employees, budget and statistics.
 
 ### Needed to install
-| Program | Version | Links |
-| ----------- | ----------- | ----------- |
-| Python | 3.11.1 | [link](https://www.python.org/downloads/) |
-| Docker | 20.10.22 | [link](https://docs.docker.com/compose/install/) |
-| Poetry | 1.3.2 | [link](https://python-poetry.org/docs/#installation) |
-| Node.js | 9.5.21 | [link](https://nodejs.org/en/) |
-| PostgreSQL | 15.1 | [link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) |
-| DBeaver | 22.3.4 | [link](https://dbeaver.io/download)
+
+| Program    | Version  | Links                                                                        |
+| ---------- | -------- | ---------------------------------------------------------------------------- |
+| Python     | 3.11.1   | [link](https://www.python.org/downloads/)                                    |
+| Docker     | 20.10.22 | [link](https://docs.docker.com/compose/install/)                             |
+| Poetry     | 1.3.2    | [link](https://python-poetry.org/docs/#installation)                         |
+| Node.js    | 9.5.21   | [link](https://nodejs.org/en/)                                               |
+| PostgreSQL | 15.1     | [link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) |
+| DBeaver    | 22.3.4   | [link](https://dbeaver.io/download)                                          |
+
 ### Clone the project
 
 ```bash
@@ -29,6 +33,7 @@ The project presents interactiv dashboard for managing the enterprise, employees
 ```
 
 # Local
+
 If you need install some new dependencies, do it like this:
 
 ### Install backend packages
@@ -46,12 +51,14 @@ If you need install some new dependencies, do it like this:
   # you can use version-number or latest
   cd frontend
   npm install <package-name>@latest
+  npm install # to install all frontend dependencies
 ```
 
 If you install some new dependencies, again build app.
 
 ```bash
-  docker-compose up --build
+  docker-compose up frontend --build # to build only frontend package
+  docker-compose up --build # to build full api
 ```
 
 ## Local install only postgres
@@ -59,11 +66,11 @@ If you install some new dependencies, again build app.
 To your connection in Dbeaver or other you use:
 
 ```yaml
-  Host: localhost
-  Port: 5433
-  Database: job-schedule
-  Username: job-schedule
-  Password: django-app
+Host: localhost
+Port: 5433
+Database: job-schedule
+Username: job-schedule
+Password: django-app
 ```
 
 Build postgres database and run connections
