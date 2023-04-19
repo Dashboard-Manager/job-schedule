@@ -184,3 +184,29 @@ then you are logged in container as root:
 ```
 
 and do this same commands
+
+## Frontend
+
+### Functional tests with cypress and e2e
+
+For functional tests you do:
+
+```bash
+  cd frontend
+  npm run cypress:open
+```
+
+and then chose e2e tests
+or
+
+```bash
+  cd frontend
+  npm run cypress:run
+```
+
+### Integration tests
+
+For integration tests, you can use two ways:
+
+1. You can install [vscode-jest](https://github.com/jest-community/vscode-jest#getting-started) and in VS Code press F1 and chose 'Jest Start All Runners or
+2. Chose Run and Debug 'Run Jest'

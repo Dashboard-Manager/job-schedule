@@ -6,6 +6,11 @@
       "dom.iterable",
       "es6"
     ],
+    "types": [
+      "node",
+      "jest",
+      "@testing-library/jest-dom",
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -22,6 +27,22 @@
     "baseUrl": "src"
   },
   "include": [
-    "src"
-  ]
+    "./jest-setup.ts",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "tests/**/*.js",
+    "tests/**/*.jsx",
+    "src/**/*.js",
+    "src/**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "cypress.config.ts"
+  ],
 }

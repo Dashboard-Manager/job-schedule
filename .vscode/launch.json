@@ -7,12 +7,38 @@
       "request": "attach",
       "pathMappings": [
         {
-          "localRoot": "${workspaceFolder}/backend/",
+          "localRoot": "${workspaceRoot}/backend/",
           "remoteRoot": "/src/"
         }
       ],
       "port": 7777,
       "host": "127.0.0.1",
+    },
+    {
+      "name": "Run Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/frontend/",
+      "preLaunchTask": "npm: start"
+    },
+    {
+      "name": "Run Jest",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/frontend/node_modules/.bin/jest",
+      "args": [
+        "test",
+        "--runInBand",
+        "--no-cache",
+        "--watchAll=false"
+      ],
+      "cwd": "${workspaceRoot}/frontend/",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "CI": "true"
+      },
     }
   ]
 }
