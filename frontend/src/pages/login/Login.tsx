@@ -18,7 +18,7 @@ export function Login({ onLoginSuccess }: LoginProps) {
 
   return (
     <div className='container'>
-      <div className='login-wrapper'>
+      {/* <div className='login-wrapper'>
         <h1>Please Log In</h1>
         <form onSubmit={handleSubmit}>
           <label>
@@ -33,7 +33,7 @@ export function Login({ onLoginSuccess }: LoginProps) {
             <button type='submit'>Log In</button>
           </div>
         </form>
-      </div>
+      </div> */}
     </div>
   )
 }
