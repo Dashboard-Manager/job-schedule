@@ -7,7 +7,7 @@ import { useFormik } from 'formik'
 import { Link } from 'react-router-dom'
 
 export function Login() {
-  const { errors, handleChange, handleSubmit, touched, values } = useFormik({
+  const { handleChange, handleSubmit, values } = useFormik({
     initialValues: {
       name: '',
       username: '',
@@ -35,8 +35,6 @@ export function Login() {
                 icon={input.icon}
                 value={values[valueOfElement]}
                 onChange={handleChange}
-                error={errors[valueOfElement]}
-                touched={touched[valueOfElement]}
               />
             )
           })}
