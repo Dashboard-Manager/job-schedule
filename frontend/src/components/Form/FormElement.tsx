@@ -9,8 +9,8 @@ type FormElement = {
   icon: ReactNode
   value: string
   onChange: FormikHandlers['handleChange']
-  error: string | undefined
-  touched: boolean | undefined
+  error?: string | undefined
+  touched?: boolean | undefined
 }
 
 export function FormElement({ type, name, icon, value, onChange, error, touched }: FormElement) {
