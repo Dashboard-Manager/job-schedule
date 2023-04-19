@@ -15,7 +15,7 @@ export function Button({ children, type = 'button' }: Button) {
     <button
       type={type}
       className={
-        'bg-bloody px-8 py-2 font-bold outline-none  focus:bg-blue-500 active:translate-y-[1px]'
+        'bg-bloody px-8 py-2 font-bold outline-none focus:bg-blue-500 active:translate-y-[1px]'
       }
       onClick={handleClick}
     >
