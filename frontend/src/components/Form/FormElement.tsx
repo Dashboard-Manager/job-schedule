@@ -9,7 +9,6 @@ type FormElement = {
   icon: ReactNode
   value: string
   onChange: FormikHandlers['handleChange']
-  onBlur: FormikHandlers['handleBlur']
   error: string | undefined
   touched: boolean | undefined
 }
