@@ -25,12 +25,6 @@ export const FormElements = {
       name: 'password',
       icon: <FaLock color='#fa8142' size={`${fontFormStyles.size}`} />,
     },
-    // {
-    //   id: 4,
-    //   type: 'password',
-    //   name: 'confirm password',
-    //   icon: <FaLock color='#fa8142' size={`${fontFormStyles.size}`} />,
-    // },
   ],
   LoginPage: [
     {
