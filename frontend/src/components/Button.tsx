@@ -1,15 +1,15 @@
-import { MouseEvent, ReactNode } from 'react'
+import { MouseEvent, ReactNode } from 'react';
 
 type Button = {
-    children: ReactNode
-    type: 'button' | 'submit' | 'reset' | undefined
-}
+    children: ReactNode;
+    type: 'button' | 'submit' | 'reset' | undefined;
+};
 
 export function Button({ children, type = 'button' }: Button) {
     const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-        const button = event.target as HTMLButtonElement
-        button.blur()
-    }
+        const button = event.target as HTMLButtonElement;
+        button.blur();
+    };
 
     return (
         <button
@@ -21,5 +21,5 @@ export function Button({ children, type = 'button' }: Button) {
         >
             {children}
         </button>
-    )
+    );
 }

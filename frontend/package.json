@@ -13,7 +13,7 @@
         "eject": "react-scripts eject",
         "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
         "lint:fix": "eslint . --fix",
-        "prettier": "prettier . --write src/*.(js|jsx|ts|tsx|css|md|json|html)",
+        "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md,json,html}\"",
         "jest": "jest",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run"
@@ -24,7 +24,7 @@
         "@types/node": "^18.15.11",
         "express": "^4.18.2",
         "formik": "^2.2.9",
-    "react": "^18.2.0",
+        "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-icons": "^4.8.0",
         "react-redux": "^8.0.5",
@@ -32,7 +32,7 @@
         "react-scripts": "5.0.1",
         "typescript": "^4.9.5",
         "web-vitals": "^3.3.1",
-    "yup": "^1.1.1"
+        "yup": "^1.1.1"
     },
     "devDependencies": {
         "@cypress/webpack-dev-server": "^3.4.1",
@@ -40,7 +40,9 @@
         "@tanstack/eslint-plugin-query": "^4.13.0",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^14.0.0",
+        "@trivago/prettier-plugin-sort-imports": "^4.1.1",
         "@types/jest": "^29.5.0",
+        "@types/prettier": "^2.7.2",
         "@types/react": "^18.0.37",
         "@types/react-dom": "^18.0.11",
         "@typescript-eslint/eslint-plugin": "^5.56.0",
@@ -62,7 +64,7 @@
         "jest-environment-jsdom": "^29.5.0",
         "postcss": "^8.4.21",
         "prettier": "^2.8.6",
-        "prettier-plugin-organize-imports": "^3.2.2",
+        "prettier-linter-helpers": "^1.0.0",
         "prettier-plugin-tailwindcss": "^0.2.7",
         "tailwindcss": "^3.3.1",
         "ts-jest": "^29.1.0",

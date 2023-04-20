@@ -1,37 +1,37 @@
-import { useState } from 'react'
-import './Login.css'
+import { useState } from 'react';
+import './Login.css';
 
 interface LoginProps {
-    onLoginSuccess: (username: string, password: string) => void
+    onLoginSuccess: (username: string, password: string) => void;
 }
 
 function Login({ onLoginSuccess }: LoginProps) {
-    const [username, setUserName] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
+        event.preventDefault();
         if (username && password) {
             if (username === 'admin' && password === 'password') {
-                onLoginSuccess(username, password)
+                onLoginSuccess(username, password);
             } else {
-                setError('Invalid username or password')
+                setError('Invalid username or password');
             }
         }
-    }
+    };
 
     return (
-        <div className='container'>
-            <div className='login-wrapper'>
+        <div className="container">
+            <div className="login-wrapper">
                 <h1>Please Log In</h1>
-                {error && <p className='error'>{error}</p>}
+                {error && <p className="error">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <label>
                         <p>Username</p>
                         <input
-                            name='username'
-                            type='text'
+                            name="username"
+                            type="text"
                             value={username}
                             onChange={(e) => setUserName(e.target.value)}
                         />
@@ -39,21 +39,21 @@ function Login({ onLoginSuccess }: LoginProps) {
                     <label>
                         <p>Password</p>
                         <input
-                            name='password'
-                            type='password'
+                            name="password"
+                            type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </label>
                     <div>
-                        <button name='submit' type='submit'>
+                        <button name="submit" type="submit">
                             Log In
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-    )
+    );
 }
 
-export default Login
+export default Login;

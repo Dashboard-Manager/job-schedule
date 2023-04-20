@@ -56,9 +56,11 @@ repos:
       hooks:
           - id: prettier
             files: ^frontend/
+            args: ['--write \"src/**/*.{js,jsx,ts,tsx,css,md,json,html}\"']
             additional_dependencies:
-                - prettier-plugin-organize-imports
+                - "@trivago/prettier-plugin-sort-imports"
                 - prettier-plugin-tailwindcss
+                - prettier-linter-helpers
 
 dev_ci:
     autoupdate_schedule: weekly
