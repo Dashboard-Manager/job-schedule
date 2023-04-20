@@ -28,14 +28,6 @@
   },
   "include": [
     "./jest-setup.ts",
-    "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "tests/**/*.js",
-    "tests/**/*.jsx",
-    "src/**/*.js",
-    "src/**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
@@ -45,4 +37,11 @@
     "node_modules",
     "cypress.config.ts"
   ],
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "compilerOptions": {
+      "rootDir": "."
+    }
+  }
 }

@@ -1,8 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import Home from 'pages/Home'
-import Login from 'pages/login/Login'
-import { Register } from 'pages/users/register/Register'
+import Home from 'pages/home/Home'
+import Login from 'pages/users/login/Login'
+import Register from 'pages/users/register/Register'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import PrivateRoutes from 'utils/PrivateRoutes'
 
@@ -17,16 +17,7 @@ function App() {
                         <Route path='/register' element={<Register />} />
                     </Route>
                     <Route path='/' element={<Home />} />
-                    <Route
-                        path='/login'
-                        element={
-                            <Login
-                                onLoginSuccess={(username, password) =>
-                                    console.log(username, password)
-                                }
-                            />
-                        }
-                    />
+                    <Route path='/login' element={<Login />} />
                 </Routes>
                 <ReactQueryDevtools initialIsOpen={false} />
             </BrowserRouter>

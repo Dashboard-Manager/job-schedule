@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import Button from '../Button'
-import Text from '../Text'
+import Button from './Button'
+import Text from './Text'
 
 const Home = () => {
     const [toggle, setToggle] = useState(true)
