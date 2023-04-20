@@ -57,6 +57,7 @@ repos:
           - id: prettier
             files: ^frontend/
             additional_dependencies:
+                - prettier@2.8.6
                 - "@trivago/prettier-plugin-sort-imports"
                 - prettier-plugin-tailwindcss
                 - prettier-linter-helpers
