@@ -1,7 +1,6 @@
 import { FormikHandlers } from 'formik';
 import { ReactNode, useRef, useState } from 'react';
 import { fontFormStyles } from 'utils';
-
 import { Tooltip } from '../Tooltip';
 
 type FormElement = {
