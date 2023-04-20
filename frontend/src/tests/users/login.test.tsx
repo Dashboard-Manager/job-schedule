@@ -3,6 +3,7 @@
  */
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+
 import Login from '../../pages/users/login/Login';
 
 describe('Login component', () => {

@@ -1,13 +1,8 @@
 {
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": "../node_modules",
-    "types": [
-      "cypress"
-    ]
-  },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": "../node_modules",
+        "types": ["cypress"]
+    },
+    "include": ["**/*.ts", "**/*.tsx"]
 }
