@@ -1,6 +1,6 @@
 /* eslint-disable */
-import type { Config } from '@jest/types'
-import { defaults as tsJestPreset } from 'ts-jest/presets'
+import type { Config } from '@jest/types';
+import { defaults as tsJestPreset } from 'ts-jest/presets';
 
 const config: Config.InitialOptions = {
     roots: ['<rootDir>/src'],
@@ -24,7 +24,10 @@ const config: Config.InitialOptions = {
     },
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     moduleDirectories: ['node_modules', 'src'],
-    setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect', '@testing-library/jest-dom'],
+    setupFilesAfterEnv: [
+        '@testing-library/jest-dom/extend-expect',
+        '@testing-library/jest-dom',
+    ],
     clearMocks: true,
     restoreMocks: true,
     collectCoverage: true,
@@ -38,6 +41,6 @@ const config: Config.InitialOptions = {
             statements: 80,
         },
     },
-}
+};
 
-export default config
+export default config;

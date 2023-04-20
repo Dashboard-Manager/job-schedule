@@ -1,20 +1,15 @@
 {
-    "plugins": ["prettier-plugin-organize-imports", "prettier-plugin-tailwindcss"],
-    "semi": false,
+    "plugins": [
+        "@trivago/prettier-plugin-sort-imports",
+        "prettier-plugin-tailwindcss",
+        "prettier-linter-helpers"
+    ],
+    "printWidth": 80,
     "tabWidth": 4,
-    "printWidth": 100,
-    "singleQuote": true,
     "trailingComma": "all",
-    "jsxSingleQuote": true,
-    "bracketSpacing": true,
-    "prettier-plugin-organize-imports": {
-        "forceExplicitTypeImports": true,
-        "sortDirsRelativeToConfig": true,
-        "sortPackages": true,
-        "removeUnusedImport": true,
-        "useRelativePath": false,
-        "useTrailingCommas": true,
-        "useLinebreaks": true,
-        "useSpaces": true
-    }
+    "singleQuote": true,
+    "semi": true,
+    "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
 }

@@ -57,8 +57,9 @@ repos:
           - id: prettier
             files: ^frontend/
             additional_dependencies:
-                - prettier-plugin-organize-imports
+                - "@trivago/prettier-plugin-sort-imports"
                 - prettier-plugin-tailwindcss
+                - prettier-linter-helpers
 
 dev_ci:
     autoupdate_schedule: weekly
