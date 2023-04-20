@@ -4,7 +4,7 @@
 
 import '@testing-library/jest-dom'
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import Home from '../../src/pages/Home'
+import Home from '../../src/pages/example/Home'
 
 afterEach(() => {
     cleanup()
