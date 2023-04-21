@@ -1,6 +1,6 @@
 {
-    "name": "Using fixtures to represent data",
-    "email": "hello@cypress.io",
-    "username": "hello",
-    "password": "hello1234"
+  "name": "Using fixtures to represent data",
+  "email": "hello@cypress.io",
+  "username": "hello",
+  "password": "hello1234"
 }

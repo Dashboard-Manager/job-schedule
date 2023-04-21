@@ -1,9 +1,9 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
 import Home from 'pages/home/Home';
 import Login from 'pages/users/login/Login';
 import Register from 'pages/users/register/Register';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import PrivateRoutes from 'utils/PrivateRoutes';
 
 const queryClient = new QueryClient();

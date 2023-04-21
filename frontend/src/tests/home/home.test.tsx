@@ -1,9 +1,8 @@
 /**
  * @jest-environment jsdom
  */
-import { render, screen } from '@testing-library/react';
-
 import Home from '../../pages/home/Home';
+import {render, screen} from '@testing-library/react';
 
 describe('Home', () => {
     it('should render the HomePage text', () => {
@@ -13,13 +12,13 @@ describe('Home', () => {
 
     it('should render the Register and Login links', () => {
         render(<Home />);
-        expect(screen.getByRole('link', { name: 'Register' })).toHaveAttribute(
+        expect(screen.getByRole('link', {name: 'Register'})).toHaveAttribute(
             'href',
-            '/register',
+            '/register'
         );
-        expect(screen.getByRole('link', { name: 'Login' })).toHaveAttribute(
+        expect(screen.getByRole('link', {name: 'Login'})).toHaveAttribute(
             'href',
-            '/login',
+            '/login'
         );
     });
 

@@ -1,5 +1,5 @@
-import { FaLock, FaUserAlt } from 'react-icons/fa';
-import { MdAlternateEmail } from 'react-icons/md';
+import {FaLock, FaUserAlt} from 'react-icons/fa';
+import {MdAlternateEmail} from 'react-icons/md';
 
 export const fontFormStyles = {
     size: '1.1em',

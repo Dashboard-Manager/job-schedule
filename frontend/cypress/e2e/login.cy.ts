@@ -18,7 +18,7 @@ describe('Login form', () => {
         });
         cy.intercept('POST', '/login', {
             statusCode: 401,
-            body: { message: 'Invalid username or password' },
+            body: {message: 'Invalid username or password'},
         }).as('loginRequest');
 
         cy.get('[name="username"]').type(user_data.username);

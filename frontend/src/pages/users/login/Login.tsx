@@ -1,13 +1,13 @@
-import { Button } from 'components/Button';
-import { DescriptionTypography } from 'components/DescriptionTypography';
-import { Board } from 'components/Form/Board';
-import { FormElement } from 'components/Form/FormElement';
-import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
-import { FormElements } from 'utils';
+import {Button} from 'components/Button';
+import {DescriptionTypography} from 'components/DescriptionTypography';
+import {Board} from 'components/Form/Board';
+import {FormElement} from 'components/Form/FormElement';
+import {useFormik} from 'formik';
+import {Link} from 'react-router-dom';
+import {FormElements} from 'utils';
 
 function Login() {
-    const { handleChange, handleSubmit, values } = useFormik({
+    const {handleChange, handleSubmit, values} = useFormik({
         initialValues: {
             name: '',
             username: '',

@@ -1,6 +1,6 @@
 /* eslint-disable */
-import type { Config } from '@jest/types';
-import { defaults as tsJestPreset } from 'ts-jest/presets';
+import type {Config} from '@jest/types';
+import {defaults as tsJestPreset} from 'ts-jest/presets';
 
 const config: Config.InitialOptions = {
     roots: ['<rootDir>/src'],

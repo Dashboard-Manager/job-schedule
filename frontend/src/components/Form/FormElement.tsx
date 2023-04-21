@@ -1,8 +1,7 @@
-import { FormikHandlers } from 'formik';
-import { ReactNode, useRef, useState } from 'react';
-import { fontFormStyles } from 'utils';
-
-import { Tooltip } from '../Tooltip';
+import {Tooltip} from '../Tooltip';
+import {FormikHandlers} from 'formik';
+import {ReactNode, useRef, useState} from 'react';
+import {fontFormStyles} from 'utils';
 
 type FormElement = {
     type: string;
@@ -44,8 +43,7 @@ export function FormElement({
                 : error
                 ? 'border-bloody'
                 : 'border-gray-dark'
-        }`}
-                >
+        }`}>
                     <input
                         type={type}
                         id={name}
@@ -64,8 +62,7 @@ export function FormElement({
                     <span
                         className="order-1 cursor-text px-2"
                         aria-hidden
-                        onClick={focusInput}
-                    >
+                        onClick={focusInput}>
                         {icon}
                     </span>
                 </div>

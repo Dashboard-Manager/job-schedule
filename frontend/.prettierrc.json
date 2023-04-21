@@ -1,15 +1,22 @@
 {
-    "plugins": [
-        "@trivago/prettier-plugin-sort-imports",
-        "prettier-linter-helpers",
-        "prettier-plugin-tailwindcss"
-    ],
-    "printWidth": 80,
-    "tabWidth": 4,
-    "trailingComma": "all",
-    "singleQuote": true,
-    "semi": true,
-    "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
-    "importOrderSeparation": true,
-    "importOrderSortSpecifiers": true
+  "plugins": ["prettier-linter-helpers", "prettier-plugin-tailwindcss"],
+  "bracketSpacing": false,
+  "singleQuote": true,
+  "bracketSameLine": true,
+  "trailingComma": "es5",
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": "*.css",
+      "options": {
+        "parser": "css"
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "parser": "mdx"
+      }
+    }
+  ]
 }
