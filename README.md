@@ -32,36 +32,17 @@ The project presents interactiv dashboard for managing the enterprise, employees
   docker-compose up --build
 ```
 
-# Local
-
-If you need install some new dependencies, do it like this:
-
-### Install backend packages
+### Run only one django container
 
 ```bash
-  # you can use version-number or latest
-  cd backend
-  poetry install <package-name>@latest
-  poetry export --with production --with dev -f requirements.txt --output requirements.txt
+  #run only django
+  docker-compose up <container-name> --build
+  # names you can use in project:
+  # postgres, django, redis, frontend, celery_worker, celery_beat, flower
+
 ```
 
-### Install frontend installation
-
-```bash
-  # you can use version-number or latest
-  cd frontend
-  npm install <package-name>@latest
-  npm install # to install all frontend dependencies
-```
-
-If you install some new dependencies, again build app.
-
-```bash
-  docker-compose up frontend --build # to build only frontend package
-  docker-compose up --build # to build full api
-```
-
-## Local install only postgres
+## install only postgres
 
 To your connection in Dbeaver or other you use:
 
@@ -73,12 +54,6 @@ Username: job-schedule
 Password: django-app
 ```
 
-Build postgres database and run connections
-
-```bash
-  docker-compose up postgres --build
-```
-
 To navigate if database is builded
 
 ```bash
@@ -88,41 +63,38 @@ To navigate if database is builded
   docker-compose stop postgres
 ```
 
-### Backend makemigrations app
+# Packages
+
+### Install backend packages
 
 ```bash
-  # remove migration
-  rm -rf backend/apps/<app>/migrations/
-  # use if django don't stand up
-  docker-compose run --rm django sh -c "python manage.py makemigrations <app-name>"
-  # use when django is running
-  docker-compose exec -it django sh -c "python manage.py makemigrations <app-name>"
-  # if you got "No changes detected in app '<app-name>'"
-  # and you dont have makemigrations folder in your app
-  docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
-  # if you need you can remove postgres database
-  docker volume rm job_schedule_postgres_data
-  # remeber you can connect commands like remove migrations and add changes in one step
-  rm -rf backend/apps/<app>/migrations/ && docker-compose run --rm django python manage.py makemigrations <app-name>
+  # you can use version-number or latest
+  cd backend
+  poetry install <package-name>@latest
+  # or
+  poetry install <package-name>@latest --dev
+  poetry export --with production --with dev -f requirements.txt --output requirements.txt
 ```
 
-## Deployment
-
-### Run only backend
+### Install frontend packages
 
 ```bash
-  docker-compose up django
+  # you can use version-number or latest
+  cd frontend
+  npm i <package-name>@latest
+  # or
+  npm i <package-name>@latest --save-dev
+  npm i # to install all frontend dependencies
 ```
 
-### Run only frontend
+If you install some new dependencies, again build app.
 
 ```bash
-  docker-compose up frontend
+  docker-compose up frontend --build # to build only frontend package
+  docker-compose up --build # to build full api
 ```
 
-# for Develop
-
-## Backend
+## Backend Django
 
 ### Create app in apps
 
@@ -148,6 +120,28 @@ The next you need do some steps with app
   in config/urls.py add path("api/<app-name>/", include("apps.<app-name>.urls")),
 ```
 
+### Makemigrations app
+
+```bash
+  # remove migration
+  rm -rf backend/apps/<app>/migrations/
+  # use if django don't stand up
+  docker-compose run --rm django sh -c "python manage.py makemigrations <app-name>"
+  # use when django is running
+  docker-compose exec -it django sh -c "python manage.py makemigrations <app-name>"
+  # if you got "No changes detected in app '<app-name>'"
+  # and you dont have makemigrations folder in your app
+  docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
+  # if you need you can remove postgres database
+  docker volume rm job_schedule_postgres_data
+  # remeber you can connect commands like remove migrations and add changes in one step
+  rm -rf backend/apps/<app>/migrations/ && docker-compose run --rm django python manage.py makemigrations <app-name>
+```
+
+# Testing
+
+## Backend tests
+
 ### Run tests and linters after deployment app
 
 ```bash
@@ -156,7 +150,7 @@ The next you need do some steps with app
   docker-compose exec -it django bash -c "docker/debug/run.sh"
 ```
 
-Run one test only
+Run one test or linter only
 
 ```bash
   # pytest
@@ -185,7 +179,7 @@ then you are logged in container as root:
 
 and do this same commands
 
-## Frontend
+## Frontend tests
 
 ### Functional tests with cypress and e2e
 
@@ -208,5 +202,24 @@ or
 
 For integration tests, you can use two ways:
 
-1. You can install [vscode-jest](https://github.com/jest-community/vscode-jest#getting-started) and in VS Code press F1 and chose 'Jest Start All Runners or
-2. Chose Run and Debug 'Run Jest'
+```bash
+  cd frontend
+  npm test
+```
+
+or with coverage
+
+```bash
+  cd frontend
+  npm coverage
+```
+
+### Local run frontend
+
+```bash
+  cd frontend
+  npm i
+  npm run dev #port 3000
+  #or
+  npm run local #port 5173
+```
