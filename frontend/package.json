@@ -1,90 +1,104 @@
 {
-  "name": "frontend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/index.tsx",
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "jest --coverage",
-    "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
-    "lint:fix": "eslint . --fix",
-    "prettier": "prettier --write .",
-    "jest": "jest",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^4.29.3",
-    "@tanstack/react-query-devtools": "^4.29.3",
-    "@types/node": "^18.15.11",
-    "express": "^4.18.2",
-    "formik": "^2.2.9",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^4.8.0",
-    "react-redux": "^8.0.5",
-    "react-router-dom": "^6.9.0",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
-    "web-vitals": "^3.3.1",
-    "yup": "^1.1.1"
-  },
-  "devDependencies": {
-    "@cypress/webpack-dev-server": "^3.4.1",
-    "@jest/globals": "^29.5.0",
-    "@tanstack/eslint-plugin-query": "^4.13.0",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^14.0.0",
-    "@types/jest": "^29.5.0",
-    "@types/prettier": "^2.7.2",
-    "@types/react": "^18.0.37",
-    "@types/react-dom": "^18.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.58.0",
-    "autoprefixer": "^10.4.14",
-    "cypress": "^12.6.0",
-    "eslint": "^8.36.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-import-resolver-typescript": "^3.5.3",
-    "eslint-plugin-cypress": "^2.12.1",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-jest": "^27.1.7",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-tailwindcss": "^3.11.0",
-    "jest": "^29.5.0",
-    "jest-css-modules-transform": "^4.4.2",
-    "jest-environment-jsdom": "^29.5.0",
-    "postcss": "^8.4.21",
-    "prettier": "^2.8.6",
-    "prettier-linter-helpers": "^1.0.0",
-    "prettier-plugin-tailwindcss": "^0.2.7",
-    "tailwindcss": "^3.3.1",
-    "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.1"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+    "name": "frontend",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "local": "vite",
+        "dev": "vite --port 3000 --host 0.0.0.0",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+        "lint:fix": "eslint . --fix",
+        "prettier": "prettier --write .",
+        "test": "vitest",
+        "coverage": "vitest run --coverage",
+        "cypress:open": "cypress open",
+        "cypress:run": "cypress run",
+        "prepare": "cd .. && husky install ./.husky"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "formik": "^2.2.9",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-icons": "^4.8.0",
+        "react-redux": "^8.0.5",
+        "react-router-dom": "^6.9.0",
+        "tailwindcss": "^3.3.1"
+    },
+    "devDependencies": {
+        "@tanstack/eslint-plugin-query": "^4.13.0",
+        "@tanstack/react-query": "^4.29.3",
+        "@tanstack/react-query-devtools": "^4.29.3",
+        "@testing-library/jest-dom": "^5.16.5",
+        "@testing-library/react": "^14.0.0",
+        "@types/react": "^18.0.28",
+        "@types/react-dom": "^18.0.11",
+        "@types/react-test-renderer": "^18.0.0",
+        "@types/testing-library__jest-dom": "5.14.5",
+        "@typescript-eslint/eslint-plugin": "^5.57.1",
+        "@typescript-eslint/parser": "^5.57.1",
+        "@vitejs/plugin-react": "^4.0.0-beta.0",
+        "@vitejs/plugin-react-swc": "^3.3.0",
+        "@vitest/coverage-c8": "^0.30.1",
+        "autoprefixer": "^10.4.14",
+        "cypress": "^12.6.0",
+        "eslint": "^8.39.0",
+        "eslint-config-prettier": "8.8.0",
+        "eslint-config-react-app": "^7.0.1",
+        "eslint-define-config": "^1.18.0",
+        "eslint-import-resolver-typescript": "3.5.5",
+        "eslint-plugin-cypress": "^2.12.1",
+        "eslint-plugin-import": "2.27.5",
+        "eslint-plugin-jest-dom": "^4.0.3",
+        "eslint-plugin-prettier": "^4.2.1",
+        "eslint-plugin-promise": "6.1.1",
+        "eslint-plugin-react": "^7.32.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "eslint-plugin-react-refresh": "^0.3.4",
+        "eslint-plugin-tailwindcss": "^3.11.0",
+        "husky": "8.0.3",
+        "jsdom": "^21.1.1",
+        "lint-staged": "13.2.1",
+        "postcss": "^8.4.23",
+        "postcss-flexbugs-fixes": "^5.0.2",
+        "postcss-preset-env": "^8.3.2",
+        "prettier": "2.8.7",
+        "prettier-linter-helpers": "^1.0.0",
+        "prettier-plugin-tailwindcss": "^0.2.7",
+        "typescript": "^5.0.2",
+        "vite": "^4.3.0",
+        "vite-node": "^0.30.1",
+        "vite-plugin-eslint": "^1.8.1",
+        "vite-tsconfig-paths": "^4.2.0",
+        "vitest": "^0.30.1",
+        "yup": "^1.1.1"
+    },
+    "engines": {
+        "node": ">=16.15"
+    },
+    "resolve": {
+        "mainFields": [
+            "module",
+            "main"
+        ]
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx,json,css,scss,md,mdx}": [
+            "prettier --write"
+        ]
+    }
 }

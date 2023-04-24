@@ -1,7 +1,7 @@
-import {Tooltip} from '../Tooltip';
-import {FormikHandlers} from 'formik';
-import {ReactNode, useRef, useState} from 'react';
-import {fontFormStyles} from 'utils';
+import { FormikHandlers } from 'formik';
+import { ReactNode, useRef, useState } from 'react';
+import { fontFormStyles } from '../../utils';
+import { Tooltip } from '../Tooltip';
 
 type FormElement = {
     type: string;
@@ -33,7 +33,7 @@ export function FormElement({
 
     return (
         <>
-            <div className="relative mb-4">
+            <div className='relative mb-4'>
                 <label htmlFor={name}>{name}</label>
                 <div
                     className={`flex items-center border-2 bg-gray-light p-2
@@ -43,7 +43,8 @@ export function FormElement({
                 : error
                 ? 'border-bloody'
                 : 'border-gray-dark'
-        }`}>
+        }`}
+                >
                     <input
                         type={type}
                         id={name}
@@ -51,7 +52,7 @@ export function FormElement({
                         onChange={onChange}
                         value={value}
                         placeholder={name}
-                        className="order-2 bg-gray-light outline-none"
+                        className='order-2 bg-gray-light outline-none'
                         style={{
                             fontSize: `${fontFormStyles.size}`,
                         }}
@@ -60,9 +61,10 @@ export function FormElement({
                         onFocus={() => setIsFocused(true)}
                     />
                     <span
-                        className="order-1 cursor-text px-2"
+                        className='order-1 cursor-text px-2'
                         aria-hidden
-                        onClick={focusInput}>
+                        onClick={focusInput}
+                    >
                         {icon}
                     </span>
                 </div>

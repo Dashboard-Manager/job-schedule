@@ -13,12 +13,14 @@ describe('Login form', () => {
 
     it('displays an alert message with the entered username and password if the user enters invalid credentials', () => {
         // spy on the alert function and intercept the network request
+        /* eslint-disable */
         cy.window().then((win) => {
             cy.spy(win, 'alert').as('onAlert');
         });
+        /* eslint-enable */
         cy.intercept('POST', '/login', {
             statusCode: 401,
-            body: {message: 'Invalid username or password'},
+            body: { message: 'Invalid username or password' },
         }).as('loginRequest');
 
         cy.get('[name="username"]').type(user_data.username);

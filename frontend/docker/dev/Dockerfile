@@ -1,4 +1,3 @@
-# Stage 1: Build frontend code
 FROM node:19-alpine as build
 
 ARG APP_DIR=/app
@@ -13,4 +12,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
