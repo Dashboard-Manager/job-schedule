@@ -15,6 +15,7 @@
         "coverage": "vitest run --coverage",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
+        "pre-commit": "lint-staged",
         "prepare": "cd .. && husky install ./.husky"
     },
     "dependencies": {
