@@ -1,30 +1,39 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "lib": ["dom", "dom.iterable", "es6"],
-    "types": ["node", "jest", "@testing-library/jest-dom"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "es6",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "baseUrl": "src"
-  },
-  "include": ["./jest-setup.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
-  "exclude": ["node_modules", "cypress.config.ts"],
-  "ts-node": {
-    "transpileOnly": true,
-    "files": true,
     "compilerOptions": {
-      "rootDir": "."
-    }
-  }
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "lib": ["DOM", "DOM.Iterable", "ESNext"],
+        "allowJs": false,
+        "skipLibCheck": true,
+        "esModuleInterop": false,
+        "allowSyntheticDefaultImports": true,
+        "strict": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "ESNext",
+        "moduleResolution": "Node",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "types": ["vitest/globals"],
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["./src/*", "./dist/*", ""],
+            "pages/*": ["src/pages/*"],
+            "components/*": ["src/components/*"],
+            "schemas/*": ["src/schemas/*"],
+            "utils/*": ["src/utils/*"],
+            "types/*": ["src/@types/*"],
+            "public/*": ["public/*"]
+        }
+    },
+    "include": ["src"],
+    "optimizeDeps": {
+        "include": ["@testing-library/jest-dom"]
+    },
+    "references": [
+        {
+            "path": "./tsconfig.node.json"
+        }
+    ]
 }

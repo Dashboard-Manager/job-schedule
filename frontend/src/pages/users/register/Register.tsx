@@ -1,14 +1,14 @@
-import {Button} from 'components/Button';
-import {DescriptionTypography} from 'components/DescriptionTypography';
-import {Board} from 'components/Form/Board';
-import {FormElement} from 'components/Form/FormElement';
-import {useFormik} from 'formik';
-import {Link} from 'react-router-dom';
-import {formSchema} from 'schemas';
-import {FormElements} from 'utils';
+import { Button } from 'components/Button';
+import { DescriptionTypography } from 'components/DescriptionTypography';
+import { Board } from 'components/Form/Board';
+import { FormElement } from 'components/Form/FormElement';
+import { useFormik } from 'formik';
+import { Link } from 'react-router-dom';
+import { formSchema } from 'schemas/index';
+import { FormElements } from 'utils/index';
 
 function Register() {
-    const {errors, handleChange, handleSubmit, touched, values} = useFormik({
+    const { errors, handleChange, handleSubmit, touched, values } = useFormik({
         initialValues: {
             name: '',
             username: '',
@@ -19,9 +19,9 @@ function Register() {
     });
 
     return (
-        <div className="flex h-[100vh] w-[100vw] items-center justify-center bg-black-bg">
+        <div className='flex·h-[100vh]·w-[100vw]·items-center·justify-center·bg-black-bg'>
             <Board>
-                <h1 className="mb-2 text-center text-4xl font-bold">
+                <h1 className='mb-2 text-center text-4xl font-bold'>
                     Register
                 </h1>
                 <DescriptionTypography>
@@ -45,13 +45,13 @@ function Register() {
                             />
                         );
                     })}
-                    <div className="mb-2 mt-8 text-center">
-                        <Button type="submit">Register</Button>
+                    <div className='mb-2 mt-8 text-center'>
+                        <Button type='submit'>Register</Button>
                     </div>
                 </form>
                 <DescriptionTypography>
                     Already have an account?{' '}
-                    <Link className="text-success" to="/login">
+                    <Link className='text-success' to='/login'>
                         Log in.
                     </Link>{' '}
                 </DescriptionTypography>

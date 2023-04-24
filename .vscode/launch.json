@@ -23,17 +23,14 @@
       "preLaunchTask": "npm: start"
     },
     {
-      "name": "Run Jest",
+      "name": "Run Vitest",
       "type": "node",
       "request": "launch",
-      "runtimeExecutable": "${workspaceRoot}/frontend/node_modules/.bin/jest",
+      "runtimeExecutable": "${workspaceRoot}/frontend/node_modules/.bin/vitest",
       "args": [
-        "test",
-        "--runInBand",
-        "--no-cache",
-        "--watchAll=false"
+        "--coverage"
       ],
-      "cwd": "${workspaceRoot}/frontend/",
+      "cwd": "${workspaceRoot}/frontend/src/tests",
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "env": {

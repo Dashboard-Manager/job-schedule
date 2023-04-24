@@ -9,7 +9,6 @@
 /coverage
 /cypress/videos/
 
-
 # production
 /build
 
