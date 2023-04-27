@@ -1,15 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-    content: ['./src/**/*.{js,ts,jsx,tsx}'],
+    content: ['./src/**/*.{ts,tsx}'],
     theme: {
         fontFamily: {
             sans: ['Open Sans', 'sans-serif'],
         },
         extend: {
-            backgroundImage: {
-                user: 'url("https://svgshare.com/i/sAi.svg")',
-            },
             colors: {
                 'black-bg': '#12181b',
                 'gray-dark': '#2a2e35',

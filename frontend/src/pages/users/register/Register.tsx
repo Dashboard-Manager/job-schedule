@@ -19,7 +19,7 @@ function Register() {
     });
 
     return (
-        <div className='flex·h-[100vh]·w-[100vw]·items-center·justify-center·bg-black-bg'>
+        <div className='flex h-[100vh] w-[100vw] items-center justify-center bg-black-bg text-white-text'>
             <Board>
                 <h1 className='mb-2 text-center text-4xl font-bold'>
                     Register

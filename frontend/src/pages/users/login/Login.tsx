@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import { Link } from 'react-router-dom';
 import { FormElements } from 'utils/index';
 
-function Login() {
+export function Login() {
     const { handleChange, handleSubmit, values } = useFormik({
         initialValues: {
             name: '',
@@ -19,7 +19,7 @@ function Login() {
     });
 
     return (
-        <div className='flex·h-[100vh]·w-[100vw]·items-center·justify-center·bg-black-bg'>
+        <div className='flex h-[100vh] w-[100vw] items-center justify-center bg-black-bg text-white-text'>
             <Board>
                 <h1 className='mb-2 text-center text-4xl font-bold'>Login</h1>
                 <DescriptionTypography>
@@ -55,5 +55,3 @@ function Login() {
         </div>
     );
 }
-
-export default Login;
