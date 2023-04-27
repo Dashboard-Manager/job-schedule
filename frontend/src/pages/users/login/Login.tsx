@@ -11,15 +11,15 @@ export function Login() {
         initialValues: {
             name: '',
             username: '',
-            password: '',
+            password: ''
         },
         onSubmit: (values) => {
             alert(JSON.stringify(values, null, 2));
-        },
+        }
     });
 
     return (
-        <div className='flex h-[100vh] w-[100vw] items-center justify-center bg-black-bg text-white-text'>
+        <div className='bg-black-bg text-white-text flex h-[100vh] w-[100vw] items-center justify-center'>
             <Board>
                 <h1 className='mb-2 text-center text-4xl font-bold'>Login</h1>
                 <DescriptionTypography>

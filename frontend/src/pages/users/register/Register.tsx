@@ -12,14 +12,14 @@ function Register() {
         initialValues: {
             name: '',
             username: '',
-            password: '',
+            password: ''
         },
         validationSchema: formSchema,
-        onSubmit: () => console.log('submitted'),
+        onSubmit: () => console.log('submitted')
     });
 
     return (
-        <div className='flex h-[100vh] w-[100vw] items-center justify-center bg-black-bg text-white-text'>
+        <div className='bg-black-bg text-white-text flex h-[100vh] w-[100vw] items-center justify-center'>
             <Board>
                 <h1 className='mb-2 text-center text-4xl font-bold'>
                     Register

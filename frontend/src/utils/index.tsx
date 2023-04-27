@@ -2,7 +2,7 @@ import { FaLock, FaUserAlt } from 'react-icons/fa';
 import { MdAlternateEmail } from 'react-icons/md';
 
 export const fontFormStyles = {
-    size: '1.1em',
+    size: '1.1em'
 };
 
 export const FormElements = {
@@ -11,7 +11,7 @@ export const FormElements = {
             id: 1,
             type: 'text',
             name: 'name',
-            icon: <FaUserAlt color='#498afb' size={`${fontFormStyles.size}`} />,
+            icon: <FaUserAlt color='#498afb' size={`${fontFormStyles.size}`} />
         },
         {
             id: 2,
@@ -22,14 +22,14 @@ export const FormElements = {
                     color='#9166cc'
                     size={`${fontFormStyles.size}`}
                 />
-            ),
+            )
         },
         {
             id: 3,
             type: 'password',
             name: 'password',
-            icon: <FaLock color='#fa8142' size={`${fontFormStyles.size}`} />,
-        },
+            icon: <FaLock color='#fa8142' size={`${fontFormStyles.size}`} />
+        }
     ],
     LoginPage: [
         {
@@ -41,13 +41,13 @@ export const FormElements = {
                     color='#9166cc'
                     size={`${fontFormStyles.size}`}
                 />
-            ),
+            )
         },
         {
             id: 2,
             type: 'password',
             name: 'password',
-            icon: <FaLock color='#fa8142' size={`${fontFormStyles.size}`} />,
-        },
-    ],
+            icon: <FaLock color='#fa8142' size={`${fontFormStyles.size}`} />
+        }
+    ]
 };

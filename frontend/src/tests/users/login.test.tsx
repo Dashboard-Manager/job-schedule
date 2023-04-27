@@ -1,4 +1,4 @@
-import Login from '../../pages/users/login/Login';
+import { Login } from 'pages/users/login/Login';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 

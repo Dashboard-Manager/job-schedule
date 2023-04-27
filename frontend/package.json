@@ -9,7 +9,7 @@
         "build": "tsc && vite build",
         "preview": "vite preview",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-        "lint:fix": "npx eslint src/*/.{js,jsx,ts,tsx} --fix",
+        "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
         "prettier": "npx prettier --write src/*.{ts,tsx}",
         "test": "vitest",
         "coverage": "vitest run --coverage",
@@ -26,7 +26,6 @@
         "react-icons": "^4.8.0",
         "react-redux": "^8.0.5",
         "react-router-dom": "^6.9.0",
-        "tailwindcss": "^3.3.1",
         "vite": "^4.3.0"
     },
     "devDependencies": {
@@ -47,7 +46,7 @@
         "autoprefixer": "^10.4.14",
         "cypress": "^12.6.0",
         "eslint": "^8.39.0",
-        "eslint-config-prettier": "8.8.0",
+        "eslint-config-prettier": "^8.8.0",
         "eslint-config-react-app": "^7.0.1",
         "eslint-define-config": "^1.20.0",
         "eslint-import-resolver-typescript": "3.5.5",
@@ -69,6 +68,7 @@
         "prettier": "2.8.7",
         "prettier-linter-helpers": "^1.0.0",
         "prettier-plugin-tailwindcss": "^0.2.7",
+        "tailwindcss": "^3.3.2",
         "typescript": "^5.0.2",
         "vite-node": "^0.30.1",
         "vite-plugin-eslint": "^1.8.1",
@@ -98,8 +98,18 @@
         ]
     },
     "lint-staged": {
-        "*.{js,jsx,ts,tsx,json,css,scss,md,mdx}": [
-            "prettier --write"
+        "*.{ts,tsx}": [
+            "prettier . --write"
         ]
+    },
+    "postcss": {
+      "plugins": {
+          "postcss-flexbugs-fixes": {},
+          "postcss-nested": {},
+          "postcss-preset-env": {},
+          "tailwindcss": {
+            "config" : "./tailwind.config.json"
+          }
+      }
     }
 }

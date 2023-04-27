@@ -2,3 +2,5 @@ build
 coverage
 docker
 node_modules
+node_modules/**
+dist
