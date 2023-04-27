@@ -26,7 +26,7 @@
             "public/*": ["public/*"]
         }
     },
-    "include": ["src"],
+    "include": ["src", "tests", "vite.config.ts"],
     "exclude": ["node_modules", "dist"],
     "optimizeDeps": {
         "include": ["@testing-library/jest-dom"]
