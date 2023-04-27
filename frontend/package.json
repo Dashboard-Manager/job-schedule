@@ -10,8 +10,7 @@
         "preview": "vite preview",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "npx eslint src/*/.{js,jsx,ts,tsx} --fix",
-        "prettier": "npx prettier --write src/*.{ts,tsx}"
-        ,
+        "prettier": "npx prettier --write src/*.{ts,tsx}",
         "test": "vitest",
         "coverage": "vitest run --coverage",
         "cypress:open": "cypress open",
