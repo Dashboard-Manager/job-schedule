@@ -10,7 +10,7 @@
         "preview": "vite preview",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
         "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
-        "prettier": "npx prettier --write src/*.{ts,tsx}",
+        "prettier": "npx prettier --write \"src/**/*.{ts,tsx,test}.{ts,tsx}\"",
         "test": "vitest",
         "coverage": "vitest run --coverage",
         "cypress:open": "cypress open",
@@ -37,7 +37,7 @@
         "@types/react": "^18.0.28",
         "@types/react-dom": "^18.0.11",
         "@types/react-test-renderer": "^18.0.0",
-        "@types/testing-library__jest-dom": "5.14.5",
+        "@types/testing-library__jest-dom": "^5.14.5",
         "@typescript-eslint/eslint-plugin": "^5.57.1",
         "@typescript-eslint/parser": "^5.57.1",
         "@vitejs/plugin-react": "^4.0.0-beta.0",
@@ -98,18 +98,18 @@
         ]
     },
     "lint-staged": {
-        "*.{ts,tsx}": [
+        "*.{ts,tsx,test}.{ts,tsx}": [
             "prettier . --write"
         ]
     },
     "postcss": {
-      "plugins": {
-          "postcss-flexbugs-fixes": {},
-          "postcss-nested": {},
-          "postcss-preset-env": {},
-          "tailwindcss": {
-            "config" : "./tailwind.config.json"
-          }
-      }
+        "plugins": {
+            "postcss-flexbugs-fixes": {},
+            "postcss-nested": {},
+            "postcss-preset-env": {},
+            "tailwindcss": {
+                "config": "./tailwind.config.json"
+            }
+        }
     }
 }
