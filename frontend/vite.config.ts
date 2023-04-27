@@ -10,9 +10,9 @@ export default defineConfig({
     test: {
         globals: true,
         environment: 'jsdom',
-        setupFiles: './src/globalVitestImports.tsx',
+        setupFiles: './src/vitest-setup.tsx',
         coverage: {
-            reportsDirectory: './coverage/',
+            reportsDirectory: '../coverage/',
             provider: 'c8',
         },
     },
