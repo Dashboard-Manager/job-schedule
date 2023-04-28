@@ -19,33 +19,8 @@ on:
             - master
             - 50-github-actions-tests
 jobs:
-    dev:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                python-version: ["3.10.7"]
-                poetry-version: ["1.3.2"]
-        steps:
-            - name: Checkout Code Repository
-              uses: actions/checkout@v3
-            - name: Setup Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v4
-              with:
-                  python-version: ${{ matrix.python-version }}
-                  architecture: x64
-            - name: Setup poetry ${{ matrix.poetry-version }}
-              shell: bash
-              run: pipx install poetry==${{ matrix.poetry-version }}
-            - name: Install poetry ${{ matrix.poetry-version }}
-              shell: bash
-              run: |
-                  cd backend
-                  poetry export --with production --with dev -f requirements.txt --output requirements.txt
-                  pip install -r requirements.txt
-
     docker:
         runs-on: ubuntu-latest
-        needs: dev
         steps:
             - name: Checkout Code Repository
               uses: actions/checkout@v3

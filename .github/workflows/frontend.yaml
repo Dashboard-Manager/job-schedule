@@ -48,11 +48,19 @@ jobs:
                   browser: chrome
                   working-directory: frontend
 
-    vitest-coverage-run:
+    vitest-tests:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v3
-            - name: Vitest Run
+            - name: Vitest
+              run: docker-compose run frontend sh -c 'npm run vite'
+            - name: Vitest Coverage
               run: docker-compose run frontend sh -c 'npm run coverage'
+            - name: Prettier
+              run: docker-compose run frontend sh -c 'npm run prettier'
+            - name: Lint
+              run: docker-compose run frontend sh -c 'npm run lint'
+            - name: Lint-fix
+              run: docker-compose run frontend sh -c 'npm run lint:fix'
 
