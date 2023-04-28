@@ -23,13 +23,14 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Setup Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v4
+              uses: actions/setup-python@v3
               with:
                   python-version: ${{ matrix.python-version }}
                   architecture: x64
+                  cache: 'pip'
             - name: Setup poetry ${{ matrix.poetry-version }}
               shell: bash
-              run: pipx install poetry==${{ matrix.poetry-version }}
+              run: pip install poetry==${{ matrix.poetry-version }} --no-cache-dir
             - name: Install poetry ${{ matrix.poetry-version }}
               shell: bash
               run: |
@@ -44,7 +45,7 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Build the Stack
-              run: docker-compose build
+              run: docker-compose -f docker-compose.yml build django postgres redis celery_worker celery_beat flower
             - name: Run DB Migrations
               run: docker-compose run --rm django python manage.py migrate
 
@@ -76,8 +77,15 @@ jobs:
             - name: Checkout mypy
               run: docker-compose run django mypy . --config-file mypy.ini
 
+    vite:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Build frontend
+              run: docker-compose up frontend --build
+
     cypress-run:
         runs-on: ubuntu-latest
+        needs: vite
         container:
             image: cypress/browsers
             options: --user 1001
@@ -87,11 +95,12 @@ jobs:
             - name: Cypress run
               uses: cypress-io/github-action@v5.0.2
               with:
-                  browser: chrome
+                  browser: firefox
                   working-directory: frontend
+
     vitest-coverage-run:
         runs-on: ubuntu-latest
-        needs: django
+        needs: vite
         steps:
             - name: Checkout
               uses: actions/checkout@v3
