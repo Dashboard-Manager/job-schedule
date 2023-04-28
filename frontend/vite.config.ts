@@ -23,8 +23,12 @@ export default defineConfig({
         setupFiles: './vitest-setup.tsx',
         environment: 'jsdom',
         coverage: {
-            reportsDirectory: '../coverage/',
-            provider: 'c8'
+            lines: 60,
+            branches: 60,
+            functions: 60,
+            statements: 60,
+            provider: 'c8',
+            reporter: ['text', 'json-summary', 'json']
         }
     },
     server: {

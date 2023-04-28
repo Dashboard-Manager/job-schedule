@@ -1,0 +1,65 @@
+name: frontend-example
+
+env:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+    pull_request:
+        branches:
+            - main
+            - develop
+            - master
+
+    push:
+        branches:
+            - main
+            - develop
+            - master
+jobs:
+    cypress-e2e:
+        runs-on: ubuntu-latest
+        container:
+            image: cypress/browsers
+            options: --user 1001
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Cypress run
+              uses: cypress-io/github-action@v5
+              with:
+                  browser: chrome
+                  build: npm run build
+                  start: npm run dev
+                  working-directory: frontend
+
+    vitest-tests:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pull-requests: write
+        defaults:
+            run:
+                working-directory: ./frontend
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+            - name: Vitest install
+              run: npm i
+            - name: Vitest build
+              run: npm run build
+            - name: Prettier
+              run: npm run prettier
+            - name: Lint
+              run: npm run lint
+            - name: Lint-fix
+              run: npm run lint:fix
+            - name: Vitest Coverage
+              run: npm run coverage
+            - name: Report Coverage
+              if: always()
+              uses: davelosert/vitest-coverage-report-action@v1
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  working-directory: frontend
+
