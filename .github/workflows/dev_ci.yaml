@@ -96,7 +96,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Cypress run
-              uses: cypress-io/github-action@v5.0.2
+              uses: cypress-io/github-action@v5
               with:
                   browser: chrome
                   working-directory: frontend
@@ -108,5 +108,5 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Vitest run
-              uses: docker-compose run frontend sh -c 'npm run coverage'
+              run: docker-compose run frontend sh -c 'npm run coverage'
 
