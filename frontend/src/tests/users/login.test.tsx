@@ -1,5 +1,5 @@
-import { Login } from 'pages/users/login/Login';
 import { render, screen } from '@testing-library/react';
+import { Login } from 'pages/users/login/Login';
 import { BrowserRouter } from 'react-router-dom';
 
 describe('Login component', () => {
