@@ -23,14 +23,13 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Setup Python ${{ matrix.python-version }}
-              uses: actions/setup-python@v3
+              uses: actions/setup-python@v4
               with:
                   python-version: ${{ matrix.python-version }}
                   architecture: x64
-                  cache: 'pip'
             - name: Setup poetry ${{ matrix.poetry-version }}
               shell: bash
-              run: pip install poetry==${{ matrix.poetry-version }} --no-cache-dir
+              run: pipx install poetry==${{ matrix.poetry-version }}
             - name: Install poetry ${{ matrix.poetry-version }}
               shell: bash
               run: |
@@ -38,14 +37,18 @@ jobs:
                   poetry export --with production --with dev -f requirements.txt --output requirements.txt
                   pip install -r requirements.txt
 
-    django:
+    docker:
         runs-on: ubuntu-latest
-        needs: dev
         steps:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Build the Stack
-              run: docker-compose -f docker-compose.yml build django postgres redis celery_worker celery_beat flower
+              run: docker-compose build
+
+    django:
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
             - name: Run DB Migrations
               run: docker-compose run --rm django python manage.py migrate
 
@@ -79,13 +82,13 @@ jobs:
 
     vite:
         runs-on: ubuntu-latest
+        needs: docker
         steps:
-            - name: Build frontend
-              run: docker-compose up frontend --build
+            - name: Run frontend
+              run: docker-compose run --rm frontend
 
     cypress-run:
         runs-on: ubuntu-latest
-        needs: vite
         container:
             image: cypress/browsers
             options: --user 1001
@@ -95,12 +98,12 @@ jobs:
             - name: Cypress run
               uses: cypress-io/github-action@v5.0.2
               with:
-                  browser: firefox
+                  browser: chrome
                   working-directory: frontend
 
     vitest-coverage-run:
         runs-on: ubuntu-latest
-        needs: vite
+        needs: django
         steps:
             - name: Checkout
               uses: actions/checkout@v3
