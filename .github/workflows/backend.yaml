@@ -29,7 +29,7 @@ jobs:
 
     django:
         runs-on: ubuntu-latest
-        needs: [dev, docker]
+        needs: docker
         steps:
             - name: Run DB Migrations
               run: docker-compose run --rm django python manage.py migrate
