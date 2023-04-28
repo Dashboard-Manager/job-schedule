@@ -32,7 +32,7 @@ jobs:
         needs: docker
         steps:
             - name: Run DB Migrations
-              run: docker-compose run --rm django python manage.py migrate
+              run: docker-compose -f docker-compose.yml run --rm django python manage.py migrate
 
     pytest:
         runs-on: ubuntu-latest
@@ -41,9 +41,9 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Run Django Tests
-              run: docker-compose run django coverage run -m pytest
+              run: docker-compose -f docker-compose.yml run django coverage run -m pytest
             - name: Generate coverage.lcov
-              run: docker-compose run django coverage lcov
+              run: docker-compose -f docker-compose.yml run django coverage lcov
             - name: Tear down the Stack
               run: docker-compose down
             - name: Coveralls GitHub Action
@@ -60,4 +60,4 @@ jobs:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Checkout mypy
-              run: docker-compose run django mypy . --config-file mypy.ini
+              run: docker-compose -f docker-compose.yml run django mypy . --config-file mypy.ini
