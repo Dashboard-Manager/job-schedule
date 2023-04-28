@@ -1,4 +1,4 @@
-name: CI
+name: frontend-example
 
 env:
     DOCKER_BUILDKIT: 1
@@ -6,11 +6,16 @@ env:
 
 on:
     pull_request:
-        branches: ["main", "develop"]
+        branches:
+            - main
+            - develop
+            - master
 
     push:
-        branches: ["main", "develop"]
-
+        branches:
+            - main
+            - develop
+            - master
 jobs:
     docker:
         runs-on: ubuntu-latest

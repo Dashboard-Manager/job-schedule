@@ -7,11 +7,16 @@
 #
 #on:
 #    pull_request:
-#        branches: ["main", "develop"]
+#        branches:
+#            - main
+#            - develop
+#            - master
 #
 #    push:
-#        branches: ["main", "develop"]
-#
+#        branches:
+#            - main
+#            - develop
+#            - master
 #jobs:
 #    dev:
 #        runs-on: ubuntu-latest
