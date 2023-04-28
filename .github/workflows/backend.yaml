@@ -19,18 +19,13 @@ on:
             - master
             - 50-github-actions-tests
 jobs:
-    docker:
+    django:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Build the Stack
               run: docker-compose build
-
-    django:
-        runs-on: ubuntu-latest
-        needs: docker
-        steps:
             - name: Run DB Migrations
               run: docker-compose run --rm django python manage.py migrate
 
