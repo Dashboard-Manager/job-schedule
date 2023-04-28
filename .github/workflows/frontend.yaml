@@ -32,10 +32,11 @@ jobs:
         needs: docker
         steps:
             - name: Run frontend
-              run: docker-compose -f docker-compose.yml run --rm frontend
+              run: docker-compose run frontend
 
     cypress-run:
         runs-on: ubuntu-latest
+        needs: vite
         container:
             image: cypress/browsers
             options: --user 1001
@@ -50,17 +51,18 @@ jobs:
 
     vitest-tests:
         runs-on: ubuntu-latest
+        needs: vite
         steps:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Vitest
-              run: docker-compose -f docker-compose.yml run frontend sh -c 'npm run vite'
+              run: docker-compose run frontend sh -c 'npm run vite'
             - name: Vitest Coverage
-              run: docker-compose -f docker-compose.yml run frontend sh -c 'npm run coverage'
+              run: docker-compose run frontend sh -c 'npm run coverage'
             - name: Prettier
-              run: docker-compose -f docker-compose.yml run frontend sh -c 'npm run prettier'
+              run: docker-compose run frontend sh -c 'npm run prettier'
             - name: Lint
-              run: docker-compose -f docker-compose.yml run frontend sh -c 'npm run lint'
+              run: docker-compose run frontend sh -c 'npm run lint'
             - name: Lint-fix
-              run: docker-compose -f docker-compose.yml run frontend sh -c 'npm run lint:fix'
+              run: docker-compose run frontend sh -c 'npm run lint:fix'
 
