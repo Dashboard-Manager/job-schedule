@@ -19,7 +19,7 @@ on:
             - master
             - 50-github-actions-tests
 jobs:
-    docker:
+    vite:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code Repository
