@@ -1,21 +1,25 @@
  <!-- markdownlint-disable MD033 MD022 MD001 MD041 -->
-| Apps | Results |
-| ----------- | ----------- |
+
+| Apps       | Results                                                                                                                                                                                        |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | pre-commit | [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/Dashboard-Manager/job-schedule/main.svg)](https://results.pre-commit.ci/latest/github/Dashboard-Manager/job-schedule/main) |
-| coverage | [![Coverage Status](https://coveralls.io/repos/github/Dashboard-Manager/job-schedule/badge.svg?branch=main)](https://coveralls.io/github/Dashboard-Manager/job-schedule?branch=main) |
+| coverage   | [![Coverage Status](https://coveralls.io/repos/github/Dashboard-Manager/job-schedule/badge.svg?branch=main)](https://coveralls.io/github/Dashboard-Manager/job-schedule?branch=main)           |
 
 # Job-schedule
+
 The project presents interactiv dashboard for managing the enterprise, employees, budget and statistics.
 
 ### Needed to install
-| Program | Version | Links |
-| ----------- | ----------- | ----------- |
-| Python | 3.11.1 | [link](https://www.python.org/downloads/) |
-| Docker | 20.10.22 | [link](https://docs.docker.com/compose/install/) |
-| Poetry | 1.3.2 | [link](https://python-poetry.org/docs/#installation) |
-| Node.js | 9.5.21 | [link](https://nodejs.org/en/) |
-| PostgreSQL | 15.1 | [link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) |
-| DBeaver | 22.3.4 | [link](https://dbeaver.io/download)
+
+| Program    | Version  | Links                                                                        |
+| ---------- | -------- | ---------------------------------------------------------------------------- |
+| Python     | 3.11.1   | [link](https://www.python.org/downloads/)                                    |
+| Docker     | 20.10.22 | [link](https://docs.docker.com/compose/install/)                             |
+| Poetry     | 1.3.2    | [link](https://python-poetry.org/docs/#installation)                         |
+| Node.js    | 9.5.21   | [link](https://nodejs.org/en/)                                               |
+| PostgreSQL | 15.1     | [link](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads) |
+| DBeaver    | 22.3.4   | [link](https://dbeaver.io/download)                                          |
+
 ### Clone the project
 
 ```bash
@@ -28,48 +32,26 @@ The project presents interactiv dashboard for managing the enterprise, employees
   docker-compose up --build
 ```
 
-# Local
-If you need install some new dependencies, do it like this:
-
-### Install backend packages
+### Run only one django container
 
 ```bash
-  # you can use version-number or latest
-  cd backend
-  poetry install <package-name>@latest
-  poetry export --with production --with dev -f requirements.txt --output requirements.txt
+  #run only django
+  docker-compose up <container-name> --build
+  # names you can use in project:
+  # postgres, django, redis, frontend, celery_worker, celery_beat, flower
+
 ```
 
-### Install frontend installation
-
-```bash
-  # you can use version-number or latest
-  cd frontend
-  npm install <package-name>@latest
-```
-
-If you install some new dependencies, again build app.
-
-```bash
-  docker-compose up --build
-```
-
-## Local install only postgres
+## install only postgres
 
 To your connection in Dbeaver or other you use:
 
 ```yaml
-  Host: localhost
-  Port: 5433
-  Database: job-schedule
-  Username: job-schedule
-  Password: django-app
-```
-
-Build postgres database and run connections
-
-```bash
-  docker-compose up postgres --build
+Host: localhost
+Port: 5433
+Database: job-schedule
+Username: job-schedule
+Password: django-app
 ```
 
 To navigate if database is builded
@@ -81,41 +63,38 @@ To navigate if database is builded
   docker-compose stop postgres
 ```
 
-### Backend makemigrations app
+# Packages
+
+### Install backend packages
 
 ```bash
-  # remove migration
-  rm -rf backend/apps/<app>/migrations/
-  # use if django don't stand up
-  docker-compose run --rm django sh -c "python manage.py makemigrations <app-name>"
-  # use when django is running
-  docker-compose exec -it django sh -c "python manage.py makemigrations <app-name>"
-  # if you got "No changes detected in app '<app-name>'"
-  # and you dont have makemigrations folder in your app
-  docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
-  # if you need you can remove postgres database
-  docker volume rm job_schedule_postgres_data
-  # remeber you can connect commands like remove migrations and add changes in one step
-  rm -rf backend/apps/<app>/migrations/ && docker-compose run --rm django python manage.py makemigrations <app-name>
+  # you can use version-number or latest
+  cd backend
+  poetry install <package-name>@latest
+  # or
+  poetry install <package-name>@latest --dev
+  poetry export --with production --with dev -f requirements.txt --output requirements.txt
 ```
 
-## Deployment
-
-### Run only backend
+### Install frontend packages
 
 ```bash
-  docker-compose up django
+  # you can use version-number or latest
+  cd frontend
+  npm i <package-name>@latest
+  # or
+  npm i <package-name>@latest --save-dev
+  npm i # to install all frontend dependencies
 ```
 
-### Run only frontend
+If you install some new dependencies, again build app.
 
 ```bash
-  docker-compose up frontend
+  docker-compose up frontend --build # to build only frontend package
+  docker-compose up --build # to build full api
 ```
 
-# for Develop
-
-## Backend
+## Backend Django
 
 ### Create app in apps
 
@@ -141,6 +120,28 @@ The next you need do some steps with app
   in config/urls.py add path("api/<app-name>/", include("apps.<app-name>.urls")),
 ```
 
+### Makemigrations app
+
+```bash
+  # remove migration
+  rm -rf backend/apps/<app>/migrations/
+  # use if django don't stand up
+  docker-compose run --rm django sh -c "python manage.py makemigrations <app-name>"
+  # use when django is running
+  docker-compose exec -it django sh -c "python manage.py makemigrations <app-name>"
+  # if you got "No changes detected in app '<app-name>'"
+  # and you dont have makemigrations folder in your app
+  docker-compose run --rm django sh -c "python manage.py makemigrations --empty <app-name>"
+  # if you need you can remove postgres database
+  docker volume rm job_schedule_postgres_data
+  # remeber you can connect commands like remove migrations and add changes in one step
+  rm -rf backend/apps/<app>/migrations/ && docker-compose run --rm django python manage.py makemigrations <app-name>
+```
+
+# Testing
+
+## Backend tests
+
 ### Run tests and linters after deployment app
 
 ```bash
@@ -149,7 +150,7 @@ The next you need do some steps with app
   docker-compose exec -it django bash -c "docker/debug/run.sh"
 ```
 
-Run one test only
+Run one test or linter only
 
 ```bash
   # pytest
@@ -177,3 +178,48 @@ then you are logged in container as root:
 ```
 
 and do this same commands
+
+## Frontend tests
+
+### Functional tests with cypress and e2e
+
+For functional tests you do:
+
+```bash
+  cd frontend
+  npm run cypress:open
+```
+
+and then chose e2e tests
+or
+
+```bash
+  cd frontend
+  npm run cypress:run
+```
+
+### Integration tests
+
+For integration tests, you can use two ways:
+
+```bash
+  cd frontend
+  npm test
+```
+
+or with coverage
+
+```bash
+  cd frontend
+  npm coverage
+```
+
+### Local run frontend
+
+```bash
+  cd frontend
+  npm i
+  npm run dev #port 3000
+  #or
+  npm run local #port 5173
+```

@@ -7,12 +7,35 @@
       "request": "attach",
       "pathMappings": [
         {
-          "localRoot": "${workspaceFolder}/backend/",
+          "localRoot": "${workspaceRoot}/backend/",
           "remoteRoot": "/src/"
         }
       ],
       "port": 7777,
       "host": "127.0.0.1",
+    },
+    {
+      "name": "Run Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceRoot}/frontend/",
+      "preLaunchTask": "npm: start"
+    },
+    {
+      "name": "Run Vitest",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/frontend/node_modules/.bin/vitest",
+      "args": [
+        "--coverage"
+      ],
+      "cwd": "${workspaceRoot}/frontend/src/tests",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "CI": "true"
+      },
     }
   ]
 }
