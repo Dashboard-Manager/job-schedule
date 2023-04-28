@@ -10,12 +10,14 @@ on:
             - main
             - develop
             - master
+            - 50-github-actions-tests
 
     push:
         branches:
             - main
             - develop
             - master
+            - 50-github-actions-tests
 jobs:
     dev:
         runs-on: ubuntu-latest
