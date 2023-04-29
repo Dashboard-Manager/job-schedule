@@ -25,7 +25,7 @@ export default defineConfig({
         coverage: {
             reportsDirectory: '../coverage/',
             provider: 'c8',
-            reporter: ['text', 'json-summary', 'json'],
+            reporter: ['text', 'json-summary', 'json']
         }
     },
     server: {
