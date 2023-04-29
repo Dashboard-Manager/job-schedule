@@ -28,7 +28,7 @@ export default defineConfig({
             functions: 60,
             statements: 60,
             provider: 'c8',
-            reporter: ['text', 'json-summary', 'json']
+            reporter: ['text', 'json-summary', 'json', 'lcov']
         }
     },
     server: {
