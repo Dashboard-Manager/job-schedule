@@ -31,7 +31,6 @@ jobs:
 
     cypress-e2e:
         runs-on: ubuntu-latest
-        needs: vite
         container:
             image: cypress/browsers
             options: --user 1001
@@ -42,7 +41,8 @@ jobs:
               uses: cypress-io/github-action@v5
               with:
                   browser: chrome
-                  start: docker-compose run --rm frontend npm run dev
+                  build: npm run build
+                  start: npm run dev
                   working-directory: frontend
 
     vitest-tests:
@@ -52,7 +52,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v3
             - name: Vitest
-              run: docker-compose run frontend sh -c 'npm run vite'
+              run: docker-compose run frontend sh -c 'npm run dev'
             - name: Vitest Coverage
               run: docker-compose run frontend sh -c 'npm run coverage'
             - name: Prettier
