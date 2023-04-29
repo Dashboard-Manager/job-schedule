@@ -19,16 +19,6 @@ on:
             - master
             - 50-github-actions-tests
 jobs:
-    vite:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Code Repository
-              uses: actions/checkout@v3
-            - name: Build the Stack
-              run: docker-compose build
-            - name: Tear down the Stack
-              run:  docker-compose down
-
     cypress-e2e:
         runs-on: ubuntu-latest
         container:
@@ -47,18 +37,22 @@ jobs:
 
     vitest-tests:
         runs-on: ubuntu-latest
-        needs: vite
+        defaults:
+            run:
+                working-directory: ./frontend
         steps:
             - name: Checkout
               uses: actions/checkout@v3
-            - name: Vitest
-              run: docker-compose run frontend sh -c 'npm run dev'
+            - name: Vitest install
+              run: npm i
+            - name: Vitest build
+              run: npm run build
             - name: Vitest Coverage
-              run: docker-compose run frontend sh -c 'npm run coverage'
+              run: npm run coverage
             - name: Prettier
-              run: docker-compose run frontend sh -c 'npm run prettier'
+              run: npm run prettier
             - name: Lint
-              run: docker-compose run frontend sh -c 'npm run lint'
+              run: npm run lint
             - name: Lint-fix
-              run: docker-compose run frontend sh -c 'npm run lint:fix'
+              run: npm run lint:fix
 
