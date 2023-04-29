@@ -19,16 +19,6 @@ on:
             - master
             - 50-github-actions-tests
 jobs:
-    vite:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout Code Repository
-              uses: actions/checkout@v3
-            - name: Build the Stack
-              run: docker-compose build
-            - name: Tear down the Stack
-              run:  docker-compose down
-
     cypress-e2e:
         runs-on: ubuntu-latest
         container:
