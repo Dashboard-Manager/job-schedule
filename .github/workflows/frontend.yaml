@@ -64,3 +64,6 @@ jobs:
                   working-directory: frontend
             - name: Coveralls
               uses: coverallsapp/github-action@v2
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  working-directory: frontend
