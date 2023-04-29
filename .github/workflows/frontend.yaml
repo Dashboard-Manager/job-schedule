@@ -27,7 +27,7 @@ jobs:
             - name: Build the Stack
               run: docker-compose build
 
-    cypress-run:
+    cypress-e2e:
         runs-on: ubuntu-latest
         container:
             image: cypress/browsers
@@ -39,6 +39,8 @@ jobs:
               uses: cypress-io/github-action@v5
               with:
                   browser: chrome
+                  build: docker-compose run --rm frontend npm run build
+                  start: docker-compose run --rm frontend npm run dev
                   working-directory: frontend
 
     vitest-tests:
