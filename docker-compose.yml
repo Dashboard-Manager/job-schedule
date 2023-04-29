@@ -55,7 +55,7 @@ services:
       - postgres
     restart: "no"
     ports: []
-    command: bash -c "sleep 2 && /celery/worker.sh"
+    command: /celery/worker.sh
 
   celery_beat:
     <<: *django
@@ -66,7 +66,7 @@ services:
       - postgres
     restart: "no"
     ports: []
-    command: bash -c "sleep 2 && /celery/beat.sh"
+    command: /celery/beat.sh
 
   flower:
     <<: *django
@@ -75,7 +75,7 @@ services:
     restart: "no"
     ports:
       - "5555:5555"
-    command: bash -c "sleep 5 && /celery/flower.sh"
+    command: /celery/flower.sh
 
   frontend:
     build:

@@ -10,6 +10,7 @@ set -o nounset
 echo "========== CELERY FLOWER ON =========="
 # Flowers
 # graphical interface for celery workers
+sleep 5
 celery \
     -A config.celery \
     -b "${CELERY_BROKER_URL}" \

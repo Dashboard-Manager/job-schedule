@@ -24,6 +24,8 @@ COPY setup.cfg .isort.cfg ./
 
 # RUN mkdir celery && chmod +x /celery
 COPY ./docker/dev/celery/* ./celery/
+RUN sed -i 's/\r$//g' celery/*.sh
+RUN chmod +x ./celery/*.sh
 
 COPY ./docker/dev/django.sh /django-commands.sh
 RUN sed -i 's/\r$//g' /django-commands.sh && chmod +x /django-commands.sh
