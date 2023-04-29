@@ -60,5 +60,6 @@ jobs:
               run: npm run coverage
             - name: Report Coverage
               uses: davelosert/vitest-coverage-report-action@v1
-
+              with:
+                  working-directory: frontend
 
