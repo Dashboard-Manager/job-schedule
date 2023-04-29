@@ -10,14 +10,12 @@ on:
             - main
             - develop
             - master
-            - 50-github-actions-tests
 
     push:
         branches:
             - main
             - develop
             - master
-            - 50-github-actions-tests
 jobs:
     cypress-e2e:
         runs-on: ubuntu-latest
