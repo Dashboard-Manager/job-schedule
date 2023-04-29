@@ -61,5 +61,6 @@ jobs:
             - name: Report Coverage
               uses: davelosert/vitest-coverage-report-action@v1
               with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
                   working-directory: frontend
 
