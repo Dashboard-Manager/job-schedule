@@ -39,9 +39,7 @@ jobs:
               uses: cypress-io/github-action@v5
               with:
                   browser: chrome
-                  build: docker-compose run --rm frontend npm run build
                   start: docker-compose run --rm frontend npm run dev
-                  working-directory: frontend
 
     vitest-tests:
         runs-on: ubuntu-latest
