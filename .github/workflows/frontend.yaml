@@ -57,12 +57,15 @@ jobs:
               run: npm i
             - name: Vitest build
               run: npm run build
-            - name: Vitest Coverage
-              run: npm run coverage
             - name: Prettier
               run: npm run prettier
             - name: Lint
               run: npm run lint
             - name: Lint-fix
               run: npm run lint:fix
+            - name: Vitest Coverage
+              run: npm run coverage
+            - name: Report Coverage
+              uses: davelosert/vitest-coverage-report-action@v1
+
 
