@@ -1,0 +1,30 @@
+name: Workflow C
+
+env:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+    pull_request:
+        branches:
+            - main
+            - develop
+            - master
+            - 50-github-actions-tests
+
+    push:
+        branches:
+            - main
+            - develop
+            - master
+            - 50-github-actions-tests
+
+needs: [backend-example, frontend-example]
+
+jobs:
+    codacy-coverage-reporter:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Coveralls GitHub Action
+              with:
+              uses: coverallsapp/github-action@2
