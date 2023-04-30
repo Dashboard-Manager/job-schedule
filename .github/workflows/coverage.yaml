@@ -36,12 +36,13 @@ jobs:
               uses: actions/checkout@v3
             - name: Run DB Migrations
               run: docker-compose run --rm django python manage.py migrate
+            - name: Pytest Tests
+              run: docker-compose run django coverage run -m pytest                                                                                                                                                                                                             ❮  21s 413ms   
             - name: Pytest Coverage
               run: docker-compose run django coverage lcov                                                                                                                                                                                                              ❮  21s 413ms   
             - name: Coveralls Parallel
               uses: coverallsapp/github-action@v2
               with:
-                file: ./backend
                 flag-name: run-1
                 parallel: true
 
@@ -53,10 +54,15 @@ jobs:
               uses: actions/checkout@v3
             - name: Vitest Coverage
               run: docker-compose run frontend npx vitest --coverage --no-watch
+            - name: Report Coverage
+              if: always()
+              uses: davelosert/vitest-coverage-report-action@v1
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  working-directory: frontend
             - name: Coveralls Parallel
               uses: coverallsapp/github-action@v2
               with:
-                file: ./frontend
                 flag-name: run-2
                 parallel: true
 
