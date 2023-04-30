@@ -36,17 +36,7 @@ jobs:
             - name: Run DB Migrations
               run: docker-compose run --rm django python manage.py migrate
             - name: Run Django Tests
-              run: docker-compose -f docker-compose.yml run django coverage run -m pytest
-            - name: Generate coverage.lcov
-              run: docker-compose -f docker-compose.yml run django coverage lcov
-            - name: Tear down the Stack
-              run: docker-compose down
-            - name: Coveralls GitHub Action
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  path-to-lcov: "./backend/coverage.lcov"
-                  base-path: "./backend"
-              uses: coverallsapp/github-action@1.1.3
+              run: docker-compose run django pytest -s -v --no-migrations
 
     linters:
         runs-on: ubuntu-latest
