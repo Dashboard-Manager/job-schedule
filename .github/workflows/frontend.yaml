@@ -33,7 +33,7 @@ jobs:
                   start: npm run dev
                   working-directory: frontend
 
-    vitest-tests:
+    vite-vitest-and-linters:
         runs-on: ubuntu-latest
         permissions:
             contents: read
