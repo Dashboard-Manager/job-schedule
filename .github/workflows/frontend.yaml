@@ -32,11 +32,18 @@ jobs:
                   build: npm run build
                   start: npm run dev
                   working-directory: frontend
-            - uses: actions/upload-artifact@v3
+            - name: Cypress Screenshots
+              uses: actions/upload-artifact@v3
               if: failure()
               with:
                   name: cypress-screenshots
                   path: cypress/screenshots
+            - name: Cypress Videos
+              uses: actions/upload-artifact@v3
+              if: always()
+              with:
+                  name: cypress-videos
+                  path: cypress/videos
 
 
     vite-vitest-and-linters:
