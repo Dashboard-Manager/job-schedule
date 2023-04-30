@@ -32,17 +32,6 @@ jobs:
                   build: npm run build
                   start: npm run dev
                   working-directory: frontend
-            - uses: actions/upload-artifact@v3
-              if: failure()
-              with:
-                  name: cypress-screenshots
-                  path: cypress/screenshots
-              # Test run video was always captured, so this action uses "always()" condition
-            - uses: actions/upload-artifact@v3
-              if: always()
-              with:
-                  name: cypress-videos
-                  path: cypress/videos
             - name: Generate and save Cypress report
               run: |
                   npm run cy:run -- --record --parallel --group "Group Name"
