@@ -33,7 +33,7 @@ jobs:
                   start: npm run dev
                   working-directory: frontend
 
-    vitest-tests:
+    vite-vitest-and-linters:
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -54,13 +54,5 @@ jobs:
               run: npm run lint
             - name: Lint-fix
               run: npm run lint:fix
-            - name: Vitest Coverage
-              run: npm run coverage
-            - name: Report Coverage
-              if: always()
-              uses: davelosert/vitest-coverage-report-action@v1
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  working-directory: frontend
-            - name: Coveralls
-              uses: coverallsapp/github-action@v2
+            - name: Vitest
+              run: npm run test --no-watch

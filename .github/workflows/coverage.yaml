@@ -1,0 +1,85 @@
+name: coverage-example
+
+env:
+    DOCKER_BUILDKIT: 1
+    COMPOSE_DOCKER_CLI_BUILD: 1
+
+on:
+    pull_request:
+        branches:
+            - main
+            - develop
+            - master
+
+    push:
+        branches:
+            - main
+            - develop
+            - master
+
+jobs:
+    docker:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
+            - name: Build the Stack
+              run: docker-compose build
+            - name: Tear down the Stack
+              run:  docker-compose down
+
+    pytest-coverage:
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
+            - name: Run DB Migrations
+              run: docker-compose run --rm django python manage.py migrate
+            - name: Run Django Tests
+              run: docker-compose run django coverage run -m pytest
+            - name: Generate coverage.lcov
+              run: docker-compose -f docker-compose.yml run django coverage lcov
+            - name: Tear down the Stack
+              run: docker-compose down
+            - name: Coveralls Parallel
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  file: "./backend/coverage.lcov"
+                  base-path: "./backend"
+                  flag-name: run-1
+                  parallel: true
+              uses: coverallsapp/github-action@v2
+
+    vitest-coverage:
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
+            - name: Vitest Coverage
+              run: docker-compose run frontend npx vitest --coverage --no-watch
+            - name: Report Coverage
+              if: always()
+              uses: davelosert/vitest-coverage-report-action@v1
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  working-directory: frontend
+            - name: Coveralls Parallel
+              uses: coverallsapp/github-action@v2
+              with:
+                  flag-name: run-2
+                  parallel: true
+
+    finish:
+        runs-on: ubuntu-latest
+        if: ${{ always() }}
+        needs: [pytest-coverage, vitest-coverage]
+        steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
+            - name: Coveralls Finished
+              uses: coverallsapp/github-action@v2
+              with:
+                  parallel-finished: true
+                  carryforward: "run-1,run-2"

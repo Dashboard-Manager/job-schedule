@@ -10,49 +10,48 @@ on:
             - main
             - develop
             - master
-            - 50-github-actions-tests
 
     push:
         branches:
             - main
             - develop
             - master
-            - 50-github-actions-tests
 jobs:
-    django:
+    docker:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
             - name: Build the Stack
               run: docker-compose build
-            - name: Run DB Migrations
-              run: docker-compose run --rm django python manage.py migrate
             - name: Tear down the Stack
               run:  docker-compose down
 
     pytest:
         runs-on: ubuntu-latest
-        needs: django
+        needs: docker
         steps:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
+            - name: Run DB Migrations
+              run: docker-compose run --rm django python manage.py migrate
             - name: Run Django Tests
-              run: docker-compose -f docker-compose.yml run django coverage run -m pytest
-            - name: Generate coverage.lcov
-              run: docker-compose -f docker-compose.yml run django coverage lcov
-            - name: Tear down the Stack
-              run: docker-compose down
-            - name: Coveralls GitHub Action
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  path-to-lcov: "./backend/coverage.lcov"
-                  base-path: "./backend"
-              uses: coverallsapp/github-action@1.1.3
+              run: docker-compose run django pytest -s -v --no-migrations
+
+    linters:
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
+            - name: Flake8
+              run: docker-compose run django flake8 . --config=setup.cfg
+            - name: Isort
+              run: docker-compose run django isort . --settings-path=.isort.cfg
 
     mypy:
         runs-on: ubuntu-latest
-        needs: django
+        needs: docker
         steps:
             - name: Checkout Code Repository
               uses: actions/checkout@v3
