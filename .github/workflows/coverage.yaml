@@ -1,4 +1,4 @@
-name: Workflow C
+name: coverage-example
 
 env:
     DOCKER_BUILDKIT: 1
@@ -10,21 +10,59 @@ on:
             - main
             - develop
             - master
-            - 50-github-actions-tests
 
     push:
         branches:
             - main
             - develop
             - master
-            - 50-github-actions-tests
-
-needs: [backend-example, frontend-example]
 
 jobs:
-    codacy-coverage-reporter:
+    docker:
         runs-on: ubuntu-latest
         steps:
-            - name: Coveralls GitHub Action
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
+            - name: Build the Stack
+              run: docker-compose build
+            - name: Tear down the Stack
+              run:  docker-compose down
+
+    pytest-coverage:
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
+            - name: Run DB Migrations
+              run: docker-compose run --rm django python manage.py migrate
+            - name: Pytest Coverage
+              run: docker-compose run django coverage lcov                                                                                                                                                                                                              ❮  21s 413ms   
+            - name: Coveralls Parallel
+              uses: coverallsapp/github-action@v2
               with:
+                file: ./backend
+                flag-name: run-1
+                parallel: true
+
+    vitest-coverage:
+        runs-on: ubuntu-latest
+        needs: docker
+        steps:
+            - name: Vitest Coverage
+              run: docker-compose run frontend npx vitest --coverage --no-watch
+            - name: Coveralls Parallel
+              uses: coverallsapp/github-action@v2
+              with:
+                file: ./frontend
+                flag-name: run-2
+                parallel: true
+
+    finish:
+        runs-on: ubuntu-latest
+        if: ${{ always() }}
+        needs: [pytest-coverage, vitest-coverage]
+        steps:
+            - name: Coveralls Finished
               uses: coverallsapp/github-action@2
+              with:
+                parallel-finished: true
+                carryforward: "run-1,run-2"

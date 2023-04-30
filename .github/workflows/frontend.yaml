@@ -54,11 +54,5 @@ jobs:
               run: npm run lint
             - name: Lint-fix
               run: npm run lint:fix
-            - name: Vitest Coverage
-              run: npm run coverage
-            - name: Report Coverage
-              if: always()
-              uses: davelosert/vitest-coverage-report-action@v1
-              with:
-                  github-token: ${{ secrets.GITHUB_TOKEN }}
-                  working-directory: frontend
+            - name: Vitest
+              run: npm run vitest --no-watch

@@ -12,7 +12,7 @@
         "lint:fix": "npx eslint src/**/*.{ts,tsx} --fix",
         "prettier": "npx prettier --write \"src/**/*.{ts,tsx,test}.{ts,tsx}\"",
         "test": "vitest",
-        "coverage": "vitest run --coverage",
+        "coverage": "npx vitest --coverage ",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
         "pre-commit": "lint-staged",
