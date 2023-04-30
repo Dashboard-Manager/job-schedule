@@ -32,16 +32,11 @@ jobs:
                   build: npm run build
                   start: npm run dev
                   working-directory: frontend
-            - name: Generate and save Cypress report
-              run: |
-                  npm run cy:run -- --record --parallel --group "Group Name"
-                  mkdir -p ${{ github.workspace }}/reports
-                  cp -R cypress/reports ${{ github.workspace }}/reports
-            - name: Upload Cypress report as artifact
-              uses: actions/upload-artifact@v2
+            - uses: actions/upload-artifact@v3
+              if: failure()
               with:
-                  name: Cypress Reports
-                  path: ${{ github.workspace }}/reports
+                  name: cypress-screenshots
+                  path: cypress/screenshots
 
 
     vite-vitest-and-linters:
