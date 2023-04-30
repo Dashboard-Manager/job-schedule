@@ -55,4 +55,4 @@ jobs:
             - name: Lint-fix
               run: npm run lint:fix
             - name: Vitest
-              run: npm run vitest --no-watch
+              run: npm run test --no-watch

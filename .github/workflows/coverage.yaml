@@ -32,6 +32,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: docker
         steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
             - name: Run DB Migrations
               run: docker-compose run --rm django python manage.py migrate
             - name: Pytest Coverage
@@ -47,6 +49,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: docker
         steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
             - name: Vitest Coverage
               run: docker-compose run frontend npx vitest --coverage --no-watch
             - name: Coveralls Parallel
@@ -61,6 +65,8 @@ jobs:
         if: ${{ always() }}
         needs: [pytest-coverage, vitest-coverage]
         steps:
+            - name: Checkout Code Repository
+              uses: actions/checkout@v3
             - name: Coveralls Finished
               uses: coverallsapp/github-action@2
               with:
