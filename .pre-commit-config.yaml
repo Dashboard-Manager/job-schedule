@@ -18,7 +18,7 @@ repos:
           - id: debug-statements
 
     - repo: https://github.com/psf/black
-      rev: 23.3.0
+      rev: 23.7.0
       hooks:
           - id: black
             files: ^backend/
@@ -52,7 +52,7 @@ repos:
                 - flake8-warnings
 
     - repo: https://github.com/pre-commit/mirrors-prettier
-      rev: "v3.0.0-alpha.6"
+      rev: "v3.0.0"
       hooks:
           - id: prettier
             files: ^frontend/
