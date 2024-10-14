@@ -1,4 +1,4 @@
-default_stages: [commit, merge-commit, push]
+default_stages: [pre-commit, pre-merge-commit, pre-push]
 exclude: |
     (?x)(
         ^docs/|
@@ -10,7 +10,7 @@ exclude: |
 
 repos:
     - repo: https://github.com/pre-commit/pre-commit-hooks
-      rev: v4.4.0
+      rev: v5.0.0
       hooks:
           - id: trailing-whitespace
           - id: end-of-file-fixer
@@ -18,20 +18,20 @@ repos:
           - id: debug-statements
 
     - repo: https://github.com/psf/black
-      rev: 23.7.0
+      rev: 24.10.0
       hooks:
           - id: black
             files: ^backend/
 
     - repo: https://github.com/pycqa/isort/
-      rev: 5.12.0
+      rev: 5.13.2
       hooks:
           - id: isort
             files: ^backend/
             args: ["--settings-path=backend/.isort.cfg"]
 
     - repo: https://github.com/PyCQA/flake8
-      rev: 6.1.0
+      rev: 7.1.1
       hooks:
           - id: flake8
             files: ^backend/
@@ -52,7 +52,7 @@ repos:
                 - flake8-warnings
 
     - repo: https://github.com/pre-commit/mirrors-prettier
-      rev: "v3.0.2"
+      rev: "v4.0.0-alpha.8"
       hooks:
           - id: prettier
             files: ^frontend/
